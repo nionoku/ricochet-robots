@@ -1,13 +1,19 @@
-import { Box3, BufferGeometry, ColorRepresentation, Mesh, MeshBasicMaterial, Vector2 } from 'three';
-import { IRobot } from './types/robot';
+import { Box3, Mesh, MeshBasicMaterial, Vector2 } from 'three';
+import { IRobot, RobotInfo } from './types/robot';
+import { ModelLoader } from '../loaders/model-loader';
 
 const PARAM_SCALE = 0.05;
 
 class Robot extends Mesh implements IRobot {
-  constructor(model: BufferGeometry, color: ColorRepresentation) {
-    const geom = model.center();
+  constructor(robotInfo: RobotInfo) {
+    const geom = ModelLoader.Models.get('robot')?.center();
+
+    if (!geom) {
+      throw new Error('Error when build Robot. Model not loaded');
+    }
+
     const mat = new MeshBasicMaterial({
-      color,
+      color: robotInfo.color,
       transparent: true,
       opacity: 0.7,
     });
@@ -15,7 +21,7 @@ class Robot extends Mesh implements IRobot {
     super(geom, mat);
 
     this.name = 'robot';
-    this.userData.color = color;
+    this.userData.name = robotInfo.name;
 
     this.scale.set(PARAM_SCALE, PARAM_SCALE, PARAM_SCALE);
     this.position.y = this.box.max.y;

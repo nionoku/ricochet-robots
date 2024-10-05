@@ -1,4 +1,10 @@
-import { Vector2 } from 'three';
+import { ColorRepresentation, Vector2 } from 'three';
+
+type RobotInfo = {
+  name: 'blue' | 'green' | 'yellow' | 'red' | 'grey'
+  color: ColorRepresentation,
+  tint: ColorRepresentation
+};
 
 type IRobot = {
   /**
@@ -20,4 +26,5 @@ type IRobot = {
 
 export type {
   IRobot,
+  RobotInfo,
 };

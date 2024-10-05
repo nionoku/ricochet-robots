@@ -1,7 +1,7 @@
 import { Mesh, MeshBasicMaterial, PlaneGeometry } from 'three';
 import { TokenInfo } from './types/token';
 import { CELL_SIZE } from './constants/map';
-import { TextureLoader } from '../utils/textures';
+import { TextureLoader } from '../loaders/texture-loader';
 
 class Token extends Mesh {
   constructor(tokenInfo: TokenInfo) {
@@ -9,7 +9,10 @@ class Token extends Mesh {
 
     super(
       new PlaneGeometry(CELL_SIZE * 0.95, CELL_SIZE * 0.95),
-      new MeshBasicMaterial({ map: textures.get(tokenInfo.token), transparent: true }),
+      new MeshBasicMaterial({
+        map: textures.get(tokenInfo.token),
+        transparent: true,
+      }),
     );
     
     this.name = 'token';

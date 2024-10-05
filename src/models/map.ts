@@ -3,7 +3,7 @@ import { MapParts } from './types/map';
 import tokensInfo from '../assets/tokens.json';
 import { WALL_WIDTH, WALL_HEIGHT, MAP_SIZE, MAP_CELL_SIZE, WALL_TOP, CELL_SIZE_HALF, CELL_SIZE } from './constants/map';
 import { Token } from './token';
-import { TextureLoader } from '../utils/textures';
+import { TextureLoader } from '../loaders/texture-loader';
 import { TokenInfo } from './types/token';
 
 const SIDE_MATERIAL = new MeshBasicMaterial({ color: '#B0BEC5' });
@@ -45,10 +45,10 @@ class BoardMap extends Mesh {
 
     this.name = 'map';
     // add map parts with walls on board
-    this.add(...this.makeWalls(parts, textures.get('map')));
+    this.add(...this.makeWalls(parts, textures.get('board')));
   }
 
-  private makeWalls(parts: MapParts, map: Texture): Mesh[] {
+  private makeWalls(parts: MapParts, map?: Texture): Mesh[] {
     return parts.map((part, pi) => {
       const tokens = tokensInfo[pi].map((token) => new Token(token as TokenInfo));
 
