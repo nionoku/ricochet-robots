@@ -3,10 +3,10 @@ import './assets/main.css';
 import textures from './assets/textures.json';
 import models from './assets/models.json';
 
-import { ViewController } from './controllers/view';
+import { ViewController } from './app/controllers/view';
 import { ModelLoader } from './loaders/model-loader';
 import { TextureLoader } from './loaders/texture-loader';
-import { MainScene } from './scenes/main';
+import { MainScene } from './app/scenes/main';
 
 const main = async () => {
   const root = document.body;

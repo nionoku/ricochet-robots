@@ -2,7 +2,7 @@ import { Box3, Mesh, MeshBasicMaterial, Vector2 } from 'three';
 import { IRobot, RobotInfo } from './types/robot';
 import { ModelLoader } from '../loaders/model-loader';
 
-const PARAM_SCALE = 0.05;
+const PARAM_SCALE = 0.005;
 
 class Robot extends Mesh implements IRobot {
   constructor(robotInfo: RobotInfo) {
@@ -24,6 +24,7 @@ class Robot extends Mesh implements IRobot {
     this.userData.name = robotInfo.name;
 
     this.scale.set(PARAM_SCALE, PARAM_SCALE, PARAM_SCALE);
+    this.rotation.x = 270 * (Math.PI / 180);
     this.position.y = this.box.max.y;
   }
 
