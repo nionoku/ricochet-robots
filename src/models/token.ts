@@ -7,13 +7,14 @@ class Token extends Mesh {
   constructor(tokenInfo: TokenInfo) {
     const textures = TextureLoader.Textures;
 
-    super(
-      new PlaneGeometry(CELL_SIZE * 0.95, CELL_SIZE * 0.95),
-      new MeshBasicMaterial({
-        map: textures.get(tokenInfo.token),
-        transparent: true,
-      }),
-    );
+    const geom = new PlaneGeometry(CELL_SIZE * 0.95, CELL_SIZE * 0.95);
+    const mat = new MeshBasicMaterial({
+      map: textures.get(tokenInfo.token),
+      transparent: true,
+      opacity: 0.6,
+    });
+
+    super(geom, mat);
     
     this.name = 'token';
     this.userData = {

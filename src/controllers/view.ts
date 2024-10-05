@@ -1,4 +1,3 @@
-import { Camera } from 'three';
 import { CameraController } from './camera';
 import { RendererController } from './renderer';
 import { IScene } from '../scenes/types/scene';
@@ -12,12 +11,13 @@ class ViewController {
 
   private readonly scene: IScene;
 
-  constructor(private readonly root: HTMLElement, _Scene: new (camera: Camera, canvas: HTMLCanvasElement) => IScene) {
+  constructor(private readonly root: HTMLElement, _Scene: new () => IScene) {
     this.renderer = new RendererController(root.clientWidth, root.clientHeight);
     this.camera = new CameraController(root.clientWidth, root.clientHeight);
-    this.scene = new _Scene(this.camera, this.renderer.domElement);
+    this.scene = new _Scene();
 
     this.camera.position.y = this.fov();
+    this.camera.lookAt(0, 0, 0);
   }
 
   private render() {

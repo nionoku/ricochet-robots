@@ -1,4 +1,4 @@
-import { LoadingManager, TextureLoader as BaseTextureLoader, Texture } from 'three';
+import { LoadingManager, TextureLoader as BaseTextureLoader, Texture, SRGBColorSpace } from 'three';
 import texturesMap from '../assets/textures.json';
 
 type Key = keyof typeof texturesMap;
@@ -10,6 +10,9 @@ class TextureLoader {
     return Object.entries(textures)
       .map(async ([name, url]) => {
         const texture = await new BaseTextureLoader(loadingManager).loadAsync(url);
+
+        texture.colorSpace = SRGBColorSpace;
+
         TextureLoader.Textures.set(name as Key, texture);
       });
   }
