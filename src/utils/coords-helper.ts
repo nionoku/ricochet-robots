@@ -4,6 +4,7 @@ import { rotateMatrix } from './rotate-matrix';
 import { CELL_SIZE } from '../models/constants/map';
 
 const POSITION_SHIFT = 7.5;
+const COORDS_SHIFT = 8;
 
 class BoardCoordsHelper {
   static map() {
@@ -26,8 +27,8 @@ class BoardCoordsHelper {
 
   static toCoords(position: Vector2): Vector2 {
     return new Vector2(
-      position.x / (CELL_SIZE + POSITION_SHIFT),
-      position.y / (CELL_SIZE + POSITION_SHIFT),
+      position.x / CELL_SIZE + COORDS_SHIFT,
+      position.y / CELL_SIZE + COORDS_SHIFT,
     );
   }
 }

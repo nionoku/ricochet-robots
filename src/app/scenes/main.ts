@@ -38,8 +38,7 @@ class MainScene extends Scene implements IScene {
   }
 
   private setupTokens() {
-    // TODO (2024.10.06): Add tokens
-    this.add();
+    this.add(...this.tc.objects);
   }
 
   update() {

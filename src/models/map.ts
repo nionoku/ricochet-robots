@@ -1,10 +1,7 @@
 import { BoxGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Texture } from 'three';
 import { MapParts } from './types/map';
-import tokensInfo from '../assets/tokens.json';
 import { WALL_WIDTH, WALL_HEIGHT, MAP_SIZE, MAP_CELL_SIZE, WALL_TOP, CELL_SIZE_HALF, CELL_SIZE } from './constants/map';
-import { Token } from './token';
 import { TextureLoader } from '../loaders/texture-loader';
-import { TokenInfo } from './types/token';
 
 const SIDE_MATERIAL = new MeshBasicMaterial({ color: '#B0BEC5' });
 const TOP_MATERIAL = new MeshBasicMaterial({ color: '#607D8B' });
@@ -50,8 +47,6 @@ class BoardMap extends Group {
 
   private makeWalls(parts: MapParts, map?: Texture): Mesh[] {
     return parts.map((part, pi) => {
-      const tokens = tokensInfo[pi].map((token) => new Token(token as TokenInfo));
-
       const walls = part.flatMap((column, ci, { length: cs }) => {
         return column.reduce<Mesh[]>((columnWalls, cell, ri, { length: rs }) => {
           return [...columnWalls, ...this.makeCellWalls({ cell, ci, cs, ri, rs })];
@@ -66,16 +61,11 @@ class BoardMap extends Group {
       rightSide.rotation.z = 90 * (Math.PI / 180);
       rightSide.position.set(1 - CELL_SIZE_HALF, 0.5 - CELL_SIZE_HALF - WALL_HEIGHT / 2, 0);
 
-      // rotate tokens to face
-      tokens.forEach((it) => {
-        it.rotation.z = pi * 90 * (Math.PI / 180);
-      });
-
       const cells = new Group();
       // centring group
       cells.position.set(CELL_SIZE_HALF, -CELL_SIZE_HALF, 0);
       cells.rotation.x = Math.PI;
-      cells.add(...walls, bottomSide, rightSide, ...tokens);
+      cells.add(...walls, bottomSide, rightSide);
 
       const planeGeometry = new PlaneGeometry();
       // centring plane around left top
