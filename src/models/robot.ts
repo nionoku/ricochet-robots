@@ -1,6 +1,7 @@
 import { Box3, Mesh, MeshBasicMaterial, Vector2Like } from 'three';
 import { IRobot, RobotInfo } from './types/robot';
 import { ModelLoader } from '../loaders/model-loader';
+import { BoardCoordsHelper } from '../utils/coords-helper';
 
 const PARAM_SCALE = 0.005;
 
@@ -26,6 +27,10 @@ class Robot extends Mesh implements IRobot {
     this.scale.set(PARAM_SCALE, PARAM_SCALE, PARAM_SCALE);
     this.rotation.x = 270 * (Math.PI / 180);
     this.position.y = this.box.max.y;
+  }
+
+  get coords() {
+    return BoardCoordsHelper.toCoords({ x: this.position.x, y: this.position.z });
   }
 
   move(position: Vector2Like): void {
