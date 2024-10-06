@@ -1,15 +1,20 @@
-import { Object3D } from 'three';
 import { Board } from '../models/board';
 import { IController } from './types/controller';
 import { BoardMap } from '../models/map';
 import mapParts from '../assets/map.json';
 
 class BoardController implements IController {
-  private readonly board = new Board(new BoardMap(mapParts));
+  private readonly _map = new BoardMap(mapParts);
+
+  private readonly _board = new Board(this._map);
+
+  get map() {
+    return this._map;
+  }
   
-  get objects(): Object3D[] {
+  get objects(): Board[] {
     return [
-      this.board,
+      this._board,
     ];
   }
 }

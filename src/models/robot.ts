@@ -29,7 +29,8 @@ class Robot extends Mesh implements IRobot {
   }
 
   move(position: Vector2): void {
-    throw new Error('Method not implemented.');
+    this.position.x = position.x;
+    this.position.z = position.y;
   }
 
   select(): void {

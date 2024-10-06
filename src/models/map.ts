@@ -37,7 +37,7 @@ const CORNER_TEMPLATE = new Mesh(
   WALL_MATERIALS,
 );
 
-class BoardMap extends Mesh {
+class BoardMap extends Group {
   constructor(parts: MapParts) {
     const textures = TextureLoader.Textures;
     
