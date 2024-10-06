@@ -3,6 +3,8 @@ import { RendererController } from './renderer';
 import { IScene } from '../scenes/types/scene';
 // eslint-disable-next-line import/extensions
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import { GameController } from '../../controllers/game';
+import { IntersectionsController } from '../../controllers/intersections';
 
 const BASE_FOV = 1.45;
 
@@ -15,11 +17,15 @@ class ViewController {
 
   private readonly scene: IScene;
 
-  constructor(private readonly root: HTMLElement, _Scene: new () => IScene) {
+  constructor(private readonly root: HTMLElement, _Scene: new (gc: GameController) => IScene) {
     this.renderer = new RendererController(root.clientWidth, root.clientHeight);
     this.camera = new CameraController(root.clientWidth, root.clientHeight);
     this.controls = new OrbitControls(this.camera, this.domElement);
-    this.scene = new _Scene();
+
+    const ic = new IntersectionsController(this.domElement, this.camera);
+    const gc = new GameController(ic);
+
+    this.scene = new _Scene(gc);
 
     this.camera.position.y = this.fov();
     this.camera.lookAt(0, 0, 0);

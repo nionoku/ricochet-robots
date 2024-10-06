@@ -5,6 +5,9 @@ import { BoardCoordsHelper } from '../utils/coords-helper';
 
 const PARAM_SCALE = 0.005;
 
+const OPACITY_SELECTED = 0.9;
+const OPACITY_DESELECTED = 0.7;
+
 class Robot extends Mesh implements IRobot {
   declare userData: {
     name: RobotInfo['name']
@@ -20,7 +23,7 @@ class Robot extends Mesh implements IRobot {
     const mat = new MeshBasicMaterial({
       color: robotInfo.color,
       transparent: true,
-      opacity: 0.7,
+      opacity: OPACITY_DESELECTED,
     });
 
     super(geom, mat);
@@ -43,11 +46,11 @@ class Robot extends Mesh implements IRobot {
   }
 
   select(): void {
-    throw new Error('Method not implemented.');
+    (this.material as MeshBasicMaterial).opacity = OPACITY_SELECTED;
   }
   
-  unselect(): void {
-    throw new Error('Method not implemented.');
+  deselect(): void {
+    (this.material as MeshBasicMaterial).opacity = OPACITY_DESELECTED;
   }
 
   private get box() {

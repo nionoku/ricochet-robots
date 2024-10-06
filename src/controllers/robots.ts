@@ -17,6 +17,16 @@ class RobotsController implements IController {
     });
     this._robots = robots;
   }
+
+  selectRobot(name: RobotInfo['name']) {
+    this._robots.forEach((robot) => {
+      if (robot.userData.name === name) {
+        robot.select();
+      } else {
+        robot.deselect();
+      }
+    });
+  }
   
   get objects(): Robot[] {
     return this._robots;

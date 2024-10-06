@@ -22,7 +22,7 @@ type IRobot = {
   /**
    * Remove select from current robot
    */
-  unselect(): void;
+  deselect(): void;
 } & IModel;
 
 export type {
