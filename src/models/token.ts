@@ -1,4 +1,4 @@
-import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2 } from 'three';
+import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector2Like } from 'three';
 import { TokenInfo } from './types/token';
 import { CELL_SIZE } from './constants/map';
 import { TextureLoader } from '../loaders/texture-loader';
@@ -24,10 +24,10 @@ class Token extends Mesh {
     };
     
     this.rotation.x = 270 * (Math.PI / 180);
-    this.setPosition(new Vector2(tokenInfo.position[0], tokenInfo.position[1]));
+    this.setPosition(new Vector2().fromArray(tokenInfo.position));
   }
 
-  private setPosition(coords: Vector2) {
+  private setPosition(coords: Vector2Like) {
     const position = BoardCoordsHelper.toPosition(coords);
     this.position.x = position.x;
     this.position.z = position.y;

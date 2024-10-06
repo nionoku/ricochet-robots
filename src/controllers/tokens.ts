@@ -1,4 +1,4 @@
-import { Vector2 } from 'three';
+import { Vector2, Vector2Like } from 'three';
 import tokensInfo from '../assets/tokens.json';
 import { BoardCoordsHelper } from '../utils/coords-helper';
 import { IController } from './types/controller';
@@ -18,10 +18,8 @@ class TokensController implements IController {
     this._tokens = tokens;
   }
 
-  get positions(): Vector2[] {
-    return tokensInfo.flatMap(({ position }) => 
-      BoardCoordsHelper.toPosition(new Vector2(position[0], position[1])),
-    );
+  get positions(): Vector2Like[] {
+    return tokensInfo.flatMap(({ position }) => BoardCoordsHelper.toPosition(new Vector2().fromArray(position)));
   }
     
   get objects(): Token[] {

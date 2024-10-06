@@ -1,4 +1,4 @@
-import { Box3, Mesh, MeshBasicMaterial, Vector2 } from 'three';
+import { Box3, Mesh, MeshBasicMaterial, Vector2Like } from 'three';
 import { IRobot, RobotInfo } from './types/robot';
 import { ModelLoader } from '../loaders/model-loader';
 
@@ -28,7 +28,7 @@ class Robot extends Mesh implements IRobot {
     this.position.y = this.box.max.y;
   }
 
-  move(position: Vector2): void {
+  move(position: Vector2Like): void {
     this.position.x = position.x;
     this.position.z = position.y;
   }

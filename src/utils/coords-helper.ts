@@ -1,4 +1,4 @@
-import { Vector2 } from 'three';
+import { Vector2, Vector2Like } from 'three';
 import mapParts from '../assets/map.json';
 import { rotateMatrix } from './rotate-matrix';
 import { CELL_SIZE } from '../models/constants/map';
@@ -18,14 +18,14 @@ class BoardCoordsHelper {
     return [...ts, ...bs];
   }
 
-  static toPosition(coords: Vector2): Vector2 {
+  static toPosition(coords: Vector2Like): Vector2 {
     return new Vector2(
       CELL_SIZE * (coords.x - POSITION_SHIFT),
       CELL_SIZE * (coords.y - POSITION_SHIFT),
     );
   }
 
-  static toCoords(position: Vector2): Vector2 {
+  static toCoords(position: Vector2Like): Vector2 {
     return new Vector2(
       position.x / CELL_SIZE + COORDS_SHIFT,
       position.y / CELL_SIZE + COORDS_SHIFT,
