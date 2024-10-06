@@ -6,6 +6,10 @@ import { BoardCoordsHelper } from '../utils/coords-helper';
 const PARAM_SCALE = 0.005;
 
 class Robot extends Mesh implements IRobot {
+  declare userData: {
+    name: RobotInfo['name']
+  };
+
   constructor(robotInfo: RobotInfo) {
     const geom = ModelLoader.Models.get('robot')?.center();
 

@@ -1,4 +1,5 @@
 import { ColorRepresentation, Vector2 } from 'three';
+import { IModel } from './model';
 
 type RobotInfo = {
   name: 'blue' | 'green' | 'yellow' | 'red' | 'grey'
@@ -22,7 +23,7 @@ type IRobot = {
    * Remove select from current robot
    */
   unselect(): void;
-};
+} & IModel;
 
 export type {
   IRobot,

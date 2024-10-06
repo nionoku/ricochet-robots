@@ -1,10 +1,10 @@
 import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector2Like } from 'three';
-import { TokenInfo } from './types/token';
+import { IToken, TokenInfo } from './types/token';
 import { CELL_SIZE } from './constants/map';
 import { TextureLoader } from '../loaders/texture-loader';
 import { BoardCoordsHelper } from '../utils/coords-helper';
 
-class Token extends Mesh {
+class Token extends Mesh implements IToken {
   constructor(public readonly tokenInfo: TokenInfo) {
     const textures = TextureLoader.Textures;
 
@@ -32,6 +32,10 @@ class Token extends Mesh {
     this.position.x = position.x;
     this.position.z = position.y;
     this.position.y = 0.001;
+  }
+
+  get coords() {
+    return BoardCoordsHelper.toCoords({ x: this.position.x, y: this.position.z });
   }
 }
 

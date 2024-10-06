@@ -1,7 +1,7 @@
-import { MathUtils, Vector2Like } from 'three';
-import { BoardCoordsHelper } from '../utils/coords-helper';
 import { RobotsController } from './robots';
 import { TokensController } from './tokens';
+import { RobotsPositions } from './types/robots-positions';
+import { generateRobotsPositions } from './utils/generate-robots-positions';
 
 class GameController {
   constructor(
@@ -9,41 +9,35 @@ class GameController {
     private readonly tc: TokensController,
   ) {
     const robotsPositions = this.generateRobotsPositions();
-    
-    rc.objects.forEach((robot, index) => {
-      robot.move(robotsPositions[index]);
-
-      robot.visible = true;
-    });
+    this.applyRobotsPositions(robotsPositions);
   }
 
-  private reduceValidCell(records: Vector2Like[], cell: number, ri: number, ci: number) {
-    const currentPosition = BoardCoordsHelper.toPosition({ x: ci, y: ri });
+  private generateRobotsPositions() {
+    const positions = generateRobotsPositions(
+      this.tc.objects.map((it) => it.coords),
+    );
+    
+    const records = this.rc.objects.reduce<Partial<RobotsPositions>>((record, robot, index) => {
+      record[robot.userData.name] = positions[index];
 
-    const isValid = [
-      // cell not box wall
-      cell !== 15,
-      // exclude tokens positions
-      this.tc.positions.every((position) => !currentPosition.equals(position)),
-    ].every(Boolean);
+      return record;
+    }, {});
 
-    if (isValid) {
-      records.push(currentPosition);
-    }
+    // TODO (2024.10.06): emit robots positions
 
     return records;
   }
 
-  private generateRobotsPositions(): Vector2Like[] {
-    const map = BoardCoordsHelper.map();
-    const cells = map.flatMap((column, ci) => {
-      return column.reduce<Vector2Like[]>((records, cell, ri) => 
-        this.reduceValidCell(records, cell, ri, ci), [],
-      );
-    });
+  private applyRobotsPositions(positions: Partial<RobotsPositions>) {
+    this.rc.objects.forEach((robot) => {
+      const position = positions[robot.userData.name];
 
-    return Array.from({ length: 5 }, () => {
-      return cells.splice(MathUtils.randInt(0, cells.length - 1), 1)[0];
+      if (!position) {
+        throw new Error(`Undefined position for robot "${robot.userData.name}"`);
+      }
+
+      robot.move(position);
+      robot.visible = true;
     });
   }
 }
