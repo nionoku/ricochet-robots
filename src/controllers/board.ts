@@ -8,10 +8,6 @@ class BoardController implements IController {
 
   private readonly _board = new Board(this._map);
 
-  get map() {
-    return this._map;
-  }
-  
   get objects(): Board[] {
     return [
       this._board,

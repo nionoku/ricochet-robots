@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import { RobotInfo } from '../../models/types/robot';
+import { Direction } from '../../types/direction';
 import { RobotsPositions } from './robots-positions';
 
 type GenerateRobotsPositions = {
@@ -11,15 +12,21 @@ type SubmitRobotsPositions = {
   data: Partial<RobotsPositions>
 };
 
-type ClickByRobot = {
-  event: 'click_by_robot',
+type SelectRobot = {
+  event: 'select_robot',
   name: RobotInfo['name']
+};
+
+type MoveRobot = {
+  event: 'move_selected_robot',
+  direction: Direction
 };
 
 type EventMessage = 
   GenerateRobotsPositions 
     | SubmitRobotsPositions
-    | ClickByRobot;
+    | SelectRobot
+    | MoveRobot;
 
 export type {
   EventMessage,

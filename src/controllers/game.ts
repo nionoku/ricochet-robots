@@ -8,6 +8,7 @@ import { RobotsPositions } from './types/robots-positions';
 import { generateRobotsPositions } from './utils/generate-robots-positions';
 import { IntersectionEventHandler } from './types/intersections';
 import { RobotInfo } from '../models/types/robot';
+import { Direction } from '../types/direction';
 
 class GameController {
   /** Message handler */
@@ -23,8 +24,13 @@ class GameController {
         return;
       }
 
-      case 'click_by_robot': {
+      case 'select_robot': {
         this.selectRobot(event.data.name);
+        return;
+      }
+
+      case 'move_selected_robot': {
+        this.moveSelectedRobot(event.data.direction);
         return;
       }
     }
@@ -36,7 +42,7 @@ class GameController {
     const robot = intersections.find(({ object }) => object.name === 'robot')?.object;
 
     if (robot) {
-      this.mc.emit({ event: 'click_by_robot', name: robot.userData.name });
+      this.mc.emit({ event: 'select_robot', name: robot.userData.name });
     }
     /* end handle click by robot */
   };
@@ -56,7 +62,33 @@ class GameController {
 
   public readonly mc = new MessageController();
 
-  constructor(private readonly ic: IntersectionsController) {}
+  constructor(private readonly ic: IntersectionsController) {
+    /* -- temporary keyboard listener -- */
+    window.addEventListener('keyup', (event) => {
+      switch (event.key) {
+        case 'ArrowUp': {
+          this.mc.emit({ event: 'move_selected_robot', direction: Direction.UP });
+          return;
+        }
+
+        case 'ArrowDown': {
+          this.mc.emit({ event: 'move_selected_robot', direction: Direction.DOWN });
+          return;
+        }
+
+        case 'ArrowLeft': {
+          this.mc.emit({ event: 'move_selected_robot', direction: Direction.LEFT });
+          return;
+        }
+
+        case 'ArrowRight': {
+          this.mc.emit({ event: 'move_selected_robot', direction: Direction.RIGHT });
+          return;
+        }
+      }
+    });
+    /* -- end temporary keyboard listener -- */
+  }
 
   public prepare() {
     this.mc.on(this.mh);
@@ -95,6 +127,10 @@ class GameController {
 
   private selectRobot(name: RobotInfo['name']) {
     this.rc.selectRobot(name);
+  }
+
+  private moveSelectedRobot(direction: Direction) {
+    throw new Error('Not implemented');
   }
 
   private get rootObject() {
