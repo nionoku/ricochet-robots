@@ -15,10 +15,7 @@ class MainScene extends Scene implements IScene {
   }
 
   private setupScene() {
-    const board = this.gc.bc.objects[0];
-    board.rotation.x = 270 * (Math.PI / 180);
-
-    this.add(board);
+    this.add(this.gc.bc.objects[0]);
   }
 
   private setupRobots() {

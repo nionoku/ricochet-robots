@@ -32,17 +32,16 @@ class Robot extends Mesh implements IRobot {
     this.userData.name = robotInfo.name;
 
     this.scale.set(PARAM_SCALE, PARAM_SCALE, PARAM_SCALE);
-    this.rotation.x = 270 * (Math.PI / 180);
-    this.position.y = this.box.max.y;
+    this.position.z = this.box.max.z;
   }
 
   get coords() {
-    return BoardCoordsHelper.toCoords({ x: this.position.x, y: this.position.z });
+    return BoardCoordsHelper.toCoords({ x: this.position.x, y: this.position.y });
   }
 
   move(position: Vector2Like): void {
     this.position.x = position.x;
-    this.position.z = position.y;
+    this.position.y = position.y;
   }
 
   select(): void {

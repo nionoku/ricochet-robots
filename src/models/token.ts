@@ -23,15 +23,14 @@ class Token extends Mesh implements IToken {
       color: tokenInfo.color,
     };
     
-    this.rotation.x = 270 * (Math.PI / 180);
     this.setPosition(new Vector2().fromArray(tokenInfo.position));
   }
 
   private setPosition(coords: Vector2Like) {
     const position = BoardCoordsHelper.toPosition(coords);
     this.position.x = position.x;
-    this.position.z = position.y;
-    this.position.y = 0.001;
+    this.position.y = position.y;
+    this.position.z = 0.001;
   }
 
   get coords() {
