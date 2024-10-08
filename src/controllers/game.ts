@@ -9,6 +9,7 @@ import { generateRobotsPositions } from './utils/generate-robots-positions';
 import { IntersectionEventHandler } from './types/intersections';
 import { RobotInfo } from '../models/types/robot';
 import { Direction } from '../types/direction';
+import { BoardCoordsHelper } from '../utils/coords-helper';
 
 class GameController {
   /** Message handler */
@@ -130,6 +131,12 @@ class GameController {
   }
 
   private moveSelectedRobot(direction: Direction) {
+    if (!this.rc.selectedRobot) {
+      return;
+    }
+
+    BoardCoordsHelper.calculateDestinationPoint(this.rc.selectedRobot, direction, this.rc.objects);
+    
     throw new Error('Not implemented');
   }
 
