@@ -3,18 +3,20 @@ import { BoardCoordsHelper } from '../../utils/coords-helper';
 
 const generateRobotsPositions = (excludedCoords: Vector2[]): Vector2Like[] => {
   const map = BoardCoordsHelper.map();
+  
   const cells = map.flatMap((column, ci) => {
     return column.reduce<Vector2Like[]>((records, cell, ri) => {
-      const currentPosition = BoardCoordsHelper.toPosition({ x: ci, y: ri });
+      const currentCoords = new Vector2(ci, ri);
 
       const isValid = [
         // cell not box wall
         cell !== 15,
         // exclude tokens positions
-        excludedCoords.every((coords) => !coords.equals(currentPosition)),
+        excludedCoords.every((coords) => !coords.equals(currentCoords)),
       ].every(Boolean);
     
       if (isValid) {
+        const currentPosition = BoardCoordsHelper.toPosition({ x: ci, y: ri });
         records.push(currentPosition);
       }
     

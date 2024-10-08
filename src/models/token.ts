@@ -34,7 +34,7 @@ class Token extends Mesh implements IToken {
   }
 
   get coords() {
-    return BoardCoordsHelper.toCoords({ x: this.position.x, y: this.position.z });
+    return BoardCoordsHelper.toCoords({ x: this.position.x, y: this.position.y });
   }
 }
 
