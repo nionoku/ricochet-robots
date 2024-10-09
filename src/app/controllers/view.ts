@@ -52,7 +52,7 @@ class ViewController {
   }
 
   resize() {
-    this.camera.position.y = this.fov();
+    this.camera.position.z = this.fov();
 
     this.camera.resize(this.root.clientWidth, this.root.clientHeight);
     this.renderer.resize(this.root.clientWidth, this.root.clientHeight);
