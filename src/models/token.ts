@@ -28,13 +28,14 @@ class Token extends Mesh implements IToken {
 
   private setPosition(coords: Vector2Like) {
     const position = BoardCoordsHelper.toPosition(coords);
+
     this.position.x = position.x;
     this.position.y = position.y;
     this.position.z = 0.001;
   }
 
   get coords() {
-    return BoardCoordsHelper.toCoords({ x: this.position.x, y: this.position.y });
+    return BoardCoordsHelper.toCoords(this.position);
   }
 }
 

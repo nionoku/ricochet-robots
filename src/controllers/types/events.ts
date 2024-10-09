@@ -8,7 +8,7 @@ type GenerateRobotsPositions = {
 };
 
 type SubmitRobotsPositions = {
-  event: 'submit_robots_positions'
+  event: 'submit_robots_coords'
   data: Partial<RobotsPositions>
 };
 

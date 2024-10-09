@@ -1,6 +1,6 @@
 import { BoxGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Texture } from 'three';
 import { MapParts } from './types/map';
-import { WALL_WIDTH, WALL_HEIGHT, MAP_SIZE, MAP_CELL_SIZE, WALL_TOP, CELL_SIZE_HALF, CELL_SIZE } from './constants/map';
+import { WALL_WIDTH, WALL_HEIGHT, MAP_CELL_SIZE, WALL_TOP, CELL_SIZE_HALF, CELL_SIZE, MAP_CELLS_COUNT } from './constants/map';
 import { TextureLoader } from '../loaders/texture-loader';
 
 const SIDE_MATERIAL = new MeshBasicMaterial({ color: '#B0BEC5' });
@@ -20,7 +20,7 @@ const BOX_TEMPLATE = new Mesh(
 );
 
 const SIDE_TEMPLATE = new Mesh(
-  new BoxGeometry(MAP_SIZE * MAP_CELL_SIZE, WALL_HEIGHT, WALL_TOP),
+  new BoxGeometry(MAP_CELLS_COUNT * MAP_CELL_SIZE, WALL_HEIGHT, WALL_TOP),
   WALL_MATERIALS,
 );
 

@@ -5,22 +5,22 @@ import { RobotsController } from './robots';
 import { TokensController } from './tokens';
 import { MessagesHandler } from './types/message';
 import { RobotsPositions } from './types/robots-positions';
-import { generateRobotsPositions } from './utils/generate-robots-positions';
 import { IntersectionEventHandler } from './types/intersections';
 import { RobotInfo } from '../models/types/robot';
 import { Direction } from '../types/direction';
 import { BoardCoordsHelper } from '../utils/coords-helper';
+import { generateRobotsCoords } from './utils/generate-robots-positions';
 
 class GameController {
   /** Message handler */
   private readonly mh: MessagesHandler = (event) => {
     switch (event.data.event) {
       case 'generate_robots_positions': {
-        this.generateRobotsPositions();
+        this.generateRobotsCoords();
         return;
       }
 
-      case 'submit_robots_positions': {
+      case 'submit_robots_coords': {
         this.applyRobotsPositions(event.data.data);
         return;
       }
@@ -96,19 +96,19 @@ class GameController {
     this.ic.on(this.rootObject, this.ih);
   }
 
-  private generateRobotsPositions() {
-    const positions = generateRobotsPositions(
+  private generateRobotsCoords() {
+    const coords = generateRobotsCoords(
       this.tc.objects.map((it) => it.coords),
     );
     
     const data = this.rc.objects.reduce<Partial<RobotsPositions>>((record, robot, index) => {
-      record[robot.userData.name] = positions[index];
+      record[robot.userData.name] = coords[index];
 
       return record;
     }, {});
 
     this.mc.emit({
-      event: 'submit_robots_positions',
+      event: 'submit_robots_coords',
       data,
     });
   }
@@ -135,7 +135,10 @@ class GameController {
       return;
     }
 
-    BoardCoordsHelper.calculateDestinationPoint(this.rc.selectedRobot, direction, this.rc.objects);
+    const target = BoardCoordsHelper.calcTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
+    this.rc.selectedRobot.move(target);
+    console.log(target, this.rc.selectedRobot.coords);
+    
     
     throw new Error('Not implemented');
   }

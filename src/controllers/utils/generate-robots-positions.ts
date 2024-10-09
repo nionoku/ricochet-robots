@@ -1,7 +1,7 @@
 import { Vector2Like, MathUtils, Vector2 } from 'three';
 import { BoardCoordsHelper } from '../../utils/coords-helper';
 
-const generateRobotsPositions = (excludedCoords: Vector2[]): Vector2Like[] => {
+const generateRobotsCoords = (excludedCoords: Vector2[]): Vector2Like[] => {
   const map = BoardCoordsHelper.map();
   
   const cells = map.flatMap((column, ci) => {
@@ -16,8 +16,7 @@ const generateRobotsPositions = (excludedCoords: Vector2[]): Vector2Like[] => {
       ].every(Boolean);
     
       if (isValid) {
-        const currentPosition = BoardCoordsHelper.toPosition({ x: ci, y: ri });
-        records.push(currentPosition);
+        records.push(new Vector2(ci, ri));
       }
     
       return records;
@@ -30,5 +29,5 @@ const generateRobotsPositions = (excludedCoords: Vector2[]): Vector2Like[] => {
 };
 
 export {
-  generateRobotsPositions,
+  generateRobotsCoords,
 };
