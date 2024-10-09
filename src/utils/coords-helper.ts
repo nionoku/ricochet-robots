@@ -1,7 +1,7 @@
-import { Vector2, Vector2Like } from 'three';
+import { Vector2, Vector2Like, Vector3Like } from 'three';
 import mapParts from '../assets/map.json';
 import { rotateMatrix } from './rotate-matrix';
-import { CELL_SIZE } from '../models/constants/map';
+import { CELL_SIZE, MAP_SIZE } from '../models/constants/map';
 import { Robot } from '../models/robot';
 import { Direction } from '../types/direction';
 import { rotateWalls } from './rotate-walls';
@@ -21,13 +21,11 @@ class BoardCoordsHelper {
     // complete map
     const result = [...ts, ...bs];
 
-    console.log(result.map((it) => it.map((it) => it.toString().padStart(5)).join(' ')).join('\n'));
-
     return result;
   })();
 
   static map(robots?: Robot[]): number[][] {
-    const map = [...this._map];
+    const map = structuredClone(this._map);
 
     // apply "box wall" on robots positions
     robots?.forEach(({ coords: { x, y } }) => {
@@ -37,26 +35,82 @@ class BoardCoordsHelper {
     return map;
   }
 
-  static calculateDestinationPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
-    const map = this.map(robots);
+  static calcTargetPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
+    // selectedRobot shouldn't emit own position
+    const otherRobots = robots.filter((robot) => robot.userData.name !== selectedRobot.userData.name);
+    const map = this.map(otherRobots);
+
+    // console.log(map.map((it) => it.map((it) => it.toString().padStart(5)).join(' ')).join('\n'));
     
     switch (direction) {
       case Direction.LEFT: {
         const y = selectedRobot.coords.y;
 
-        console.log(selectedRobot.coords.x, y);
-        console.log(map[y], map[y].slice(0, selectedRobot.coords.x));
-        
-
         for (let x = selectedRobot.coords.x; x >= 0; x--) {
+          const isWall = (map[y][x] & Direction.LEFT) === Direction.LEFT;
+
+          console.log('left', x, y, map[y][x], isWall);
+
+          if (isWall) {
+            return new Vector2(x, y);
+          }
         }
 
-        return;
+        throw new Error('Error when find destination position to left direction');
       }
 
       case Direction.RIGHT: {
-        const from = new Vector2(selectedRobot.position.x, selectedRobot.position.z);
-        return;
+        const y = selectedRobot.coords.y;
+
+        for (let x = selectedRobot.coords.x; x < map[y].length; x++) {
+          // for right direction find wall on next cell
+          const isWall = (map[y][x] & Direction.RIGHT) === Direction.RIGHT;
+
+          console.log('right', x, y, map[y][x], isWall);
+
+          if (isWall) {
+            return new Vector2(x, y);
+          }
+        }
+
+        throw new Error('Error when find destination position to right direction');
+      }
+
+      case Direction.DOWN: {
+        const x = selectedRobot.coords.x;
+        const column = map.map((row) => row[x]);
+        console.log(column);
+        
+
+        for (let y = selectedRobot.coords.y; y < column.length; y++) {
+          // for right direction find wall on next cell
+          const isWall = (column[y] & Direction.DOWN) === Direction.DOWN;
+
+          console.log('down', x, y, column[y], isWall);
+
+          if (isWall) {
+            return new Vector2(x, y);
+          }
+        }
+
+        throw new Error('Error when find destination position to down direction');
+      }
+
+      case Direction.UP: {
+        const x = selectedRobot.coords.x;
+        const column = map.map((row) => row[x]);
+
+        for (let y = selectedRobot.coords.y; y >= 0; y--) {
+          const isWall = (column[y] & Direction.UP) === Direction.UP;
+
+          console.log('up', x, y, column[y], isWall);
+
+          if (isWall) {
+            return new Vector2(x, y);
+          }
+        }
+
+        throw new Error('Error when find destination position to up direction');
       }
     }
   }
@@ -64,14 +118,14 @@ class BoardCoordsHelper {
   static toPosition(coords: Vector2Like): Vector2 {
     return new Vector2(
       CELL_SIZE * (coords.x - POSITION_SHIFT),
-      CELL_SIZE * (coords.y - POSITION_SHIFT),
+      CELL_SIZE * (MAP_SIZE - coords.y - POSITION_SHIFT),
     );
   }
 
-  static toCoords(position: Vector2Like): Vector2 {
+  static toCoords(position: Vector2Like | Vector3Like): Vector2 {
     return new Vector2(
       position.x / CELL_SIZE + POSITION_SHIFT,
-      position.y / CELL_SIZE + POSITION_SHIFT,
+      MAP_SIZE - (position.y / CELL_SIZE + POSITION_SHIFT),
     );
   }
 }
