@@ -27,8 +27,10 @@ class GameController {
         return;
       }
 
-      case 'submit_robots_coords': {
-        this.moveRobots(event.data.coords);
+      case 'prepare': {
+        this.prepareRobots(event.data.robotsCoords);
+        this.prepareMap(event.data.schema);
+        
         return;
       }
 
@@ -144,7 +146,7 @@ class GameController {
     });
   }
 
-  private moveRobots(coordsList: Partial<RobotsCoords>) {
+  private prepareRobots(coordsList: Partial<RobotsCoords>) {
     this.rc.objects.forEach((robot) => {
       const coords = coordsList[robot.userData.name];
 
@@ -153,7 +155,13 @@ class GameController {
       }
 
       this.moveRobot(robot, coords);
+      
+      robot.visible = true;
     });
+  }
+
+  private prepareMap(partsOrder: number[]) {
+    this.bc.setMap(partsOrder);
   }
 
   private moveRobot(_robot: Robot | RobotInfo['name'], coords: Vector2Like) {
@@ -174,7 +182,7 @@ class GameController {
     if (this.st.state !== GameState.MOVE_DISABLED) {
       return;
     }
-    
+
     this.rc.selectRobot(name);
   }
 

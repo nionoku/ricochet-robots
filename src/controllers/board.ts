@@ -4,9 +4,14 @@ import { BoardMap } from '../models/map';
 import mapParts from '../assets/map.json';
 
 class BoardController implements IController {
-  private readonly _map = new BoardMap(mapParts);
+  private readonly _board = new Board();
 
-  private readonly _board = new Board(this._map);
+  setMap(mapPartsOrder: number[]) {
+    const parts = mapPartsOrder.map((index) => mapParts[index]);
+    const map = new BoardMap(parts);
+
+    this._board.setMap(map);
+  }
 
   get objects(): Board[] {
     return [

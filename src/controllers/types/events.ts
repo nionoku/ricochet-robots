@@ -14,6 +14,14 @@ type SubmitRobotsCoords = {
   coords: Partial<RobotsCoords>
 };
 
+type Prepare = {
+  event: 'prepare'
+  // order of map parts
+  schema: number[]
+  // initial robots position
+  robotsCoords: Partial<RobotsCoords>
+};
+
 type Enable = {
   event: 'enable'
 };
@@ -51,6 +59,7 @@ type TokenAchieved = {
 type EventMessage = 
   GenerateRobotsCoords 
     | SubmitRobotsCoords
+    | Prepare
     | Enable
     | Disable
     | SelectToken
