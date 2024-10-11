@@ -7,7 +7,7 @@ import { MessagesHandler } from './types/message';
 import { RobotsPositions } from './types/robots-positions';
 import { IntersectionEventHandler } from './types/intersections';
 import { RobotInfo } from '../models/types/robot';
-import { Direction } from '../types/direction';
+import { Direction } from '../constants/direction';
 import { BoardCoordsHelper } from '../utils/coords-helper';
 import { generateRobotsCoords } from './utils/generate-robots-positions';
 
@@ -135,12 +135,8 @@ class GameController {
       return;
     }
 
-    const target = BoardCoordsHelper.calcTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
+    const target = BoardCoordsHelper.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
     this.rc.selectedRobot.move(target);
-    console.log(target, this.rc.selectedRobot.coords);
-    
-    
-    throw new Error('Not implemented');
   }
 
   private get rootObject() {

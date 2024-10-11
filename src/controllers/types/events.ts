@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import { RobotInfo } from '../../models/types/robot';
-import { Direction } from '../../types/direction';
+import { Direction } from '../../constants/direction';
 import { RobotsPositions } from './robots-positions';
 
 type GenerateRobotsPositions = {
