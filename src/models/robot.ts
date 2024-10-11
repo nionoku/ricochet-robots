@@ -13,6 +13,8 @@ class Robot extends Mesh implements IRobot {
     name: RobotInfo['name']
   };
 
+  public readonly isRobot = true;
+
   constructor(robotInfo: RobotInfo) {
     const geom = ModelLoader.Models.get('robot')?.center();
 

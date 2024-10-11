@@ -34,6 +34,10 @@ class RobotsController implements IController {
   clearSelectedRobot() {
     this._selectedRobot = null;
   }
+
+  getRobotByName(name: RobotInfo['name']): Robot | undefined {
+    return this._robots.find((robot) => robot.userData.name === name);
+  }
   
   get objects(): Robot[] {
     return this._robots;

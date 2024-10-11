@@ -13,7 +13,8 @@ import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { TokenInfo } from '../models/types/token';
 import { Token } from '../models/token';
 import { Robot } from '../models/robot';
-import { Scene, Vector2Like } from 'three';
+import { Scene, Vector2, Vector2Like } from 'three';
+import { isRobot } from '../models/utils/is-robot';
 
 class GameController {
   /** Message handler */
@@ -45,7 +46,9 @@ class GameController {
       }
 
       case 'robot_moved': {
-        // TODO (2024.10.11): Move robots from other players
+        const coords = new Vector2().fromArray(event.data.to);
+        this.moveRobot(event.data.robot, coords);
+        
         return;
       }
     }
@@ -139,7 +142,13 @@ class GameController {
     });
   }
 
-  private moveRobot(robot: Robot, coords: Vector2Like) {
+  private moveRobot(_robot: Robot | RobotInfo['name'], coords: Vector2Like) {
+    const robot = isRobot(_robot) ? _robot : this.rc.getRobotByName(_robot);
+
+    if (!robot) {
+      throw new Error('Received move robot event with undefined robot');
+    }
+
     robot.move(coords);
   }
 
@@ -162,28 +171,28 @@ class GameController {
       return;
     }
 
-    this.rc.selectedRobot.move(target);
-
     this.mc.emit({
       event: 'robot_moved',
-      coords: target,
+      robot: this.rc.selectedRobot.userData.name,
+      from: this.rc.selectedRobot.coords.toArray(),
+      to: target.toArray(),
     });
 
-    if (this.isRobotAchievedToken(this.rc.selectedRobot, this.tc.selectedToken)) {
+    if (this.isRobotAchievedToken(this.rc.selectedRobot.userData.name, target, this.tc.selectedToken)) {
       this.mc.emit({
         event: 'token_achieved',
       });
     }
   }
 
-  private isRobotAchievedToken(robot: Robot | null, token: Token | null): boolean {
-    if (!token || !robot) {
+  private isRobotAchievedToken(robotName: RobotInfo['name'], robotCoords: Vector2Like, token: Token | null): boolean {
+    if (!token) {
       return false;
     }
 
-    return token.coords.equals(robot.coords) 
+    return token.coords.equals(robotCoords)
       // @ts-expect-error TokenColor extends RobotColor
-      && token.userData.color.includes(robot.userData.name);
+      && token.userData.color.includes(robotName);
   }
 
   private get rootObject() {
