@@ -4,7 +4,7 @@ import { MessageController } from './messages';
 import { RobotsController } from './robots';
 import { TokensController } from './tokens';
 import { MessagesHandler } from './types/message';
-import { RobotsPositions } from './types/robots-positions';
+import { RobotsCoords } from './types/robots-coords';
 import { IntersectionEventHandler } from './types/intersections';
 import { RobotInfo } from '../models/types/robot';
 import { Direction } from '../constants/direction';
@@ -13,6 +13,7 @@ import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { TokenInfo } from '../models/types/token';
 import { Token } from '../models/token';
 import { Robot } from '../models/robot';
+import { Scene, Vector2Like } from 'three';
 
 class GameController {
   /** Message handler */
@@ -24,7 +25,7 @@ class GameController {
       }
 
       case 'submit_robots_coords': {
-        this.applyRobotsCoords(event.data.robotsPositions);
+        this.moveRobots(event.data.coords);
         return;
       }
 
@@ -38,8 +39,13 @@ class GameController {
         return;
       }
 
-      case 'move_selected_robot': {
+      case 'move_robot': {
         this.moveSelectedRobot(event.data.direction);
+        return;
+      }
+
+      case 'robot_moved': {
+        // TODO (2024.10.11): Move robots from other players
         return;
       }
     }
@@ -76,22 +82,22 @@ class GameController {
     window.addEventListener('keyup', (event) => {
       switch (event.key) {
         case 'ArrowUp': {
-          this.mc.emit({ event: 'move_selected_robot', direction: Direction.UP });
+          this.mc.emit({ event: 'move_robot', direction: Direction.UP });
           return;
         }
 
         case 'ArrowDown': {
-          this.mc.emit({ event: 'move_selected_robot', direction: Direction.DOWN });
+          this.mc.emit({ event: 'move_robot', direction: Direction.DOWN });
           return;
         }
 
         case 'ArrowLeft': {
-          this.mc.emit({ event: 'move_selected_robot', direction: Direction.LEFT });
+          this.mc.emit({ event: 'move_robot', direction: Direction.LEFT });
           return;
         }
 
         case 'ArrowRight': {
-          this.mc.emit({ event: 'move_selected_robot', direction: Direction.RIGHT });
+          this.mc.emit({ event: 'move_robot', direction: Direction.RIGHT });
           return;
         }
       }
@@ -109,7 +115,7 @@ class GameController {
       this.tc.objects.map((it) => it.coords),
     );
     
-    const data = this.rc.objects.reduce<Partial<RobotsPositions>>((record, robot, index) => {
+    const data = this.rc.objects.reduce<Partial<RobotsCoords>>((record, robot, index) => {
       record[robot.userData.name] = coords[index];
 
       return record;
@@ -117,11 +123,11 @@ class GameController {
 
     this.mc.emit({
       event: 'submit_robots_coords',
-      robotsPositions: data,
+      coords: data,
     });
   }
 
-  private applyRobotsCoords(coordsList: Partial<RobotsPositions>) {
+  private moveRobots(coordsList: Partial<RobotsCoords>) {
     this.rc.objects.forEach((robot) => {
       const coords = coordsList[robot.userData.name];
 
@@ -129,9 +135,12 @@ class GameController {
         throw new Error(`Undefined coords for robot "${robot.userData.name}"`);
       }
 
-      robot.move(coords);
-      robot.visible = true;
+      this.moveRobot(robot, coords);
     });
+  }
+
+  private moveRobot(robot: Robot, coords: Vector2Like) {
+    robot.move(coords);
   }
 
   private selectToken(name: TokenInfo['token']) {
@@ -148,7 +157,17 @@ class GameController {
     }
 
     const target = BoardCoordsHelper.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
+    // if robot didn't move - stop handler
+    if (target.equals(this.rc.selectedRobot.coords)) {
+      return;
+    }
+
     this.rc.selectedRobot.move(target);
+
+    this.mc.emit({
+      event: 'robot_moved',
+      coords: target,
+    });
 
     if (this.isRobotAchievedToken(this.rc.selectedRobot, this.tc.selectedToken)) {
       this.mc.emit({
@@ -174,8 +193,8 @@ class GameController {
       throw new Error('Undefined parent for board');
     }
 
-    if (root.type !== 'Scene') {
-      throw new Error('Parent for board is not a Scene');
+    if (!(root as Scene).isScene) {
+      throw new Error('Parent is not a Scene');
     }
 
     return root;

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
 import { RobotInfo } from '../../models/types/robot';
 import { Direction } from '../../constants/direction';
-import { RobotsPositions } from './robots-positions';
+import { RobotsCoords } from './robots-coords';
 import { TokenInfo } from '../../models/types/token';
+import { Vector2Like } from 'three';
 
 type GenerateRobotsCoords = {
   event: 'generate_robots_coords'
@@ -10,7 +11,7 @@ type GenerateRobotsCoords = {
 
 type SubmitRobotsCoords = {
   event: 'submit_robots_coords'
-  robotsPositions: Partial<RobotsPositions>
+  coords: Partial<RobotsCoords>
 };
 
 type SelectToken = {
@@ -24,8 +25,13 @@ type SelectRobot = {
 };
 
 type MoveRobot = {
-  event: 'move_selected_robot',
+  event: 'move_robot',
   direction: Direction
+};
+
+type RobotMoved = {
+  event: 'robot_moved',
+  coords: Vector2Like,
 };
 
 type TokenAchieved = {
@@ -38,6 +44,7 @@ type EventMessage =
     | SelectToken
     | SelectRobot
     | MoveRobot
+    | RobotMoved
     | TokenAchieved;
 
 export type {
