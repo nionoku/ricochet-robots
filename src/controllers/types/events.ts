@@ -14,6 +14,14 @@ type SubmitRobotsCoords = {
   coords: Partial<RobotsCoords>
 };
 
+type Enable = {
+  event: 'enable'
+};
+
+type Disable = {
+  event: 'disable'
+};
+
 type SelectToken = {
   event: 'select_token'
   token: TokenInfo['token']
@@ -43,6 +51,8 @@ type TokenAchieved = {
 type EventMessage = 
   GenerateRobotsCoords 
     | SubmitRobotsCoords
+    | Enable
+    | Disable
     | SelectToken
     | SelectRobot
     | MoveRobot

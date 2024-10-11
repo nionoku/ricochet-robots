@@ -15,6 +15,8 @@ import { Token } from '../models/token';
 import { Robot } from '../models/robot';
 import { Scene, Vector2, Vector2Like } from 'three';
 import { isRobot } from '../models/utils/is-robot';
+import { GameStateController } from './game-state';
+import { GameState } from './constants/game-state';
 
 class GameController {
   /** Message handler */
@@ -27,6 +29,16 @@ class GameController {
 
       case 'submit_robots_coords': {
         this.moveRobots(event.data.coords);
+        return;
+      }
+
+      case 'enable': {
+        this.enableRobotsMove();
+        return;
+      }
+
+      case 'disable': {
+        this.disableMoveRobots();
         return;
       }
 
@@ -71,6 +83,8 @@ class GameController {
       return this.ceh(intersections);
     }
   };
+
+  private readonly st = new GameStateController();
 
   public readonly bc = new BoardController();
 
@@ -157,10 +171,18 @@ class GameController {
   }
 
   private selectRobot(name: RobotInfo['name']) {
+    if (this.st.state !== GameState.MOVE_DISABLED) {
+      return;
+    }
+    
     this.rc.selectRobot(name);
   }
 
   private moveSelectedRobot(direction: Direction) {
+    if (this.st.state !== GameState.MOVE_DISABLED) {
+      return;
+    }
+
     if (!this.rc.selectedRobot) {
       return;
     }
@@ -193,6 +215,14 @@ class GameController {
     return token.coords.equals(robotCoords)
       // @ts-expect-error TokenColor extends RobotColor
       && token.userData.color.includes(robotName);
+  }
+
+  private enableRobotsMove() {
+    this.st.setState(GameState.MOVE_ENABLED);
+  }
+
+  private disableMoveRobots() {
+    this.st.setState(GameState.MOVE_DISABLED);
   }
 
   private get rootObject() {
