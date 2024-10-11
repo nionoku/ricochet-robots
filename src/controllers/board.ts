@@ -2,15 +2,23 @@ import { Board } from '../models/board';
 import { IController } from './types/controller';
 import { BoardMap } from '../models/map';
 import mapParts from '../assets/map.json';
+import tokensInfo from '../assets/tokens.json';
+import { TokenInfo } from '../models/types/token';
 
 class BoardController implements IController {
   private readonly _board = new Board();
 
   setMap(mapPartsOrder: number[]) {
     const parts = mapPartsOrder.map((index) => mapParts[index]);
-    const map = new BoardMap(parts);
+    const tokens = mapPartsOrder.map((index) => tokensInfo[index]);
+    
+    const map = new BoardMap(parts, tokens as TokenInfo[][]);
 
     this._board.setMap(map);
+  }
+
+  get board(): Board {
+    return this._board;
   }
 
   get objects(): Board[] {

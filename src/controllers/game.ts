@@ -30,7 +30,7 @@ class GameController {
       case 'prepare': {
         this.prepareRobots(event.data.robotsCoords);
         this.prepareMap(event.data.schema);
-        
+
         return;
       }
 
@@ -92,9 +92,9 @@ class GameController {
 
   public readonly rc = new RobotsController();
 
-  public readonly tc = new TokensController();
+  private readonly tc = new TokensController();
 
-  public readonly mc = new MessageController();
+  private readonly mc = new MessageController();
 
   constructor(private readonly ic: IntersectionsController) {
     /* -- temporary keyboard listener -- */
@@ -162,6 +162,7 @@ class GameController {
 
   private prepareMap(partsOrder: number[]) {
     this.bc.setMap(partsOrder);
+    this.tc.setTokensFromBoard(this.bc.board);
   }
 
   private moveRobot(_robot: Robot | RobotInfo['name'], coords: Vector2Like) {

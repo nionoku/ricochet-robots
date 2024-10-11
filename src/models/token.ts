@@ -1,11 +1,13 @@
-import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector2Like } from 'three';
+import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector2Like, Vector3 } from 'three';
 import { IToken, TokenInfo } from './types/token';
-import { CELL_SIZE } from './constants/map';
+import { CELL_SIZE, CELL_SIZE_HALF } from './constants/map';
 import { TextureLoader } from '../loaders/texture-loader';
 import { BoardCoordsHelper } from '../utils/coords-helper';
 
 class Token extends Mesh implements IToken {
   declare userData: Pick<TokenInfo, 'token' | 'color'>;
+
+  public readonly isToken = true;
 
   constructor(public readonly tokenInfo: TokenInfo) {
     const textures = TextureLoader.Textures;
@@ -25,19 +27,18 @@ class Token extends Mesh implements IToken {
       color: tokenInfo.color,
     };
     
-    this.setPosition(new Vector2().fromArray(tokenInfo.position));
+    this.setInitialPosition(new Vector2().fromArray(tokenInfo.position));
   }
 
-  private setPosition(coords: Vector2Like) {
-    const position = BoardCoordsHelper.toPosition(coords);
-
-    this.position.x = position.x;
-    this.position.y = position.y;
+  private setInitialPosition(coords: Vector2Like) {
+    this.position.x = coords.x * CELL_SIZE + CELL_SIZE_HALF;
+    this.position.y = coords.y * CELL_SIZE * -1 - CELL_SIZE_HALF;
     this.position.z = 0.001;
   }
 
   get coords() {
-    return BoardCoordsHelper.toCoords(this.position);
+    const position = this.getWorldPosition(new Vector3());
+    return BoardCoordsHelper.toCoords(position);
   }
 }
 
