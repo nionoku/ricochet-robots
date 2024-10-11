@@ -2,14 +2,20 @@
 import { RobotInfo } from '../../models/types/robot';
 import { Direction } from '../../constants/direction';
 import { RobotsPositions } from './robots-positions';
+import { TokenInfo } from '../../models/types/token';
 
-type GenerateRobotsPositions = {
-  event: 'generate_robots_positions'
+type GenerateRobotsCoords = {
+  event: 'generate_robots_coords'
 };
 
-type SubmitRobotsPositions = {
+type SubmitRobotsCoords = {
   event: 'submit_robots_coords'
-  data: Partial<RobotsPositions>
+  robotsPositions: Partial<RobotsPositions>
+};
+
+type SelectToken = {
+  event: 'select_token',
+  token: TokenInfo['token']
 };
 
 type SelectRobot = {
@@ -22,11 +28,17 @@ type MoveRobot = {
   direction: Direction
 };
 
+type TokenAchieved = {
+  event: 'token_achieved',
+};
+
 type EventMessage = 
-  GenerateRobotsPositions 
-    | SubmitRobotsPositions
+  GenerateRobotsCoords 
+    | SubmitRobotsCoords
+    | SelectToken
     | SelectRobot
-    | MoveRobot;
+    | MoveRobot
+    | TokenAchieved;
 
 export type {
   EventMessage,

@@ -4,6 +4,8 @@ import { Token } from '../models/token';
 import { TokenInfo } from '../models/types/token';
 
 class TokensController implements IController {
+  private _selectedToken: Token | null = null;
+
   private readonly _tokens: Token[];
 
   constructor() {
@@ -14,6 +16,21 @@ class TokensController implements IController {
     });
 
     this._tokens = tokens;
+  }
+
+  selectToken(name: TokenInfo['token']) {
+    const nextToken = this._tokens.find(({ userData: { token } }) => token === name);
+
+    if (!nextToken) {
+      throw new Error(`Unknown token: '${name}'`);
+    }
+
+    this._selectedToken = nextToken;
+    return nextToken;
+  }
+
+  get selectedToken() {
+    return this._selectedToken;
   }
 
   get objects(): Token[] {

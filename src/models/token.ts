@@ -5,6 +5,8 @@ import { TextureLoader } from '../loaders/texture-loader';
 import { BoardCoordsHelper } from '../utils/coords-helper';
 
 class Token extends Mesh implements IToken {
+  declare userData: Pick<TokenInfo, 'token' | 'color'>;
+
   constructor(public readonly tokenInfo: TokenInfo) {
     const textures = TextureLoader.Textures;
 
@@ -19,7 +21,7 @@ class Token extends Mesh implements IToken {
     
     this.name = 'token';
     this.userData = {
-      type: tokenInfo.token,
+      token: tokenInfo.token,
       color: tokenInfo.color,
     };
     

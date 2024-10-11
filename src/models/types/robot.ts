@@ -1,8 +1,9 @@
 import { ColorRepresentation, Vector2 } from 'three';
 import { IModel } from './model';
+import { RobotColor } from './color';
 
 type RobotInfo = {
-  name: 'blue' | 'green' | 'yellow' | 'red' | 'grey'
+  name: RobotColor
   color: ColorRepresentation,
   tint: ColorRepresentation
 };

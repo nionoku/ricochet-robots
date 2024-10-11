@@ -10,18 +10,26 @@ import { RobotInfo } from '../models/types/robot';
 import { Direction } from '../constants/direction';
 import { BoardCoordsHelper } from '../utils/coords-helper';
 import { generateRobotsCoords } from './utils/generate-robots-positions';
+import { TokenInfo } from '../models/types/token';
+import { Token } from '../models/token';
+import { Robot } from '../models/robot';
 
 class GameController {
   /** Message handler */
   private readonly mh: MessagesHandler = (event) => {
     switch (event.data.event) {
-      case 'generate_robots_positions': {
+      case 'generate_robots_coords': {
         this.generateRobotsCoords();
         return;
       }
 
       case 'submit_robots_coords': {
-        this.applyRobotsPositions(event.data.data);
+        this.applyRobotsCoords(event.data.robotsPositions);
+        return;
+      }
+
+      case 'select_token': {
+        this.selectToken(event.data.token);
         return;
       }
 
@@ -109,21 +117,25 @@ class GameController {
 
     this.mc.emit({
       event: 'submit_robots_coords',
-      data,
+      robotsPositions: data,
     });
   }
 
-  private applyRobotsPositions(positions: Partial<RobotsPositions>) {
+  private applyRobotsCoords(coordsList: Partial<RobotsPositions>) {
     this.rc.objects.forEach((robot) => {
-      const position = positions[robot.userData.name];
+      const coords = coordsList[robot.userData.name];
 
-      if (!position) {
-        throw new Error(`Undefined position for robot "${robot.userData.name}"`);
+      if (!coords) {
+        throw new Error(`Undefined coords for robot "${robot.userData.name}"`);
       }
 
-      robot.move(position);
+      robot.move(coords);
       robot.visible = true;
     });
+  }
+
+  private selectToken(name: TokenInfo['token']) {
+    this.tc.selectToken(name);
   }
 
   private selectRobot(name: RobotInfo['name']) {
@@ -137,6 +149,22 @@ class GameController {
 
     const target = BoardCoordsHelper.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
     this.rc.selectedRobot.move(target);
+
+    if (this.isRobotAchievedToken(this.rc.selectedRobot, this.tc.selectedToken)) {
+      this.mc.emit({
+        event: 'token_achieved',
+      });
+    }
+  }
+
+  private isRobotAchievedToken(robot: Robot | null, token: Token | null): boolean {
+    if (!token || !robot) {
+      return false;
+    }
+
+    return token.coords.equals(robot.coords) 
+      // @ts-expect-error TokenColor extends RobotColor
+      && token.userData.color.includes(robot.userData.name);
   }
 
   private get rootObject() {

@@ -1,7 +1,7 @@
 import { Vector2Tuple } from 'three';
 import { IModel } from './model';
+import { TokenColor } from './color';
 
-type TokenColor = 'yellow' | 'blue' | 'red' | 'green';
 type TokenType = 'planet' | 'cross' | 'gear' | 'moon';
 
 type TokenInfo = {
