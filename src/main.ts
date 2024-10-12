@@ -23,7 +23,7 @@ const main = async () => {
   const vc = new ViewController(root, MainScene);
 
   window.addEventListener('resize', () => vc.resize());
-  root.appendChild(vc.domElement);
+  root.append(...vc.domElements);
 
   vc.animate();
 };

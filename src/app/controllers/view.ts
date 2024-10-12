@@ -5,10 +5,13 @@ import { IScene } from '../scenes/types/scene';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { GameController } from '../../controllers/game';
 import { IntersectionsController } from '../../controllers/intersections';
+import { NotationsRendererController } from './notations-renderer';
 
-const BASE_FOV = 1.45;
+const BASE_FOV = 1.55;
 
 class ViewController {
+  private readonly notationsRenderer: NotationsRendererController;
+
   private readonly renderer: RendererController;
 
   private readonly camera: CameraController;
@@ -20,9 +23,10 @@ class ViewController {
   constructor(private readonly root: HTMLElement, _Scene: new (gc: GameController) => IScene) {
     this.renderer = new RendererController(root.clientWidth, root.clientHeight);
     this.camera = new CameraController(root.clientWidth, root.clientHeight);
-    this.controls = new OrbitControls(this.camera, this.domElement);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.notationsRenderer = new NotationsRendererController(root.clientWidth, root.clientHeight);
 
-    const ic = new IntersectionsController(this.domElement, this.camera);
+    const ic = new IntersectionsController(this.renderer.domElement, this.camera);
     const gc = new GameController(ic);
 
     this.scene = new _Scene(gc);
@@ -35,6 +39,7 @@ class ViewController {
     this.scene.update();
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+    this.notationsRenderer.render(this.scene, this.camera);
   }
   
   private fov(): number {
@@ -47,8 +52,11 @@ class ViewController {
     return BASE_FOV * aspectRatio;
   }
 
-  get domElement() {
-    return this.renderer.domElement;
+  get domElements(): [HTMLCanvasElement, HTMLElement] {
+    return [
+      this.renderer.domElement,
+      this.notationsRenderer.domElement,
+    ];
   }
 
   resize() {
@@ -56,6 +64,7 @@ class ViewController {
 
     this.camera.resize(this.root.clientWidth, this.root.clientHeight);
     this.renderer.resize(this.root.clientWidth, this.root.clientHeight);
+    this.notationsRenderer.resize(this.root.clientWidth, this.root.clientHeight);
   }
 
   animate() {

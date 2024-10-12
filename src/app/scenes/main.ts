@@ -14,7 +14,7 @@ class MainScene extends Scene implements IScene {
   }
 
   private setupScene() {
-    this.add(this.gc.bc.objects[0]);
+    this.add(this.gc.bc.board);
   }
 
   private setupRobots() {
