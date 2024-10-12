@@ -27,6 +27,8 @@ jobs:
 
       - name: Build app
         run: npm run build
+        env:
+          VITE_APP_CORE_BASE_URL: /ricochet-robots/core
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

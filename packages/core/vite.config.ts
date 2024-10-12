@@ -6,7 +6,7 @@ import rootPkg from '../../package.json';
 
 export default defineConfig(({ mode }) => {
   const rootPath = join('..', '..');
-  const viteEnv = loadEnv(mode, rootPath);  
+  const viteEnv = { ...process.env, ...loadEnv(mode, rootPath) };
 
   const base = mode === 'production'
     ? join('/', rootPkg.name, pkg.name)
