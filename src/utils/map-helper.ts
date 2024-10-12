@@ -7,6 +7,7 @@ import { rotateWalls } from './rotate-walls';
 import { ROBOT_ON_CELL } from '../constants/robot';
 import mapParts from '../assets/map.json';
 import { MapType } from '../models/types/map';
+import { mergeSides } from './merge-parties';
 
 class MapHelperInstance {
   private readonly _map: MapType;
@@ -23,7 +24,7 @@ class MapHelperInstance {
     // top-side
     const ts = lt.map((row, i) => [...row, ...rt[i]]);
     // complete map
-    const result = [...ts, ...bs];
+    const result = mergeSides([...ts, ...bs]);
 
     this._map = result;
   }
@@ -39,6 +40,7 @@ class MapHelperInstance {
     return map;
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   getTargetPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
     // selectedRobot shouldn't emit own position on map
     const otherRobots = robots.filter((robot) => robot.userData.name !== selectedRobot.userData.name);
