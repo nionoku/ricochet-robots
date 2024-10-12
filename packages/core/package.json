@@ -1,6 +1,7 @@
 {
   "name": "ricochet-robots-core",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
