@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import { join } from 'path';
 
 import rootPkg from '../../package.json';
 
 export default defineConfig({
-  base: resolve(rootPkg.name, 'core'),
+  base: join('/', rootPkg.name, 'core'),
   build: {
-    outDir: resolve('..', '..', 'dist', 'core'),
+    outDir: join('..', '..', 'dist', 'core'),
+    emptyOutDir: true,
   },
 });
