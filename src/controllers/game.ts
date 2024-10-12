@@ -8,7 +8,7 @@ import { RobotsCoords } from './types/robots-coords';
 import { IntersectionEventHandler } from './types/intersections';
 import { RobotInfo } from '../models/types/robot';
 import { Direction } from '../constants/direction';
-import { BoardCoordsHelper } from '../utils/coords-helper';
+import { MapHelper } from '../utils/map-helper';
 import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { TokenInfo } from '../models/types/token';
 import { Token } from '../models/token';
@@ -30,6 +30,7 @@ class GameController {
       case 'prepare': {
         this.prepareRobots(event.data.robotsCoords);
         this.prepareMap(event.data.schema);
+        this.prepareMapHelper(event.data.schema);
 
         return;
       }
@@ -86,6 +87,8 @@ class GameController {
     }
   };
 
+  private readonly mapHelper = new MapHelper();
+
   private readonly st = new GameStateController();
 
   public readonly bc = new BoardController();
@@ -131,6 +134,7 @@ class GameController {
 
   private generateRobotsCoords() {
     const coords = generateRobotsCoords(
+      this.mapHelper,
       this.tc.objects.map((it) => it.coords),
     );
     
@@ -151,7 +155,7 @@ class GameController {
       const coords = coordsList[robot.userData.name];
 
       if (!coords) {
-        throw new Error(`Undefined coords for robot "${robot.userData.name}"`);
+        throw new Error(`Undefined coords for robot: '${robot.userData.name}'`);
       }
 
       this.moveRobot(robot, coords);
@@ -175,6 +179,10 @@ class GameController {
     robot.move(coords);
   }
 
+  private prepareMapHelper(partsOrder: number[]) {
+    this.mapHelper.generate(partsOrder);
+  }
+
   private selectToken(name: TokenInfo['token']) {
     this.tc.selectToken(name);
   }
@@ -196,7 +204,12 @@ class GameController {
       return;
     }
 
-    const target = BoardCoordsHelper.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
+    const target = this.mapHelper?.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
+    
+    if (!target) {
+      throw new Error(`Not found position by direction: '${direction}' from: ${this.rc.selectedRobot.coords.toArray()}`);
+    }
+    
     // if robot didn't move - stop handler
     if (target.equals(this.rc.selectedRobot.coords)) {
       return;

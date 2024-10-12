@@ -1,16 +1,21 @@
 import { Vector2, Vector2Like, Vector3Like } from 'three';
-import mapParts from '../assets/map.json';
 import { rotateMatrix } from './rotate-matrix';
 import { CELL_SIZE, MAP_SIZE, POSITION_SHIFT } from '../models/constants/map';
 import { Robot } from '../models/robot';
 import { Direction } from '../constants/direction';
 import { rotateWalls } from './rotate-walls';
 import { ROBOT_ON_CELL } from '../constants/robot';
+import mapParts from '../assets/map.json';
+import { MapType } from '../models/types/map';
 
-class BoardCoordsHelper {
-  private static readonly _map = (() => {
+class MapHelperInstance {
+  private readonly _map: MapType;
+
+  constructor(mapPartsOrder: number[]) {
+    const parts = mapPartsOrder.map((index) => mapParts[index]);
+    
     // right-bottom side, left-bottom side, left-top side, right-top side
-    const [rb, lb, lt, rt] = mapParts
+    const [rb, lb, lt, rt] = parts
       .map(rotateWalls)
       .map(rotateMatrix);
     // bottom-side
@@ -20,10 +25,10 @@ class BoardCoordsHelper {
     // complete map
     const result = [...ts, ...bs];
 
-    return result;
-  })();
+    this._map = result;
+  }
 
-  static map(robots?: Robot[]): number[][] {
+  map(robots?: Robot[]): MapType {
     const map = structuredClone(this._map);
 
     // apply "box wall" on robots positions
@@ -34,7 +39,7 @@ class BoardCoordsHelper {
     return map;
   }
 
-  static getTargetPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
+  getTargetPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
     // selectedRobot shouldn't emit own position on map
     const otherRobots = robots.filter((robot) => robot.userData.name !== selectedRobot.userData.name);
     const map = this.map(otherRobots);
@@ -127,6 +132,30 @@ class BoardCoordsHelper {
       }
     }
   }
+}
+
+class MapHelper {
+  private _helper: MapHelperInstance | undefined;
+
+  generate(order: number[]) {
+    this._helper = new MapHelperInstance(order);
+  }
+
+  map(robots?: Robot[]): MapType {
+    if (!this._helper) {
+      throw new Error('Call \'generate\' between call \'map\'');
+    }
+
+    return this._helper?.map(robots);
+  }
+
+  getTargetPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
+    if (!this._helper) {
+      throw new Error('Call \'generate\' between call \'getTargetPoint\'');
+    }
+
+    return this._helper?.getTargetPoint(selectedRobot, direction, robots);
+  }
 
   static toPosition(coords: Vector2Like): Vector2 {
     return new Vector2(
@@ -144,5 +173,5 @@ class BoardCoordsHelper {
 }
 
 export {
-  BoardCoordsHelper,
+  MapHelper,
 };

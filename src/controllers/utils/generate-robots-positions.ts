@@ -1,8 +1,8 @@
 import { Vector2Like, MathUtils, Vector2 } from 'three';
-import { BoardCoordsHelper } from '../../utils/coords-helper';
+import { MapHelper } from '../../utils/map-helper';
 
-const generateRobotsCoords = (excludedCoords: Vector2[]): Vector2Like[] => {
-  const map = BoardCoordsHelper.map();
+const generateRobotsCoords = (mapHelper: MapHelper, excludedCoords: Vector2[]): Vector2Like[] => {
+  const map = mapHelper.map();
   
   const cells = map.flatMap((column, ci) => {
     return column.reduce<Vector2Like[]>((records, cell, ri) => {

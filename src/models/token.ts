@@ -2,7 +2,7 @@ import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector2Like, Vector3 }
 import { IToken, TokenInfo } from './types/token';
 import { CELL_SIZE, CELL_SIZE_HALF } from './constants/map';
 import { TextureLoader } from '../loaders/texture-loader';
-import { BoardCoordsHelper } from '../utils/coords-helper';
+import { MapHelper } from '../utils/map-helper';
 
 class Token extends Mesh implements IToken {
   declare userData: Pick<TokenInfo, 'token' | 'color'>;
@@ -38,7 +38,7 @@ class Token extends Mesh implements IToken {
 
   get coords() {
     const position = this.getWorldPosition(new Vector3());
-    return BoardCoordsHelper.toCoords(position);
+    return MapHelper.toCoords(position);
   }
 }
 
