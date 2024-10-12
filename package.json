@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --base /ricochet-robots-core/ --mode production",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -15,7 +15,7 @@
     "eslint": "^8.57.1",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-plugin-sonarjs": "^2.0.3",
-    "typescript": "^5.6.2",
+    "typescript": "^5.6.3",
     "vite": "^5.4.8"
   },
   "dependencies": {
