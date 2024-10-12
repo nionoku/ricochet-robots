@@ -5,6 +5,10 @@ import { RobotsCoords } from './robots-coords';
 import { TokenInfo } from '../../models/types/token';
 import { Vector2Tuple } from 'three';
 
+type Ready = {
+  event: 'ready'
+};
+
 type GenerateRobotsCoords = {
   event: 'generate_robots_coords'
 };
@@ -57,7 +61,8 @@ type TokenAchieved = {
 };
 
 type EventMessage = 
-  GenerateRobotsCoords 
+  Ready
+    | GenerateRobotsCoords 
     | SubmitRobotsCoords
     | Prepare
     | Enable

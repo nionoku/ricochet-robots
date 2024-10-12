@@ -8,17 +8,12 @@ class MainScene extends Scene implements IScene {
 
     this.background = new Color('#D0D0D0');
     this.setupScene();
-    this.setupRobots();
 
     gc.prepare();
   }
 
   private setupScene() {
-    this.add(this.gc.bc.board);
-  }
-
-  private setupRobots() {
-    this.add(...this.gc.rc.objects);
+    this.add(...this.gc.objects);
   }
 
   update() {

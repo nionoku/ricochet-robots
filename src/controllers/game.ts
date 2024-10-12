@@ -13,7 +13,7 @@ import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { TokenInfo } from '../models/types/token';
 import { Token } from '../models/token';
 import { Robot } from '../models/robot';
-import { Scene, Vector2, Vector2Like } from 'three';
+import { Object3D, Scene, Vector2, Vector2Like } from 'three';
 import { isRobot } from '../models/utils/is-robot';
 import { GameStateController } from './game-state';
 import { GameState } from './constants/game-state';
@@ -91,13 +91,13 @@ class GameController {
 
   private readonly st = new GameStateController();
 
-  public readonly bc = new BoardController();
-
-  public readonly rc = new RobotsController();
-
   private readonly tc = new TokensController();
 
   private readonly mc = new MessageController();
+  
+  private readonly bc = new BoardController();
+
+  private readonly rc = new RobotsController();
 
   constructor(private readonly ic: IntersectionsController) {
     /* -- temporary keyboard listener -- */
@@ -130,6 +130,8 @@ class GameController {
   public prepare() {
     this.mc.on(this.mh);
     this.ic.on(this.rootObject, this.ih);
+
+    this.mc.emit({ event: 'ready' });
   }
 
   private generateRobotsCoords() {
@@ -245,6 +247,13 @@ class GameController {
 
   private disableMoveRobots() {
     this.st.setState(GameState.MOVE_DISABLED);
+  }
+
+  public get objects(): Object3D[] {
+    return [
+      this.bc.board,
+      ...this.rc.objects,
+    ];
   }
 
   private get rootObject() {
