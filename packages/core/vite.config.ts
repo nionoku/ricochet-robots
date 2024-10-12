@@ -6,6 +6,6 @@ import rootPkg from '../../package.json';
 export default defineConfig({
   base: resolve(rootPkg.name, 'core'),
   build: {
-    outDir: resolve(process.cwd(), '..', '..', 'dist', 'core'),
+    outDir: resolve('..', '..', 'dist', 'core'),
   },
 });
