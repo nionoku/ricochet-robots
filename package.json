@@ -1,24 +1,14 @@
 {
-  "name": "ricochet-robots-core",
-  "private": true,
+  "name": "ricochet-robots",
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc && vite build --base /ricochet-robots-core/ --mode production",
-    "preview": "vite preview"
+    "build": "npm run build --workspaces"
   },
+  "author": "nionoku <nionoku@gmail.com>",
+  "workspaces": [
+    "packages/core"
+  ],
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.10.4",
-    "@types/eslint": "^9.6.1",
-    "@types/three": "^0.169.0",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb-typescript": "^18.0.0",
-    "eslint-plugin-sonarjs": "^2.0.3",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.8"
-  },
-  "dependencies": {
-    "three": "^0.169.0"
+    "@types/node": "^22.7.5"
   }
 }
