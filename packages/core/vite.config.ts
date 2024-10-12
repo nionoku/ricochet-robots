@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     base,
+    envDir: rootPath,
     build: {
       outDir: join(rootPath, 'dist', pkg.name),
     },

@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
+    envDir: rootPath,
     build: {
       outDir: join(rootPath, 'dist'),
     },
