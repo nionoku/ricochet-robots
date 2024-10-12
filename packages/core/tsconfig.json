@@ -23,6 +23,5 @@
     "src",
 
     "vite.config.ts",
-    ".eslintrc.cjs"
   ]
 }

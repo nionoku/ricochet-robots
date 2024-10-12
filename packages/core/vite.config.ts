@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite';
 import { join } from 'node:path';
 
+import pkg from './package.json';
 import rootPkg from '../../package.json';
 
 export default defineConfig(({ mode }) => {
@@ -8,13 +9,13 @@ export default defineConfig(({ mode }) => {
   const viteEnv = loadEnv(mode, rootPath);  
 
   const base = mode === 'production'
-    ? join('/', rootPkg.name, 'core')
+    ? join('/', rootPkg.name, pkg.name)
     : '/';
 
   return {
     base,
     build: {
-      outDir: join(rootPath, 'dist', 'core'),
+      outDir: join(rootPath, 'dist', pkg.name),
       emptyOutDir: true,
     },
     server: {

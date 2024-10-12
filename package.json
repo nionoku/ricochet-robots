@@ -6,9 +6,15 @@
   },
   "author": "nionoku <nionoku@gmail.com>",
   "workspaces": [
-    "packages/core"
+    "packages/core",
+    "packages/app"
   ],
   "devDependencies": {
-    "@types/node": "^22.7.5"
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^22.7.5",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-plugin-sonarjs": "^2.0.3"
   }
 }
