@@ -2,7 +2,8 @@
   "name": "ricochet-robots",
   "version": "0.0.0",
   "scripts": {
-    "build": "npm run build --workspaces"
+    "dev": "npm run dev -w app & npm run dev -w core",
+    "build": "rm -rf dist && npm run build --workspaces"
   },
   "author": "nionoku <nionoku@gmail.com>",
   "workspaces": [

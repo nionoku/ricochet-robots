@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => {
     base,
     build: {
       outDir: join(rootPath, 'dist', pkg.name),
-      emptyOutDir: true,
     },
     server: {
       port: Number(viteEnv.VITE_APP_CORE_PORT),
