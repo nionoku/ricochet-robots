@@ -1,0 +1,7 @@
+# host
+host -> wait players -> game
+                          -> loading -> scene
+
+# player
+player -> wait host -> game
+                          -> loading -> scene
