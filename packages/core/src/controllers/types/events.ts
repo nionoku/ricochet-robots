@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
-import { RobotInfo } from '../../models/types/robot';
+import type { RobotInfo } from '../../models/types/robot';
 import { Direction } from '../../constants/direction';
-import { RobotsCoords } from './robots-coords';
-import { TokenInfo } from '../../models/types/token';
-import { Vector2Tuple } from 'three';
+import type { RobotsCoords } from './robots-coords';
+import type { TokenInfo } from '../../models/types/token';
+import type { Vector2Tuple } from 'three';
 
 type Ready = {
   event: 'ready'

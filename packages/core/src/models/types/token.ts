@@ -1,6 +1,6 @@
-import { Vector2Tuple } from 'three';
-import { IModel } from './model';
-import { TokenColor } from './color';
+import type { Vector2Tuple } from 'three';
+import type { IModel } from './model';
+import type { TokenColor } from './color';
 
 type TokenType = 'planet' | 'cross' | 'gear' | 'moon';
 

@@ -1,4 +1,4 @@
-import { MapType } from '../models/types/map';
+import type { MapType } from '../models/types/map';
 
 const rotateMatrix = (matrix: MapType, repeat = 1) => {
   let result = matrix;

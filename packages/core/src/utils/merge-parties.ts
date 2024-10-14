@@ -1,6 +1,6 @@
 import { Direction } from '../constants/direction';
 import { MAP_CELLS_COUNT } from '../models/constants/map';
-import { MapType } from '../models/types/map';
+import type { MapType } from '../models/types/map';
 
 const mergeSides = (_map: MapType): MapType => {
   const map = structuredClone(_map);

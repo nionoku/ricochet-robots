@@ -1,4 +1,4 @@
-import { Vector2, Vector2Like, Vector3Like } from 'three';
+import { Vector2, type Vector2Like, type Vector3Like } from 'three';
 import { rotateMatrix } from './rotate-matrix';
 import { CELL_SIZE, MAP_SIZE, POSITION_SHIFT } from '../models/constants/map';
 import { Robot } from '../models/robot';
@@ -6,7 +6,7 @@ import { Direction } from '../constants/direction';
 import { rotateWalls } from './rotate-walls';
 import { ROBOT_ON_CELL } from '../constants/robot';
 import mapParts from '../assets/map.json';
-import { MapType } from '../models/types/map';
+import type { MapType } from '../models/types/map';
 import { mergeSides } from './merge-parties';
 
 class MapHelperInstance {

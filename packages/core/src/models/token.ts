@@ -1,5 +1,5 @@
-import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector2Like, Vector3 } from 'three';
-import { IToken, TokenInfo } from './types/token';
+import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, type Vector2Like, Vector3 } from 'three';
+import type { IToken, TokenInfo } from './types/token';
 import { CELL_SIZE, CELL_SIZE_HALF } from './constants/map';
 import { TextureLoader } from '../loaders/texture-loader';
 import { MapHelper } from '../utils/map-helper';

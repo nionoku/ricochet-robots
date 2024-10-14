@@ -1,5 +1,5 @@
 import { Camera, Object3D, Raycaster, Vector2 } from 'three';
-import { IntersectionEventHandler, IntersectionEventType } from './types/intersections';
+import type { IntersectionEventHandler, IntersectionEventType } from './types/intersections';
 
 class IntersectionsController extends Raycaster {
   private _handler: ((event: MouseEvent) => void) | null = null;

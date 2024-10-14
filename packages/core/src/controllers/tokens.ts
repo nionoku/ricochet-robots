@@ -1,6 +1,6 @@
-import { IController } from './types/controller';
+import type { IController } from './types/controller';
 import { Token } from '../models/token';
-import { TokenInfo } from '../models/types/token';
+import type { TokenInfo } from '../models/types/token';
 import { Object3D } from 'three';
 import { isToken } from '../models/utils/is-token';
 import { Board } from '../models/board';

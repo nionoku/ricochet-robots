@@ -1,7 +1,7 @@
 import robotsInfo from '../assets/robots.json';
 import { Robot } from '../models/robot';
-import { RobotInfo } from '../models/types/robot';
-import { IController } from './types/controller';
+import type { RobotInfo } from '../models/types/robot';
+import type { IController } from './types/controller';
 
 class RobotsController implements IController {
   private readonly _robots: Robot[];

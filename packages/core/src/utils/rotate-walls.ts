@@ -1,5 +1,5 @@
 import { WALL } from '../constants/wall';
-import { MapParts, MapType } from '../models/types/map';
+import type { MapParts, MapType } from '../models/types/map';
 
 const rotateWalls = (part: MapType, direction: number, { length: size }: MapParts) => {
   return part.map((row) => row.map((cell) => {

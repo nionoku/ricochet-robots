@@ -1,5 +1,5 @@
-import { Vector2Like } from 'three';
-import { RobotInfo } from '../../models/types/robot';
+import type { Vector2Like } from 'three';
+import type { RobotInfo } from '../../models/types/robot';
 
 type RobotsCoords = Record<RobotInfo['name'], Vector2Like>;
 

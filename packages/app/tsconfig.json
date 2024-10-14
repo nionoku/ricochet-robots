@@ -1,7 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
-    "noEmit": true,
     "types": ["vite/client"]
   },
   "include": [

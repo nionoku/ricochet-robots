@@ -1,4 +1,4 @@
-import { Vector2Like, MathUtils, Vector2 } from 'three';
+import { type Vector2Like, MathUtils, Vector2 } from 'three';
 import { MapHelper } from '../../utils/map-helper';
 
 const generateRobotsCoords = (mapHelper: MapHelper, excludedCoords: Vector2[]): Vector2Like[] => {

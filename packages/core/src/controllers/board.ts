@@ -1,9 +1,9 @@
 import { Board } from '../models/board';
-import { IController } from './types/controller';
+import type { IController } from './types/controller';
 import { BoardMap } from '../models/map';
 import mapParts from '../assets/map.json';
 import tokensInfo from '../assets/tokens.json';
-import { TokenInfo } from '../models/types/token';
+import type { TokenInfo } from '../models/types/token';
 
 class BoardController implements IController {
   private readonly _board = new Board();

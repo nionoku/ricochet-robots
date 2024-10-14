@@ -1,5 +1,5 @@
-import { EventMessage } from './types/events';
-import { MessagesHandler } from './types/message';
+import type { EventMessage } from './types/events';
+import type { MessagesHandler } from './types/message';
 
 class MessageController {
   on(handler: MessagesHandler) {

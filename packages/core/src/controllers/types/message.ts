@@ -1,4 +1,4 @@
-import { EventMessage } from './events';
+import type { EventMessage } from './events';
 
 type MessagesHandler = (message: MessageEvent<EventMessage>) => void;
 

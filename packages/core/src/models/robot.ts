@@ -1,5 +1,5 @@
-import { Box3, Mesh, MeshBasicMaterial, Vector2Like } from 'three';
-import { IRobot, RobotInfo } from './types/robot';
+import { Box3, Mesh, MeshBasicMaterial, type Vector2Like } from 'three';
+import type { IRobot, RobotInfo } from './types/robot';
 import { ModelLoader } from '../loaders/model-loader';
 import { MapHelper } from '../utils/map-helper';
 

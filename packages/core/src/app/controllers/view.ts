@@ -1,6 +1,6 @@
 import { CameraController } from './camera';
 import { RendererController } from './renderer';
-import { IScene } from '../scenes/types/scene';
+import type { IScene } from '../scenes/types/scene';
 // eslint-disable-next-line import/extensions
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { GameController } from '../../controllers/game';

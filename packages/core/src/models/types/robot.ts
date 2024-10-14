@@ -1,6 +1,6 @@
-import { ColorRepresentation, Vector2 } from 'three';
-import { IModel } from './model';
-import { RobotColor } from './color';
+import { type ColorRepresentation, Vector2 } from 'three';
+import type { IModel } from './model';
+import type { RobotColor } from './color';
 
 type RobotInfo = {
   name: RobotColor

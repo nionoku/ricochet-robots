@@ -1,5 +1,5 @@
 import { Color, Scene } from 'three';
-import { IScene } from './types/scene';
+import type { IScene } from './types/scene';
 import { GameController } from '../../controllers/game';
 
 class MainScene extends Scene implements IScene {
