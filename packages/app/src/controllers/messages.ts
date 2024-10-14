@@ -4,8 +4,7 @@ import type { EventMessage } from 'core/src/controllers/types/events';
 class MessageController extends CoreMessageController {
   emit(message: EventMessage): void {
     const iframe = document.getElementById('scene') as HTMLIFrameElement;
-    // eslint-disable-next-line sonarjs/post-message
-    iframe.contentWindow?.postMessage(message, '*');
+    iframe.contentWindow?.postMessage(message, import.meta.env.VITE_APP_CORE_TARGET_ORIGIN);
   }
 }
 

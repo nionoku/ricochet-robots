@@ -11,8 +11,7 @@ class MessageController {
   }
 
   emit(message: EventMessage) {
-    // eslint-disable-next-line sonarjs/post-message
-    window.top?.postMessage(message, '*');
+    window.top?.postMessage(message, import.meta.env.VITE_APP_APP_TARGET_ORIGIN);
   }
 }
 
