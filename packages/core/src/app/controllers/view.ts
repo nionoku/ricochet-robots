@@ -7,7 +7,7 @@ import { GameController } from '../../controllers/game';
 import { IntersectionsController } from '../../controllers/intersections';
 import { NotationsRendererController } from './notations-renderer';
 
-const BASE_FOV = 1.55;
+const BASE_FOV = 1.6;
 
 class ViewController {
   private readonly notationsRenderer: NotationsRendererController;

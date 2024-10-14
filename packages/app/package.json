@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "npm run type-check && vite build",
     "type-check": "vue-tsc --build --force"
   },
