@@ -190,7 +190,7 @@ class GameController {
   }
 
   private selectRobot(name: RobotInfo['name']) {
-    if (this.st.state !== GameState.MOVE_DISABLED) {
+    if (this.st.state === GameState.MOVE_DISABLED) {
       return;
     }
 
@@ -198,7 +198,7 @@ class GameController {
   }
 
   private moveSelectedRobot(direction: Direction) {
-    if (this.st.state !== GameState.MOVE_DISABLED) {
+    if (this.st.state === GameState.MOVE_DISABLED) {
       return;
     }
 

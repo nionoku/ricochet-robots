@@ -31,6 +31,7 @@ const mc = new MessageController();
 
 const prepare = () => {
   mc.emit({ event: 'prepare', schema: [0, 1, 2, 3], robotsCoords: { "blue": { "x": 14, "y": 5 }, "green": { "x": 9, "y": 12 }, "yellow": { "x": 10, "y": 2 }, "red": { "x": 15, "y": 9 }, "grey": { "x": 11, "y": 12 } } });
+  mc.emit({ event: 'enable' })
 }
 
 // loading message handler
@@ -41,6 +42,10 @@ const lmh: MessagesHandler = (event) => {
       prepare();
 
       return;
+    }
+
+    case 'select_robot': {
+      mc.emit({ event: 'select_robot', name: event.data.name })
     }
   }
 }
