@@ -1,4 +1,15 @@
 {
   "name": "listeners",
-  "main": "index.ts"
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "lint:types": "tsc"
+  },
+  "files": [
+    "index.ts",
+    "types/index.ts"
+  ],
+  "dependencies": {
+    "typescript": "^5.6.3"
+  }
 }

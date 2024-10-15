@@ -1,17 +1,12 @@
-import type { EventMessage } from './types/events';
-import type { MessagesHandler } from './types/message';
+import { MessageController as OriginMessageController, type EventMessage } from 'listeners';
 
-class MessageController {
-  on(handler: MessagesHandler) {
-    window.addEventListener('message', handler);
-  }
-
-  off(handler: MessagesHandler) {
-    window.removeEventListener('message', handler);
+class MessageController extends OriginMessageController {
+  constructor() {
+    super(import.meta.env.VITE_APP_APP_TARGET_ORIGIN);
   }
 
   emit(message: EventMessage) {
-    window.top?.postMessage(message, import.meta.env.VITE_APP_APP_TARGET_ORIGIN);
+    window.top?.postMessage(message);
   }
 }
 

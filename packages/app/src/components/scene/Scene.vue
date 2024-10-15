@@ -3,6 +3,7 @@
     <iframe
       v-show="!isLoading"
       id="scene"
+      ref="scene"
       :src="baseUrl"
     ></iframe>
 
@@ -14,10 +15,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import Loader from './Loader.vue';
-import { type MessagesHandler } from '../../controllers/messages';
 import { useMessages } from './composables/use-messages';
+import type { MessagesHandler } from 'listeners';
 
 const props = defineProps<{
 }>();
@@ -29,6 +30,8 @@ const baseUrl = import.meta.env.VITE_APP_CORE_BASE_URL;
 
 // loading message handler
 const lmh: MessagesHandler = (event) => {
+  console.log(event.data.event);
+
   switch (event.data.event) {
     case 'ready': {
       isLoading.value = false;
@@ -42,6 +45,11 @@ const lmh: MessagesHandler = (event) => {
       return;
     }
 
+    case 'move_robot': {
+      emitMessage({ ...event.data });
+      return;
+    }
+
     case 'robot_moved': {
       emitMessage({ ...event.data });
       return;
@@ -50,7 +58,8 @@ const lmh: MessagesHandler = (event) => {
 }
 
 const isLoading = ref(true);
-const { subscribe: subscribeToMessages, emit: emitMessage } = useMessages(lmh);
+const sceneRef = useTemplateRef('scene');
+const { subscribe: subscribeToMessages, emit: emitMessage } = useMessages(lmh, sceneRef);
 
 const prepare = () => {
   emitMessage({ event: 'prepare', schema: [0, 1, 2, 3], robotsCoords: { "blue": { "x": 14, "y": 5 }, "green": { "x": 9, "y": 12 }, "yellow": { "x": 10, "y": 2 }, "red": { "x": 15, "y": 9 }, "grey": { "x": 11, "y": 12 } } });

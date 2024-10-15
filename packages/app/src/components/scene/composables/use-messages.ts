@@ -1,7 +1,7 @@
-import { onUnmounted } from 'vue';
+import { onUnmounted, useTemplateRef, watch } from 'vue';
 import { MessageController } from '../../../controllers/messages';
 
-const useMessages = (handler: Parameters<MessageController['on']>[0]) => {
+const useMessages = (handler: Parameters<MessageController['on']>[0], sceneRef: ReturnType<typeof useTemplateRef<HTMLIFrameElement>>) => {
   const mc = new MessageController();
 
   const subscribe = () => {
@@ -12,6 +12,14 @@ const useMessages = (handler: Parameters<MessageController['on']>[0]) => {
     mc.off(handler);
   };
 
+  watch(sceneRef, (scene) => {
+    if (!scene) {
+      throw new Error('Scene is undefined');
+    }
+    
+    mc.bind(scene);
+  });
+
   onUnmounted(() => {
     unsubscribe();
   });
@@ -19,7 +27,7 @@ const useMessages = (handler: Parameters<MessageController['on']>[0]) => {
   return {
     subscribe,
     unsubscribe,
-    emit: mc.emit,
+    emit: mc.emit.bind(mc),
   };
 };
 

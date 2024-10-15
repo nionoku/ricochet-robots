@@ -1,9 +1,7 @@
 import { BoardController } from './board';
 import { IntersectionsController } from './intersections';
-import { MessageController } from './messages';
 import { RobotsController } from './robots';
 import { TokensController } from './tokens';
-import type { MessagesHandler } from './types/message';
 import type { RobotsCoords } from './types/robots-coords';
 import type { IntersectionEventHandler } from './types/intersections';
 import type { RobotInfo } from '../models/types/robot';
@@ -17,6 +15,8 @@ import { Object3D, Scene, Vector2, type Vector2Like } from 'three';
 import { isRobot } from '../models/utils/is-robot';
 import { GameStateController } from './game-state';
 import { GameState } from './constants/game-state';
+import { MessageController } from './messages';
+import { KeyupController, type MessagesHandler } from 'listeners';
 
 class GameController {
   /** Message handler */
@@ -99,35 +99,12 @@ class GameController {
 
   private readonly rc = new RobotsController();
 
-  constructor(private readonly ic: IntersectionsController) {
-    /* -- temporary keyboard listener -- */
-    window.addEventListener('keyup', (event) => {
-      switch (event.key) {
-        case 'ArrowUp': {
-          this.mc.emit({ event: 'move_robot', direction: Direction.UP });
-          return;
-        }
+  private readonly kc = new KeyupController(window, this.mc);
 
-        case 'ArrowDown': {
-          this.mc.emit({ event: 'move_robot', direction: Direction.DOWN });
-          return;
-        }
-
-        case 'ArrowLeft': {
-          this.mc.emit({ event: 'move_robot', direction: Direction.LEFT });
-          return;
-        }
-
-        case 'ArrowRight': {
-          this.mc.emit({ event: 'move_robot', direction: Direction.RIGHT });
-          return;
-        }
-      }
-    });
-    /* -- end temporary keyboard listener -- */
-  }
+  constructor(private readonly ic: IntersectionsController) {}
 
   public prepare() {
+    this.kc.on();
     this.mc.on(this.mh);
     this.ic.on(this.rootObject, this.ih);
 

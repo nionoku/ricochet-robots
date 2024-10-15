@@ -23,7 +23,6 @@ class IntersectionsController extends Raycaster {
       );
   
       this.setFromCamera(pointer, this._camera);
-
       handler(this.intersectObject(from), event.type as IntersectionEventType);
     };
 

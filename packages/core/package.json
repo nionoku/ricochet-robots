@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "build": "npm run lint:types && vite build",
+    "lint:types": "tsc",
     "preview": "vite preview"
   },
   "devDependencies": {
