@@ -1,5 +1,5 @@
 <template>
-  <div class="scene-wrapper">
+  <div class="container">
     <iframe
       v-show="!isLoading"
       id="scene"
@@ -78,7 +78,7 @@ subscribeToMessages();
   height: 100%;
 }
 
-.scene-wrapper {
+.container {
   display: flex;
   place-items: center;
   place-content: center;

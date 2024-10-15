@@ -4,15 +4,15 @@
     @start-game="whenStartGame"
   />
 
-  <Scene
+  <Game
     v-else-if="route.name === 'game'"
-    class="scene"
+    class="game"
   />
 </template>
 
 <script setup lang="ts">
+import Game from './components/game/Game.vue';
 import Host from './components/host/Host.vue';
-import Scene from './components/scene/Scene.vue';
 import { useRouter, type Route } from './composables/router';
 
 // TODO (2024.10.13): Check initial by query params
@@ -26,7 +26,7 @@ const whenStartGame = () => {
 </script>
 
 <style scoped>
-.scene {
+.game {
   width: 100%;
   height: 100%;
 }
