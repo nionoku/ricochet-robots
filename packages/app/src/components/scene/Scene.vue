@@ -15,9 +15,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from 'vue';
+import { ref, useTemplateRef, watch } from 'vue';
 import Loader from './Loader.vue';
-import { useMessages } from './composables/use-messages';
+import { useSceneReady } from './composables/use-scene-ready';
+import { MessageControllerInstance } from '../../controllers/messages';
 import type { MessagesHandler } from 'listeners';
 
 const props = defineProps<{
@@ -39,17 +40,17 @@ const lmh: MessagesHandler = (event) => {
     }
 
     case 'select_robot': {
-      emitMessage({ ...event.data });
+      MessageControllerInstance.sendMessage({ ...event.data });
       return;
     }
 
     case 'move_robot': {
-      emitMessage({ ...event.data });
+      MessageControllerInstance.sendMessage({ ...event.data });
       return;
     }
 
     case 'robot_moved': {
-      emitMessage({ ...event.data });
+      MessageControllerInstance.sendMessage({ ...event.data });
       return;
     }
   }
@@ -57,16 +58,23 @@ const lmh: MessagesHandler = (event) => {
 
 const isLoading = ref(true);
 const sceneRef = useTemplateRef('scene');
-const { subscribe: subscribeToMessages, emit: emitMessage } = useMessages(lmh, sceneRef);
+const { isSceneReady } = useSceneReady(sceneRef);
 
 const prepare = () => {
-  emitMessage({ event: 'prepare', schema: [0, 1, 2, 3], robotsCoords: { "blue": { "x": 14, "y": 5 }, "green": { "x": 9, "y": 12 }, "yellow": { "x": 10, "y": 2 }, "red": { "x": 15, "y": 9 }, "grey": { "x": 11, "y": 12 } } });
-  emitMessage({ event: 'enable' })
+  MessageControllerInstance
+    .sendMessage({ event: 'prepare', schema: [0, 1, 2, 3], robotsCoords: { "blue": { "x": 14, "y": 5 }, "green": { "x": 9, "y": 12 }, "yellow": { "x": 10, "y": 2 }, "red": { "x": 15, "y": 9 }, "grey": { "x": 11, "y": 12 } } })
+    .sendMessage({ event: 'enable' })
 }
 
-// subscribe to listeners
-subscribeToMessages();
+watch(isSceneReady, () => {
+  if (!sceneRef.value?.contentWindow) {
+    throw new Error('Iframe.contentWindow is not ready');
+  }
 
+  MessageControllerInstance
+    .bind(sceneRef.value.contentWindow)
+    .on(lmh)
+})
 </script>
 
 <style scoped>

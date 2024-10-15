@@ -75,7 +75,7 @@ class GameController {
     const robot = intersections.find(({ object }) => object.name === 'robot')?.object;
 
     if (robot) {
-      this.mc.emit({ event: 'select_robot', name: robot.userData.name });
+      this.mc.sendMessage({ event: 'select_robot', name: robot.userData.name });
     }
     /* end handle click by robot */
   };
@@ -108,7 +108,7 @@ class GameController {
     this.mc.on(this.mh);
     this.ic.on(this.rootObject, this.ih);
 
-    this.mc.emit({ event: 'ready' });
+    this.mc.sendMessage({ event: 'ready' });
   }
 
   private generateRobotsCoords() {
@@ -123,7 +123,7 @@ class GameController {
       return record;
     }, {});
 
-    this.mc.emit({
+    this.mc.sendMessage({
       event: 'submit_robots_coords',
       coords: data,
     });
@@ -194,7 +194,7 @@ class GameController {
       return;
     }
 
-    this.mc.emit({
+    this.mc.sendMessage({
       event: 'robot_moved',
       robot: this.rc.selectedRobot.userData.name,
       from: this.rc.selectedRobot.coords.toArray(),
@@ -202,7 +202,7 @@ class GameController {
     });
 
     if (this.isRobotAchievedToken(this.rc.selectedRobot.userData.name, target, this.tc.selectedToken)) {
-      this.mc.emit({
+      this.mc.sendMessage({
         event: 'token_achieved',
       });
     }

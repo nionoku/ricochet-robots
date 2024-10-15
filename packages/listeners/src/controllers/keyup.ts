@@ -8,22 +8,22 @@ class KeyupController {
     this.kh = (event) => {
       switch (event.key) {
         case 'ArrowUp': {
-          mc.emit({ event: 'move_robot', direction: Direction.UP });
+          mc.sendMessage({ event: 'move_robot', direction: Direction.UP });
           return;
         }
 
         case 'ArrowDown': {
-          mc.emit({ event: 'move_robot', direction: Direction.DOWN });
+          mc.sendMessage({ event: 'move_robot', direction: Direction.DOWN });
           return;
         }
 
         case 'ArrowLeft': {
-          mc.emit({ event: 'move_robot', direction: Direction.LEFT });
+          mc.sendMessage({ event: 'move_robot', direction: Direction.LEFT });
           return;
         }
 
         case 'ArrowRight': {
-          mc.emit({ event: 'move_robot', direction: Direction.RIGHT });
+          mc.sendMessage({ event: 'move_robot', direction: Direction.RIGHT });
           return;
         }
       }
