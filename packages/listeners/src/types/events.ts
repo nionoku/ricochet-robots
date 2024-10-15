@@ -5,7 +5,11 @@ import type { RobotsCoords } from 'core/src/controllers/types/robots-coords';
 import type { TokenInfo } from 'core/src/models/types/token';
 import type { Vector2Tuple } from 'three';
 
-type Ready = {
+type Ping = {
+  event: 'ping'
+};
+
+type Status = {
   event: 'ready'
 };
 
@@ -61,7 +65,8 @@ type TokenAchieved = {
 };
 
 type EventMessage = 
-  Ready
+  Status
+    | Ping
     | GenerateRobotsCoords 
     | SubmitRobotsCoords
     | Prepare

@@ -22,6 +22,11 @@ class GameController {
   /** Message handler */
   private readonly mh: MessagesHandler = (event) => {
     switch (event.data.event) {
+      case 'ping': {
+        this.notifyReady();
+        return;
+      }
+
       case 'generate_robots_coords': {
         this.generateRobotsCoords();
         return;
@@ -107,7 +112,9 @@ class GameController {
     this.kc.on();
     this.mc.on(this.mh);
     this.ic.on(this.rootObject, this.ih);
+  }
 
+  private notifyReady() {
     this.mc.sendMessage({ event: 'ready' });
   }
 

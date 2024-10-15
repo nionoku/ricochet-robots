@@ -20,6 +20,7 @@ import Loader from './Loader.vue';
 import { useSceneReady } from './composables/use-scene-ready';
 import { MessageControllerInstance } from '../../controllers/messages';
 import type { MessagesHandler } from 'listeners';
+import { usePing } from './composables/use-ping';
 
 const props = defineProps<{
 }>();
@@ -34,6 +35,8 @@ const lmh: MessagesHandler = (event) => {
   switch (event.data.event) {
     case 'ready': {
       isLoading.value = false;
+
+      cancelPingReadyState();
       prepare();
 
       return;
@@ -59,6 +62,7 @@ const lmh: MessagesHandler = (event) => {
 const isLoading = ref(true);
 const sceneRef = useTemplateRef('scene');
 const { isSceneReady } = useSceneReady(sceneRef);
+const { ping: pingReadyState, cancel: cancelPingReadyState } = usePing();
 
 const prepare = () => {
   MessageControllerInstance
@@ -74,6 +78,8 @@ watch(isSceneReady, () => {
   MessageControllerInstance
     .bind(sceneRef.value.contentWindow)
     .on(lmh)
+
+  pingReadyState();
 })
 </script>
 
