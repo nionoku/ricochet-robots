@@ -29,8 +29,8 @@ jobs:
         run: npm run build
         env:
           VITE_APP_CORE_BASE_URL: /ricochet-robots/core
-          VITE_APP_APP_TARGET_ORIGIN: https://nionoku.github.io/
-          VITE_APP_CORE_TARGET_ORIGIN: https://nionoku.github.io/
+          VITE_APP_APP_TARGET_ORIGIN: https://nionoku.github.io
+          VITE_APP_CORE_TARGET_ORIGIN: https://nionoku.github.io
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

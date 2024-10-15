@@ -1,8 +1,6 @@
 import { CameraController } from './camera';
 import { RendererController } from './renderer';
 import type { IScene } from '../scenes/types/scene';
-// eslint-disable-next-line import/extensions
-import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { GameController } from '../../controllers/game';
 import { IntersectionsController } from '../../controllers/intersections';
 import { NotationsRendererController } from './notations-renderer';
@@ -16,22 +14,16 @@ class ViewController {
 
   private readonly camera: CameraController;
 
-  private readonly controls: OrbitControls;
-
   private readonly scene: IScene;
 
   constructor(private readonly root: HTMLElement, _Scene: new (gc: GameController) => IScene) {
     this.renderer = new RendererController(root.clientWidth, root.clientHeight);
     this.camera = new CameraController(root.clientWidth, root.clientHeight);
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.notationsRenderer = new NotationsRendererController(root.clientWidth, root.clientHeight);
 
     const ic = new IntersectionsController(this.renderer.domElement, this.camera);
     const gc = new GameController(ic);
 
-    // disable controls by default
-    this.controls.enabled = false;
-    
     this.scene = new _Scene(gc);
 
     this.camera.position.z = this.fov();
@@ -40,7 +32,6 @@ class ViewController {
 
   private render() {
     this.scene.update();
-    this.controls.update();
     this.renderer.render(this.scene, this.camera);
     this.notationsRenderer.render(this.scene, this.camera);
   }
@@ -48,6 +39,10 @@ class ViewController {
   private fov(): number {
     const aspectRatio = this.root.clientHeight / this.root.clientWidth;
 
+    if (!aspectRatio) {
+      return BASE_FOV;
+    }
+    
     if (aspectRatio <= 1) {
       return BASE_FOV;
     }
@@ -63,15 +58,15 @@ class ViewController {
   }
 
   resize() {
+    this.camera.resize(this.root.clientWidth, this.root.clientHeight);
     this.camera.position.z = this.fov();
 
-    this.camera.resize(this.root.clientWidth, this.root.clientHeight);
     this.renderer.resize(this.root.clientWidth, this.root.clientHeight);
     this.notationsRenderer.resize(this.root.clientWidth, this.root.clientHeight);
   }
 
   animate() {
-    this.renderer.setAnimationLoop(() => this.render());
+    this.renderer.setAnimationLoop(this.render.bind(this));
   }
 }
 
