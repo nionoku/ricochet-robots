@@ -1,4 +1,4 @@
-import { MessageController as OriginMessageController, type EventMessage } from 'listeners';
+import { MessageController as OriginMessageController } from 'listeners';
 
 class MessageController extends OriginMessageController {
   constructor() {
@@ -9,10 +9,6 @@ class MessageController extends OriginMessageController {
     }
 
     this.bind(window.top);
-  }
-
-  sendMessage(message: EventMessage) {
-    super.sendMessage(message);
   }
 }
 
