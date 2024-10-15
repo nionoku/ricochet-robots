@@ -29,6 +29,9 @@ class ViewController {
     const ic = new IntersectionsController(this.renderer.domElement, this.camera);
     const gc = new GameController(ic);
 
+    // disable controls by default
+    this.controls.enabled = false;
+    
     this.scene = new _Scene(gc);
 
     this.camera.position.z = this.fov();
