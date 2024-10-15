@@ -8,7 +8,8 @@
   "author": "nionoku <nionoku@gmail.com>",
   "workspaces": [
     "packages/core",
-    "packages/app"
+    "packages/app",
+    "packages/listeners"
   ],
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.10.4",
