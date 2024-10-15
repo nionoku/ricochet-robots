@@ -1,10 +1,10 @@
 import { Direction } from 'core/src/constants/direction';
-import type { MessageController } from './messages';
+import type { IMessagesControllerImpl } from '../types';
 
 class KeyupController {
   private readonly kh: (event: KeyboardEvent) => void;
 
-  constructor(private readonly target: Window, mc: MessageController) {
+  constructor(private readonly target: Window, mc: IMessagesControllerImpl) {
     this.kh = (event) => {
       switch (event.key) {
         case 'ArrowUp': {

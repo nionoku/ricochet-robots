@@ -6,7 +6,11 @@ class MessageController extends OriginMessageController {
   }
 
   emit(message: EventMessage) {
-    window.top?.postMessage(message);
+    if (!window.top) {
+      throw new Error('window.top is undefined');
+    }
+    
+    super.emit(message, window.top);
   }
 }
 

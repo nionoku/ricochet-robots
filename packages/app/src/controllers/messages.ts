@@ -12,11 +12,11 @@ class MessageController extends OriginMessageController {
   }
 
   emit(message: EventMessage) {
-    if (!this.target) {
+    if (!this.target?.contentWindow) {
       throw new Error('Call \'bind\' with argument is target iframe, before emit events');
     }
 
-    this.target.contentWindow?.postMessage(message);
+    super.emit(message, this.target.contentWindow);
   }
 }
 

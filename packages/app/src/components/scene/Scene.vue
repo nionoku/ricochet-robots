@@ -30,8 +30,6 @@ const baseUrl = import.meta.env.VITE_APP_CORE_BASE_URL;
 
 // loading message handler
 const lmh: MessagesHandler = (event) => {
-  console.log(event.data.event);
-
   switch (event.data.event) {
     case 'ready': {
       isLoading.value = false;

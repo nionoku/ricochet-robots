@@ -12,8 +12,8 @@ class MessageController {
     window.removeEventListener('message', handler);
   }
 
-  emit(message: EventMessage) {
-    window.top?.postMessage(message, this.targetOrigin);
+  emit(message: EventMessage, target: Window) {
+    target.postMessage(message, this.targetOrigin);
   }
 }
 
