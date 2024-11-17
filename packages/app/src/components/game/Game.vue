@@ -1,13 +1,23 @@
 <template>
   <div class="container">
-    <div class="stats">
-      stats
+    <div class="top">
+      <Stats class="stats" />
+
+      <Timer
+        v-show="isShowTimer"
+        ref="timerRef"
+        class="timer"
+        @finish="handleFinishTimer"
+      />
     </div>
 
     <Scene class="scene" />
 
     <div class="actions">
-      <button class="resolve">
+      <button
+        class="resolve"
+        @click="handleResolve"
+      >
         Resolve
       </button>
     </div>
@@ -15,7 +25,20 @@
 </template>
 
 <script lang="ts" setup>
+import { useTemplateRef } from 'vue';
 import Scene from '../scene/Scene.vue';
+import Stats from '../stats/Stats.vue';
+import Timer from '../timer/Timer.vue';
+import { useEmitAnswer } from './composables/use-emit-answer';
+import { validateAnswer } from './utils/validate-answer';
+
+const timerRef = useTemplateRef<InstanceType<typeof Timer>>('timerRef');
+const {
+  isShowTimer,
+  handleAnswer,
+
+  handleTimeout,
+} = useEmitAnswer(timerRef);
 
 const props = defineProps<{
 }>();
@@ -23,6 +46,22 @@ const props = defineProps<{
 const emits = defineEmits({
 });
 
+
+const handleResolve = () => {
+  // TODO (2024.11.17): Replace prompt to dialog
+  // TODO (2024.11.17): prompt stops microtasks queue
+  const stepCount = validateAnswer(
+    prompt('Steps for resolve?')
+  );
+
+  // TODO (2024.11.17): Check is first or better answer
+  // if (isFirstOrBetterAnswer) ...
+  handleAnswer(stepCount);
+}
+
+const handleFinishTimer = () => {
+  handleTimeout();
+}
 </script>
 
 <style scoped>
@@ -39,7 +78,7 @@ const emits = defineEmits({
   flex-grow: 1;
 }
 
-.stats,
+.top,
 .actions {
   display: flex;
 
@@ -51,8 +90,12 @@ const emits = defineEmits({
   z-index: 1;
 }
 
-.stats {
+.top {
   top: var(--gap);
+
+  flex-direction: column;
+
+  row-gap: var(--gap);
 }
 
 .actions {

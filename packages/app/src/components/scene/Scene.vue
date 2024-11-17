@@ -67,10 +67,9 @@ const { ping: pingReadyState, cancel: cancelPingReadyState } = usePing();
 const prepare = () => {
   MessageControllerInstance
     .sendMessage({ event: 'prepare', schema: [0, 1, 2, 3], robotsCoords: { "blue": { "x": 14, "y": 5 }, "green": { "x": 9, "y": 12 }, "yellow": { "x": 10, "y": 2 }, "red": { "x": 15, "y": 9 }, "grey": { "x": 11, "y": 12 } } })
-    .sendMessage({ event: 'enable' })
 }
 
-watch(isSceneReady, () => {
+const handleIsSceneReady = () => {
   if (!sceneRef.value?.contentWindow) {
     throw new Error('Iframe.contentWindow is not ready');
   }
@@ -80,7 +79,9 @@ watch(isSceneReady, () => {
     .on(lmh)
 
   pingReadyState();
-})
+}
+
+watch(isSceneReady, handleIsSceneReady)
 </script>
 
 <style scoped>
