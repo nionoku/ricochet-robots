@@ -13,14 +13,20 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    "checkJs": true,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true
   },
   "include": [
     "packages/**/*",
-    ".eslintrc.cjs"
+    "eslint.config.mjs"
   ]
 }
