@@ -11,10 +11,12 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits({
-  startGame: null
+  startGame: null,
 });
 
-const whenClick = () => emits('startGame')
+const whenClick = () => {
+  emits('startGame');
+};
 </script>
 
 <style scoped>

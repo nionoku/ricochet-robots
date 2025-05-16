@@ -4,8 +4,8 @@ import textures from './assets/textures.json';
 import models from './assets/models.json';
 
 import { ViewController } from './app/controllers/view';
-import { ModelLoader } from './loaders/model-loader';
-import { TextureLoader } from './loaders/texture-loader';
+import { ModelLoader } from './loaders/models';
+import { TextureLoader } from './loaders/textures';
 import { MainScene } from './app/scenes/main';
 
 const main = async () => {
@@ -22,7 +22,9 @@ const main = async () => {
 
   const vc = new ViewController(root, MainScene);
 
-  window.addEventListener('resize', () => vc.resize());
+  window.addEventListener('resize', () => {
+    vc.resize();
+  });
   root.append(...vc.domElements);
 
   vc.animate();

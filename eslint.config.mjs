@@ -103,6 +103,8 @@ const pluginStylistic = [
         consistent: true,
         multiline: true,
       }],
+      '@stylistic/arrow-parens': ['error', 'always'],
+      '@stylistic/brace-style': ['error', '1tbs'],
     },
   },
 ];
@@ -113,6 +115,7 @@ const pluginUnicorn = [
   {
     rules: {
       'unicorn/no-null': 'off',
+      'unicorn/no-array-reduce': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/relative-url-style': ['error', 'always'],
     },

@@ -16,13 +16,13 @@ import Host from './components/host/Host.vue';
 import { useRouter, type Route } from './composables/router';
 
 // TODO (2024.10.13): Check initial by query params
-const initial: Route = { name: 'host' }
+const initial: Route = { name: 'host' };
 
 const { route, replace } = useRouter(initial);
 
 const whenStartGame = () => {
-  replace({ name: 'game' })
-}
+  replace({ name: 'game' });
+};
 </script>
 
 <style scoped>

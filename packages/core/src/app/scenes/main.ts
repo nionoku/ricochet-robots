@@ -1,6 +1,6 @@
 import { Color, Scene } from 'three';
-import type { IScene } from './types/scene';
 import { GameController } from '../../controllers/game';
+import type { IScene } from './types/scene';
 
 class MainScene extends Scene implements IScene {
   constructor(private readonly gc: GameController) {

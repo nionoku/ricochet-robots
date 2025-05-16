@@ -1,8 +1,8 @@
-import { CameraController } from './camera';
-import { RendererController } from './renderer';
 import type { IScene } from '../scenes/types/scene';
 import { GameController } from '../../controllers/game';
 import { IntersectionsController } from '../../controllers/intersections';
+import { RendererController } from './renderer';
+import { CameraController } from './camera';
 import { NotationsRendererController } from './notations-renderer';
 
 const BASE_FOV = 1.6;
@@ -35,14 +35,14 @@ class ViewController {
     this.renderer.render(this.scene, this.camera);
     this.notationsRenderer.render(this.scene, this.camera);
   }
-  
+
   private fov(): number {
     const aspectRatio = this.root.clientHeight / this.root.clientWidth;
 
     if (!aspectRatio) {
       return BASE_FOV;
     }
-    
+
     if (aspectRatio <= 1) {
       return BASE_FOV;
     }

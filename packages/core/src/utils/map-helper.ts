@@ -1,12 +1,12 @@
 import { Vector2, type Vector2Like, type Vector3Like } from 'three';
-import { rotateMatrix } from './rotate-matrix';
 import { CELL_SIZE, MAP_SIZE, POSITION_SHIFT } from '../models/constants/map';
 import { Robot } from '../models/robot';
 import { Direction } from '../constants/direction';
-import { rotateWalls } from './rotate-walls';
 import { ROBOT_ON_CELL } from '../constants/robot';
 import mapParts from '../assets/map.json';
 import type { MapType } from '../models/types/map';
+import { rotateWalls } from './rotate-walls';
+import { rotateMatrix } from './rotate-matrix';
 import { mergeSides } from './merge-parties';
 
 class MapHelperInstance {
@@ -14,7 +14,7 @@ class MapHelperInstance {
 
   constructor(mapPartsOrder: number[]) {
     const parts = mapPartsOrder.map((index) => mapParts[index]);
-    
+
     // right-bottom side, left-bottom side, left-top side, right-top side
     const [rb, lb, lt, rt] = parts
       .map(rotateWalls)
@@ -33,9 +33,9 @@ class MapHelperInstance {
     const map = structuredClone(this._map);
 
     // apply "box wall" on robots positions
-    robots?.forEach(({ coords: { x, y } }) => {
+    if (robots) for (const { coords: { x, y } } of robots) {
       map[y][x] = 15;
-    });
+    }
 
     return map;
   }
@@ -46,9 +46,8 @@ class MapHelperInstance {
     const otherRobots = robots.filter((robot) => robot.userData.name !== selectedRobot.userData.name);
     const map = this.map(otherRobots);
 
-    // eslint-disable-next-line sonarjs/no-commented-code
     // console.log(map.map((it) => it.map((it) => it.toString().padStart(5)).join(' ')).join('\n'));
-    
+
     switch (direction) {
       case Direction.LEFT: {
         const y = selectedRobot.coords.y;
@@ -58,8 +57,7 @@ class MapHelperInstance {
           // there is no robot on the next left cell
           const hasRobot = map[y][x - 1] === ROBOT_ON_CELL;
           const isTarget = hasWall || hasRobot;
-          
-          // eslint-disable-next-line sonarjs/no-commented-code
+
           // console.log('left', x, y, map[y], map[y][x], hasWall, hasRobot);
 
           if (isTarget) {
@@ -78,8 +76,7 @@ class MapHelperInstance {
           // there is no robot on the next right cell
           const hasRobot = map[y][x + 1] === ROBOT_ON_CELL;
           const isTarget = hasWall || hasRobot;
-          
-          // eslint-disable-next-line sonarjs/no-commented-code
+
           // console.log('right', x, y, map[y], map[y][x], hasWall, hasRobot);
 
           if (isTarget) {
@@ -100,8 +97,7 @@ class MapHelperInstance {
           // there is no robot on the next down cell
           const hasRobot = map[y + 1] && (map[y + 1][x] === ROBOT_ON_CELL);
           const isTarget = hasWall || hasRobot;
-          
-          // eslint-disable-next-line sonarjs/no-commented-code
+
           // console.log('down', x, y, column, column[x], hasWall, hasRobot);
 
           if (isTarget) {
@@ -121,8 +117,7 @@ class MapHelperInstance {
           // there is no robot on the next up cell
           const hasRobot = map[y - 1] && (map[y - 1][x] === ROBOT_ON_CELL);
           const isTarget = hasWall || hasRobot;
-          
-          // eslint-disable-next-line sonarjs/no-commented-code
+
           // console.log('up', x, y, column, column[x], hasWall, hasRobot);
 
           if (isTarget) {

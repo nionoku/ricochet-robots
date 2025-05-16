@@ -1,8 +1,8 @@
 import { Vector2 } from 'three';
 
-type IModel = {
+interface IModel {
   get coords(): Vector2
-};
+}
 
 export type {
   IModel,

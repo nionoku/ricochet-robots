@@ -1,7 +1,6 @@
 import { LoadingManager, BufferGeometry } from 'three';
-import modelsMap from '../assets/models.json';
-// eslint-disable-next-line import/extensions
 import { STLLoader } from 'three/examples/jsm/Addons.js';
+import modelsMap from '../assets/models.json';
 
 type Key = keyof typeof modelsMap;
 

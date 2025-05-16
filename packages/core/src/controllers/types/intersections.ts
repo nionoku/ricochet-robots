@@ -1,7 +1,7 @@
-import { type Intersection, Object3D } from 'three';
+import { type Intersection } from 'three';
 
 type IntersectionEventType = keyof HTMLElementEventMap;
-type IntersectionEventHandler = (intersections: Intersection<Object3D>[], event?: IntersectionEventType) => void;
+type IntersectionEventHandler = (intersections: Intersection[], event?: IntersectionEventType) => void;
 
 export type {
   IntersectionEventHandler,

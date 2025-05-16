@@ -14,7 +14,7 @@ const currentTime = ref<number>(timeoutValue);
 let timerId: NodeJS.Timeout;
 
 const emits = defineEmits<{
-  start: [],
+  start: []
   finish: []
 }>();
 
@@ -33,19 +33,19 @@ const start = () => {
   }, 1000);
 
   emits('start');
-}
+};
 
 const stop = () => {
   currentTime.value = 0;
 
   clearInterval(timerId);
   emits('finish');
-}
+};
 
 defineExpose({
   start,
   stop,
-})
+});
 
 </script>
 

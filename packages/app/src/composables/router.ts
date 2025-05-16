@@ -1,8 +1,8 @@
 import { ref, type Ref } from 'vue';
 
-type Route = {
+interface Route {
   name: 'host' | 'game'
-};
+}
 
 const useRouter = (initial: Route) => {
   const route: Ref<Route> = ref(initial);

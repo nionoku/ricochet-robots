@@ -2,28 +2,28 @@ import { type ColorRepresentation, Vector2 } from 'three';
 import type { IModel } from './model';
 import type { RobotColor } from './color';
 
-type RobotInfo = {
+interface RobotInfo {
   name: RobotColor
-  color: ColorRepresentation,
+  color: ColorRepresentation
   tint: ColorRepresentation
-};
+}
 
 type IRobot = {
   /**
    * Move robot to position
    * @param position position between [0, 15] for x and y
    */
-  move(position: Vector2): void;
+  move(position: Vector2): void
 
   /**
    * Select current robot
    */
-  select(): void;
+  select(): void
 
   /**
    * Remove select from current robot
    */
-  deselect(): void;
+  deselect(): void
 } & IModel;
 
 export type {

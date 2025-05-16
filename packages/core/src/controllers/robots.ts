@@ -22,7 +22,7 @@ class RobotsController implements IController {
   selectRobot(name: RobotInfo['name']) {
     this.clearSelectedRobot();
 
-    this._robots.forEach((robot) => {
+    for (const robot of this._robots) {
       if (robot.userData.name === name) {
         this._selectedRobot = robot;
 
@@ -30,7 +30,7 @@ class RobotsController implements IController {
       } else {
         robot.deselect();
       }
-    });
+    }
   }
 
   clearSelectedRobot() {
@@ -40,7 +40,7 @@ class RobotsController implements IController {
   getRobotByName(name: RobotInfo['name']): Robot | undefined {
     return this._robots.find((robot) => robot.userData.name === name);
   }
-  
+
   get objects(): Robot[] {
     return this._robots;
   }

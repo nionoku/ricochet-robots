@@ -8,8 +8,7 @@
 const props = defineProps<{
 }>();
 
-const emits = defineEmits({
-});
+const emits = defineEmits({});
 
 </script>
 

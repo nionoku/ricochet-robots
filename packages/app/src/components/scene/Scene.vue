@@ -5,7 +5,7 @@
       id="scene"
       ref="scene"
       :src="baseUrl"
-    ></iframe>
+    />
 
     <Loader
       v-if="isLoading"
@@ -16,17 +16,11 @@
 
 <script lang="ts" setup>
 import { ref, useTemplateRef, watch } from 'vue';
+import type { MessagesHandler } from 'listeners';
+import { MessageControllerInstance } from '../../controllers/messages';
 import Loader from './Loader.vue';
 import { useSceneReady } from './composables/use-scene-ready';
-import { MessageControllerInstance } from '../../controllers/messages';
-import type { MessagesHandler } from 'listeners';
 import { usePing } from './composables/use-ping';
-
-const props = defineProps<{
-}>();
-
-const emits = defineEmits({
-});
 
 const baseUrl = import.meta.env.VITE_APP_CORE_BASE_URL;
 
@@ -57,7 +51,7 @@ const lmh: MessagesHandler = (event) => {
       return;
     }
   }
-}
+};
 
 const isLoading = ref(true);
 const sceneRef = useTemplateRef('scene');
@@ -66,8 +60,33 @@ const { ping: pingReadyState, cancel: cancelPingReadyState } = usePing();
 
 const prepare = () => {
   MessageControllerInstance
-    .sendMessage({ event: 'prepare', schema: [0, 1, 2, 3], robotsCoords: { "blue": { "x": 14, "y": 5 }, "green": { "x": 9, "y": 12 }, "yellow": { "x": 10, "y": 2 }, "red": { "x": 15, "y": 9 }, "grey": { "x": 11, "y": 12 } } })
-}
+    .sendMessage({
+      event: 'prepare',
+      schema: [0, 1, 2, 3],
+      robotsCoords: {
+        blue: {
+          x: 14,
+          y: 5,
+        },
+        green: {
+          x: 9,
+          y: 12,
+        },
+        yellow: {
+          x: 10,
+          y: 2,
+        },
+        red: {
+          x: 15,
+          y: 9,
+        },
+        grey: {
+          x: 11,
+          y: 12,
+        },
+      },
+    });
+};
 
 const handleIsSceneReady = () => {
   if (!sceneRef.value?.contentWindow) {
@@ -76,12 +95,12 @@ const handleIsSceneReady = () => {
 
   MessageControllerInstance
     .bind(sceneRef.value.contentWindow)
-    .on(lmh)
+    .on(lmh);
 
   pingReadyState();
-}
+};
 
-watch(isSceneReady, handleIsSceneReady)
+watch(isSceneReady, handleIsSceneReady);
 </script>
 
 <style scoped>

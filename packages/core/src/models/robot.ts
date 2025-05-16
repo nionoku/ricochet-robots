@@ -1,7 +1,7 @@
 import { Box3, Mesh, MeshBasicMaterial, type Vector2Like } from 'three';
-import type { IRobot, RobotInfo } from './types/robot';
-import { ModelLoader } from '../loaders/model-loader';
+import { ModelLoader } from '../loaders/models';
 import { MapHelper } from '../utils/map-helper';
+import type { IRobot, RobotInfo } from './types/robot';
 
 const PARAM_SCALE = 0.005;
 
@@ -43,7 +43,7 @@ class Robot extends Mesh implements IRobot {
 
   move(coords: Vector2Like): void {
     const position = MapHelper.toPosition(coords);
-    
+
     this.position.x = position.x;
     this.position.y = position.y;
   }
@@ -51,7 +51,7 @@ class Robot extends Mesh implements IRobot {
   select(): void {
     (this.material as MeshBasicMaterial).opacity = OPACITY_SELECTED;
   }
-  
+
   deselect(): void {
     (this.material as MeshBasicMaterial).opacity = OPACITY_DESELECTED;
   }

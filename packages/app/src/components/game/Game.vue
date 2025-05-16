@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import Scene from '../scene/Scene.vue';
+import { Scene } from '../scene';
 import Stats from '../stats/Stats.vue';
 import Timer from '../timer/Timer.vue';
 import { useEmitAnswer } from './composables/use-emit-answer';
@@ -43,25 +43,23 @@ const {
 const props = defineProps<{
 }>();
 
-const emits = defineEmits({
-});
-
+const emits = defineEmits({});
 
 const handleResolve = () => {
   // TODO (2024.11.17): Replace prompt to dialog
   // TODO (2024.11.17): prompt stops microtasks queue
   const stepCount = validateAnswer(
-    prompt('Steps for resolve?')
+    prompt('Steps for resolve?'),
   );
 
   // TODO (2024.11.17): Check is first or better answer
   // if (isFirstOrBetterAnswer) ...
   handleAnswer(stepCount);
-}
+};
 
 const handleFinishTimer = () => {
   handleTimeout();
-}
+};
 </script>
 
 <style scoped>

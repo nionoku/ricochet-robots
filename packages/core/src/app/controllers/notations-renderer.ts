@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import { CSS2DRenderer } from 'three/examples/jsm/Addons.js';
 
 class NotationsRendererController extends CSS2DRenderer {
@@ -12,7 +11,7 @@ class NotationsRendererController extends CSS2DRenderer {
 
     this.setSize(width, height);
   }
-  
+
   resize(width: number, height: number) {
     this.setSize(width, height);
   }

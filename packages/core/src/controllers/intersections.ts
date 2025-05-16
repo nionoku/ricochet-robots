@@ -13,7 +13,7 @@ class IntersectionsController extends Raycaster {
 
   on(from: Object3D, handler: IntersectionEventHandler) {
     this.off();
-    
+
     this._handler = (event: MouseEvent) => {
       const bbox = this._canvas.getBoundingClientRect();
 
@@ -21,7 +21,7 @@ class IntersectionsController extends Raycaster {
         ((event.x - bbox.left) / this._canvas.scrollWidth) * 2 - 1,
         -((event.y - bbox.top) / this._canvas.scrollHeight) * 2 + 1,
       );
-  
+
       this.setFromCamera(pointer, this._camera);
       handler(this.intersectObject(from), event.type as IntersectionEventType);
     };

@@ -1,9 +1,9 @@
-import type { IController } from './types/controller';
+import { Object3D } from 'three';
 import { Token } from '../models/token';
 import type { TokenInfo } from '../models/types/token';
-import { Object3D } from 'three';
 import { isToken } from '../models/utils/is-token';
 import { Board } from '../models/board';
+import type { IController } from './types/controller';
 
 class TokensController implements IController {
   private _selectedToken: Token | null = null;
@@ -34,15 +34,21 @@ class TokensController implements IController {
   }
 
   private findTokens(from: Object3D): Token[] {
-    const { tokens, other } = from.children.reduce<{ tokens: Token[], other: Object3D[] }>((acc, it) => {
+    const { tokens, other } = from.children.reduce<{
+      tokens: Token[]
+      other: Object3D[]
+    }>((acc, it) => {
       if (isToken(it)) {
         acc.tokens.push(it);
       } else {
         acc.other.push(it);
       }
-      
+
       return acc;
-    }, { tokens: [], other: [] });
+    }, {
+      tokens: [],
+      other: [],
+    });
 
     return [...tokens, ...other.flatMap(this.findTokens.bind(this))];
   }

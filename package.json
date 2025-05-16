@@ -1,9 +1,15 @@
 {
   "name": "ricochet-robots",
   "version": "0.0.0",
+  "browserslist": [
+    "defaults",
+    "not op_mini all"
+  ],
   "scripts": {
     "dev": "npm run dev -w app & npm run dev -w core",
-    "build": "rm -rf dist && npm run build -w app & npm run build -w core"
+    "build": "rm -rf dist && npm run build -w app & npm run build -w core",
+    "lint:eslint": "eslint",
+    "lint:eslint:fix": "eslint --fix"
   },
   "author": "nionoku <nionoku@gmail.com>",
   "workspaces": [

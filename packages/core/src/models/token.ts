@@ -1,8 +1,8 @@
 import { Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, type Vector2Like, Vector3 } from 'three';
+import { TextureLoader } from '../loaders/textures';
+import { MapHelper } from '../utils/map-helper';
 import type { IToken, TokenInfo } from './types/token';
 import { CELL_SIZE, CELL_SIZE_HALF } from './constants/map';
-import { TextureLoader } from '../loaders/texture-loader';
-import { MapHelper } from '../utils/map-helper';
 
 class Token extends Mesh implements IToken {
   declare userData: Pick<TokenInfo, 'token' | 'color'>;
@@ -20,13 +20,13 @@ class Token extends Mesh implements IToken {
     });
 
     super(geom, mat);
-    
+
     this.name = 'token';
     this.userData = {
       token: tokenInfo.token,
       color: tokenInfo.color,
     };
-    
+
     this.setInitialPosition(new Vector2().fromArray(tokenInfo.position));
   }
 

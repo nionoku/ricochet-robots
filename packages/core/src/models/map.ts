@@ -1,7 +1,7 @@
 import { BoxGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Texture } from 'three';
+import { TextureLoader } from '../loaders/textures';
 import type { MapParts } from './types/map';
 import { WALL_WIDTH, WALL_HEIGHT, MAP_CELL_SIZE, WALL_TOP, CELL_SIZE_HALF, CELL_SIZE, MAP_CELLS_COUNT } from './constants/map';
-import { TextureLoader } from '../loaders/texture-loader';
 import type { TokenInfo } from './types/token';
 import { Token } from './token';
 
@@ -39,7 +39,7 @@ const CORNER_TEMPLATE = new Mesh(
 class BoardMap extends Group {
   constructor(parts: MapParts, tokens: TokenInfo[][]) {
     const textures = TextureLoader.Textures;
-    
+
     super();
 
     this.name = 'map';
@@ -51,7 +51,13 @@ class BoardMap extends Group {
     return parts.map((part, pi) => {
       const walls = part.flatMap((column, ci, { length: cs }) => {
         return column.reduce<Mesh[]>((columnWalls, cell, ri, { length: rs }) => {
-          return [...columnWalls, ...this.makeCellWalls({ cell, ci, cs, ri, rs })];
+          return [...columnWalls, ...this.makeCellWalls({
+            cell,
+            ci,
+            cs,
+            ri,
+            rs,
+          })];
         }, []);
       });
 
@@ -68,7 +74,7 @@ class BoardMap extends Group {
 
       const tokensGroup = this.tokensGroup(tokens, pi);
       const plane = this.plane(pi, map);
-      
+
       plane.add(cellsGroup, tokensGroup);
 
       return plane;
@@ -76,7 +82,13 @@ class BoardMap extends Group {
   }
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
-  private makeCellWalls(info: { cell: number, ci: number, cs: number, ri: number, rs: number }) {
+  private makeCellWalls(info: {
+    cell: number
+    ci: number
+    cs: number
+    ri: number
+    rs: number
+  }) {
     const walls: Mesh[] = [];
 
     const firstInColumn = info.ci === 0;
@@ -128,7 +140,7 @@ class BoardMap extends Group {
     }
 
     // bottom wall
-    if (info.cell >> 0 & 1 && !lastInColumn) {
+    if (Math.trunc(info.cell) & 1 && !lastInColumn) {
       const wall = WALL_TEMPLATE.clone();
       wall.name = 'wall';
 
@@ -158,7 +170,7 @@ class BoardMap extends Group {
     }
 
     // right-bottom corner
-    if (((info.cell >> 0 & 3) === 3) && !lastInRow && !lastInColumn) {
+    if (((Math.trunc(info.cell) & 3) === 3) && !lastInRow && !lastInColumn) {
       const corner = CORNER_TEMPLATE.clone();
       corner.name = 'corner';
 
@@ -168,7 +180,7 @@ class BoardMap extends Group {
     }
 
     // left-bottom corner
-    if ((info.cell >> 3 & 1) & (info.cell >> 0 & 1) && !lastInColumn) {
+    if ((info.cell >> 3 & 1) & (Math.trunc(info.cell) & 1) && !lastInColumn) {
       const corner = CORNER_TEMPLATE.clone();
       corner.name = 'corner';
 

@@ -1,22 +1,22 @@
+import { Object3D, Scene, Vector2, type Vector2Like } from 'three';
+import { KeyupController, type MessagesHandler } from 'listeners';
+import type { RobotInfo } from '../models/types/robot';
+import { Direction } from '../constants/direction';
+import { MapHelper } from '../utils/map-helper';
+import type { TokenInfo } from '../models/types/token';
+import { Token } from '../models/token';
+import { Robot } from '../models/robot';
+import { isRobot } from '../models/utils/is-robot';
 import { BoardController } from './board';
 import { IntersectionsController } from './intersections';
 import { RobotsController } from './robots';
 import { TokensController } from './tokens';
 import type { RobotsCoords } from './types/robots-coords';
 import type { IntersectionEventHandler } from './types/intersections';
-import type { RobotInfo } from '../models/types/robot';
-import { Direction } from '../constants/direction';
-import { MapHelper } from '../utils/map-helper';
 import { generateRobotsCoords } from './utils/generate-robots-positions';
-import type { TokenInfo } from '../models/types/token';
-import { Token } from '../models/token';
-import { Robot } from '../models/robot';
-import { Object3D, Scene, Vector2, type Vector2Like } from 'three';
-import { isRobot } from '../models/utils/is-robot';
 import { GameStateController } from './game-state';
 import { GameState } from './constants/game-state';
 import { MessageController } from './messages';
-import { KeyupController, type MessagesHandler } from 'listeners';
 
 class GameController {
   /** Message handler */
@@ -68,7 +68,7 @@ class GameController {
       case 'robot_moved': {
         const coords = new Vector2().fromArray(event.data.to);
         this.moveRobot(event.data.robot, coords);
-        
+
         return;
       }
     }
@@ -80,7 +80,10 @@ class GameController {
     const robot = intersections.find(({ object }) => object.name === 'robot')?.object;
 
     if (robot) {
-      this.mc.sendMessage({ event: 'select_robot', name: robot.userData.name });
+      this.mc.sendMessage({
+        event: 'select_robot',
+        name: robot.userData.name,
+      });
     }
     /* end handle click by robot */
   };
@@ -88,7 +91,8 @@ class GameController {
   /** Intersection handler */
   private readonly ih: IntersectionEventHandler = (intersections, event) => {
     if (event === 'click') {
-      return this.ceh(intersections);
+      this.ceh(intersections);
+      return;
     }
   };
 
@@ -99,12 +103,12 @@ class GameController {
   private readonly tc = new TokensController();
 
   private readonly mc = new MessageController();
-  
+
   private readonly bc = new BoardController();
 
   private readonly rc = new RobotsController();
 
-  private readonly kc = new KeyupController(window, this.mc);
+  private readonly kc = new KeyupController(globalThis, this.mc);
 
   constructor(private readonly ic: IntersectionsController) {}
 
@@ -123,7 +127,7 @@ class GameController {
       this.mapHelper,
       this.tc.objects.map((it) => it.coords),
     );
-    
+
     const data = this.rc.objects.reduce<Partial<RobotsCoords>>((record, robot, index) => {
       record[robot.userData.name] = coords[index];
 
@@ -137,7 +141,7 @@ class GameController {
   }
 
   private prepareRobots(coordsList: Partial<RobotsCoords>) {
-    this.rc.objects.forEach((robot) => {
+    for (const robot of this.rc.objects) {
       const coords = coordsList[robot.userData.name];
 
       if (!coords) {
@@ -145,9 +149,9 @@ class GameController {
       }
 
       this.moveRobot(robot, coords);
-      
+
       robot.visible = true;
-    });
+    }
   }
 
   private prepareMap(partsOrder: number[]) {
@@ -190,12 +194,12 @@ class GameController {
       return;
     }
 
-    const target = this.mapHelper?.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
-    
+    const target = this.mapHelper.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
+
     if (!target) {
       throw new Error(`Not found position by direction: '${direction}' from: ${this.rc.selectedRobot.coords.toArray()}`);
     }
-    
+
     // if robot didn't move - stop handler
     if (target.equals(this.rc.selectedRobot.coords)) {
       return;

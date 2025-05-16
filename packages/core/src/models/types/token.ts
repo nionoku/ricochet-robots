@@ -4,11 +4,11 @@ import type { TokenColor } from './color';
 
 type TokenType = 'planet' | 'cross' | 'gear' | 'moon';
 
-type TokenInfo = {
+interface TokenInfo {
   token: `${TokenColor}-${TokenType}` | 'black-hole'
-  color: TokenColor[],
+  color: TokenColor[]
   position: Vector2Tuple
-};
+}
 
 type IToken = IModel;
 

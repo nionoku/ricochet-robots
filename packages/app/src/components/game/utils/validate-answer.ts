@@ -4,11 +4,11 @@ const validateAnswer = (answer: ReturnType<typeof prompt>): number => {
     throw new Error('stepCount is undefined');
   }
 
-  const answerNumber = parseInt(answer);
+  const answerNumber = Number.parseInt(answer);
 
   if (!Number.isFinite(answerNumber) || !Number.isInteger(answerNumber)) {
   // TODO (2024.11.17): Show message is not integer
-    throw new Error('stepCount not integer');
+    throw new TypeError('stepCount not integer');
   }
 
   if (answerNumber < 1) {
