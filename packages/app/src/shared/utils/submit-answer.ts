@@ -10,12 +10,6 @@ const submitAnswer = (): void => {
     return;
   }
 
-  // DEBUG !!! REMOVE AFTER TESTS
-  MessageControllerInstance.sendMessage({
-    event: 'enable',
-  });
-  // DEBUG !!! REMOVE AFTER TESTS
-
   MessageControllerInstance.sendMessage({
     event: 'answer',
     steps,

@@ -1,6 +1,6 @@
 import { MessageController as OriginMessageController } from 'listeners';
 
-class MessageController extends OriginMessageController {
+class MessagesController extends OriginMessageController {
   constructor() {
     super(import.meta.env.VITE_APP_APP_TARGET_ORIGIN);
 
@@ -13,5 +13,5 @@ class MessageController extends OriginMessageController {
 }
 
 export {
-  MessageController,
+  MessagesController,
 };

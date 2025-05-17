@@ -16,15 +16,17 @@ class ViewController {
 
   private readonly scene: IScene;
 
+  private readonly gc: GameController;
+
   constructor(private readonly root: HTMLElement, _Scene: new (gc: GameController) => IScene) {
     this.renderer = new RendererController(root.clientWidth, root.clientHeight);
     this.camera = new CameraController(root.clientWidth, root.clientHeight);
     this.notationsRenderer = new NotationsRendererController(root.clientWidth, root.clientHeight);
 
     const ic = new IntersectionController(this.renderer.domElement, this.camera);
-    const gc = new GameController(ic);
+    this.gc = new GameController(ic);
 
-    this.scene = new _Scene(gc);
+    this.scene = new _Scene(this.gc);
 
     this.camera.position.z = this.fov();
     this.camera.lookAt(0, 0, 0);
@@ -58,6 +60,10 @@ class ViewController {
 
   animate(): void {
     this.renderer.setAnimationLoop(this.render.bind(this));
+  }
+
+  notifyReady(): void {
+    this.gc.notifyReady();
   }
 }
 

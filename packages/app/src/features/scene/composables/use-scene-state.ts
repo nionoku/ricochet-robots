@@ -6,6 +6,7 @@ const useSceneState = () => {
   const isLoading = shallowRef(false);
 
   // DEBUG !!! REMOVE AFTER TESTS
+  /** @deprecated remove after tests */
   const prepare = () => {
     MessageControllerInstance
       .sendMessage({
@@ -34,12 +35,15 @@ const useSceneState = () => {
           },
         },
       });
+
+    MessageControllerInstance.sendMessage({
+      event: 'enable',
+    });
   };
   // DEBUG !!! REMOVE AFTER TESTS
 
   // loading message handler
   const lmh: MessagesHandler = (event) => {
-  // eslint-disable-next-line sonarjs/no-small-switch
     switch (event.data.event) {
       case 'ready': {
         isLoading.value = false;
@@ -49,6 +53,19 @@ const useSceneState = () => {
         // DEBUG !!! REMOVE AFTER TESTS
 
         break;
+      }
+
+      case 'move_robot':
+      case 'robot_moved':
+      case 'select_token':
+      case 'token_achieved':
+      case 'select_robot': {
+        // TODO (2025.05.18): Move call sendMessage to peerjs-instance
+
+        // DEBUG !!! REMOVE AFTER TESTS
+        MessageControllerInstance
+          .sendMessage(event.data);
+        // DEBUG !!! REMOVE AFTER TESTS
       }
     }
   };

@@ -18,17 +18,12 @@ import type { IntersectionEventHandler } from './types/intersections';
 import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { GameStateController } from './game-state';
 import { GameState } from './constants/game-state';
-import { MessageController } from './messages';
+import { MessagesController } from './messages';
 
 class GameController {
   /** Message handler */
   private readonly mh: MessagesHandler = (event) => {
     switch (event.data.event) {
-      case 'ping': {
-        this.notifyReady();
-        return;
-      }
-
       case 'generate_robots_coords': {
         this.generateRobotsCoords();
         return;
@@ -111,7 +106,7 @@ class GameController {
 
   private readonly tc = new TokensController();
 
-  private readonly mc = new MessageController();
+  private readonly mc = new MessagesController();
 
   private readonly bc = new BoardController();
 
@@ -127,7 +122,7 @@ class GameController {
     this.ic.on(this.rootObject, this.ih);
   }
 
-  private notifyReady(): void {
+  public notifyReady(): void {
     this.mc.sendMessage({ event: 'ready' });
   }
 

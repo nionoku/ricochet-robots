@@ -25,6 +25,7 @@ const main = async (): Promise<void> => {
   root.append(...vc.domElements);
 
   vc.animate();
+  vc.notifyReady();
 };
 
 void main();
