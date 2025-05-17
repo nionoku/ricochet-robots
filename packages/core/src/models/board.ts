@@ -2,9 +2,7 @@ import { Group } from 'three';
 import { CSS2DObject } from 'three/examples/jsm/Addons.js';
 import { MapHelper } from '../utils/map-helper';
 import { BoardMap } from './map';
-import { MAP_CELLS_COUNT } from './constants/map';
-
-const NOTATION_OFFSET = 0.04;
+import { MAP_CELLS_COUNT, NOTATION_OFFSET } from './constants/map';
 
 class Board extends Group {
   constructor() {
@@ -13,7 +11,7 @@ class Board extends Group {
     this.name = 'board';
   }
 
-  setMap(map: BoardMap) {
+  setMap(map: BoardMap): void {
     this.clear();
     // add map parts with walls on board
     this.add(map);

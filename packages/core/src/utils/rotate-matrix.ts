@@ -1,6 +1,6 @@
 import type { MapType } from '../models/types/map';
 
-const rotateMatrix = (matrix: MapType, repeat = 1) => {
+const rotateMatrix = (matrix: MapType, repeat: number): MapType => {
   let result = matrix;
 
   for (let i = 0; i < repeat; i++) {

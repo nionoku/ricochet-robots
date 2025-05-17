@@ -7,7 +7,7 @@ class TextureLoader {
   public static readonly instance = new TextureLoader();
   public readonly textures = new Map<Key, Texture>();
 
-  async load(textures: Record<string, string>, loadingManager?: LoadingManager): Promise<void> {
+  load(textures: Record<string, string>, loadingManager?: LoadingManager): Promise<Texture[]> {
     const tasks = Object.entries(textures)
       .map(([name, url]) => {
         return new BaseTextureLoader(loadingManager)
@@ -20,7 +20,7 @@ class TextureLoader {
           });
       });
 
-    await Promise.all(tasks);
+    return Promise.all(tasks);
   }
 }
 

@@ -30,7 +30,7 @@ class ViewController {
     this.camera.lookAt(0, 0, 0);
   }
 
-  private render() {
+  private render(): void {
     this.scene.update();
     this.renderer.render(this.scene, this.camera);
     this.notationsRenderer.render(this.scene, this.camera);
@@ -48,7 +48,7 @@ class ViewController {
     ];
   }
 
-  resize() {
+  resize(): void {
     this.camera.resize(this.root.clientWidth, this.root.clientHeight);
     this.camera.position.z = this.fov();
 
@@ -56,7 +56,7 @@ class ViewController {
     this.notationsRenderer.resize(this.root.clientWidth, this.root.clientHeight);
   }
 
-  animate() {
+  animate(): void {
     this.renderer.setAnimationLoop(this.render.bind(this));
   }
 }

@@ -1,3 +1,5 @@
+import { Color } from 'three';
+
 export const MAP_CELLS_COUNT = 16;
 export const MAP_SIZE = MAP_CELLS_COUNT - 1;
 export const MAP_CELL_SIZE = 1 / MAP_CELLS_COUNT;
@@ -10,3 +12,8 @@ export const POSITION_SHIFT = MAP_SIZE / 2;
 
 export const WALL_HEIGHT = 0.015;
 export const WALL_WIDTH = CELL_SIZE - WALL_HEIGHT;
+
+export const SIDE_WALL_COLOR = new Color('#B0BEC5');
+export const TOP_WALL_COLOR = new Color('#607D8B');
+
+export const NOTATION_OFFSET = 0.04;

@@ -8,16 +8,12 @@ import { ModelLoader } from './loaders/models';
 import { TextureLoader } from './loaders/textures';
 import { MainScene } from './app/scenes/main';
 
-const main = async () => {
+const main = async (): Promise<void> => {
   const root = document.body;
 
-  if (!root) {
-    throw new Error('Invalid root element');
-  }
-
   await Promise.all([
-    ...TextureLoader.load(textures),
-    ...ModelLoader.load(models),
+    TextureLoader.instance.load(textures),
+    ModelLoader.instance.load(models),
   ]);
 
   const vc = new ViewController(root, MainScene);
@@ -25,9 +21,10 @@ const main = async () => {
   window.addEventListener('resize', () => {
     vc.resize();
   });
+
   root.append(...vc.domElements);
 
   vc.animate();
 };
 
-main();
+void main();

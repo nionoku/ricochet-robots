@@ -8,7 +8,7 @@ class ModelLoader {
   public readonly models = new Map<Key, BufferGeometry>();
   public static readonly instance = new ModelLoader();
 
-  async load(models: Record<string, string>, loadingManager?: LoadingManager): Promise<void> {
+  async load(models: Record<string, string>, loadingManager?: LoadingManager): Promise<BufferGeometry[]> {
     const tasks = Object.entries(models)
       .map(([name, url]) => {
         return new STLLoader(loadingManager)
@@ -20,7 +20,7 @@ class ModelLoader {
           });
       });
 
-    await Promise.all(tasks);
+    return Promise.all(tasks);
   }
 }
 

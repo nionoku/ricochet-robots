@@ -1,12 +1,14 @@
 import { BoxGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Texture } from 'three';
 import { TextureLoader } from '../loaders/textures';
 import type { MapParts } from './types/map';
-import { WALL_WIDTH, WALL_HEIGHT, MAP_CELL_SIZE, WALL_TOP, CELL_SIZE_HALF, CELL_SIZE, MAP_CELLS_COUNT } from './constants/map';
+import {
+  WALL_WIDTH, WALL_HEIGHT, MAP_CELL_SIZE, WALL_TOP, CELL_SIZE_HALF, CELL_SIZE, MAP_CELLS_COUNT, SIDE_WALL_COLOR, TOP_WALL_COLOR,
+} from './constants/map';
 import type { TokenInfo } from './types/token';
 import { Token } from './token';
 
-const SIDE_MATERIAL = new MeshBasicMaterial({ color: '#B0BEC5' });
-const TOP_MATERIAL = new MeshBasicMaterial({ color: '#607D8B' });
+const SIDE_MATERIAL = new MeshBasicMaterial({ color: SIDE_WALL_COLOR });
+const TOP_MATERIAL = new MeshBasicMaterial({ color: TOP_WALL_COLOR });
 const WALL_MATERIALS = [
   SIDE_MATERIAL,
   SIDE_MATERIAL,
@@ -38,7 +40,7 @@ const CORNER_TEMPLATE = new Mesh(
 
 class BoardMap extends Group {
   constructor(parts: MapParts, tokens: TokenInfo[][]) {
-    const textures = TextureLoader.Textures;
+    const textures = TextureLoader.instance.textures;
 
     super();
 
@@ -88,7 +90,7 @@ class BoardMap extends Group {
     cs: number
     ri: number
     rs: number
-  }) {
+  }): Mesh[] {
     const walls: Mesh[] = [];
 
     const firstInColumn = info.ci === 0;
@@ -108,7 +110,7 @@ class BoardMap extends Group {
     }
 
     // left wall
-    if (info.cell >> 3 & 1 && firstInRow) {
+    if (Boolean(info.cell >> 3 & 1) && firstInRow) {
       const wall = WALL_TEMPLATE.clone();
       wall.name = 'wall';
 
@@ -119,7 +121,7 @@ class BoardMap extends Group {
     }
 
     // top wall
-    if (info.cell >> 2 & 1 && firstInColumn) {
+    if (Boolean(info.cell >> 2 & 1) && firstInColumn) {
       const wall = WALL_TEMPLATE.clone();
       wall.name = 'wall';
 
@@ -129,7 +131,7 @@ class BoardMap extends Group {
     }
 
     // right wall
-    if (info.cell >> 1 & 1 && !lastInRow) {
+    if (Boolean(info.cell >> 1 & 1) && !lastInRow) {
       const wall = WALL_TEMPLATE.clone();
       wall.name = 'wall';
 
@@ -140,7 +142,7 @@ class BoardMap extends Group {
     }
 
     // bottom wall
-    if (Math.trunc(info.cell) & 1 && !lastInColumn) {
+    if (Boolean(Math.trunc(info.cell) & 1) && !lastInColumn) {
       const wall = WALL_TEMPLATE.clone();
       wall.name = 'wall';
 
@@ -180,7 +182,7 @@ class BoardMap extends Group {
     }
 
     // left-bottom corner
-    if ((info.cell >> 3 & 1) & (Math.trunc(info.cell) & 1) && !lastInColumn) {
+    if (Boolean((info.cell >> 3 & 1) & (Math.trunc(info.cell) & 1)) && !lastInColumn) {
       const corner = CORNER_TEMPLATE.clone();
       corner.name = 'corner';
 
@@ -220,7 +222,7 @@ class BoardMap extends Group {
     // centring plane around left top
     planeGeometry.translate(0.5, -0.5, 0);
     const plane = new Mesh(planeGeometry, new MeshBasicMaterial({ map }));
-    plane.name = `part_${index}`;
+    plane.name = `part_${index.toString()}`;
     plane.rotation.z = index * 90 * (Math.PI / 180) * -1;
 
     return plane;
