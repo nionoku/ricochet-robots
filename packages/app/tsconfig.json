@@ -7,6 +7,6 @@
     "src",
 
     "vite.config.ts",
-    "env.d.ts"
+    "../../env.d.ts"
   ]
 }

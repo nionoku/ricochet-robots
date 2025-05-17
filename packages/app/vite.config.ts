@@ -1,22 +1,22 @@
-import { fileURLToPath } from 'node:url';
-
 import path from 'node:path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, mergeConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
+import baseConfig from '../../vite.config';
 
 import rootPkg from '../../package.json';
 
-export default defineConfig(({ mode }) => {
-  const rootPath = path.join('..', '..');
-  const viteEnv = {
-    ...process.env,
-    ...loadEnv(mode, rootPath),
-  };
-
+const config = defineConfig(({ mode }) => {
   const base = mode === 'production'
     ? path.join('/', rootPkg.name)
     : '/';
+
+  const root = path.resolve(process.cwd(), '..', '..');
+
+  process.env = {
+    ...process.env,
+    ...loadEnv(mode, root),
+  };
 
   return {
     base,
@@ -24,17 +24,13 @@ export default defineConfig(({ mode }) => {
       vue(),
       vueDevTools(),
     ],
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-      },
-    },
-    envDir: rootPath,
     build: {
-      outDir: path.join(rootPath, 'dist'),
+      outDir: path.join(root, 'dist'),
     },
     server: {
-      port: Number(viteEnv['VITE_APP_APP_PORT']),
+      port: Number(process.env.VITE_APP_APP_PORT),
     },
   };
 });
+
+export default defineConfig((configEnv) => mergeConfig(baseConfig, config(configEnv)));

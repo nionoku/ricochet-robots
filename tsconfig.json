@@ -32,6 +32,9 @@
   },
   "include": [
     "packages/**/*",
-    "eslint.config.mjs"
+
+    "eslint.config.mjs",
+    "vite.config.ts",
+    "env.d.ts"
   ]
 }
