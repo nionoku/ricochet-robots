@@ -5,7 +5,7 @@ class CameraController extends PerspectiveCamera {
     super(75, width / height, 0.1, 1000);
   }
 
-  resize(width: number, height: number) {
+  resize(width: number, height: number): void {
     this.aspect = width / height;
     this.updateProjectionMatrix();
   }

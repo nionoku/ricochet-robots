@@ -1,6 +1,6 @@
 import type { IScene } from '../scenes/types/scene';
 import { GameController } from '../../controllers/game';
-import { IntersectionsController } from '../../controllers/intersections';
+import { IntersectionController } from '../../controllers/intersection';
 import { RendererController } from './renderer';
 import { CameraController } from './camera';
 import { NotationsRendererController } from './notations-renderer';
@@ -21,7 +21,7 @@ class ViewController {
     this.camera = new CameraController(root.clientWidth, root.clientHeight);
     this.notationsRenderer = new NotationsRendererController(root.clientWidth, root.clientHeight);
 
-    const ic = new IntersectionsController(this.renderer.domElement, this.camera);
+    const ic = new IntersectionController(this.renderer.domElement, this.camera);
     const gc = new GameController(ic);
 
     this.scene = new _Scene(gc);
@@ -38,16 +38,7 @@ class ViewController {
 
   private fov(): number {
     const aspectRatio = this.root.clientHeight / this.root.clientWidth;
-
-    if (!aspectRatio) {
-      return BASE_FOV;
-    }
-
-    if (aspectRatio <= 1) {
-      return BASE_FOV;
-    }
-
-    return BASE_FOV * aspectRatio;
+    return Math.max(BASE_FOV, 1) * aspectRatio;
   }
 
   get domElements(): [HTMLCanvasElement, HTMLElement] {

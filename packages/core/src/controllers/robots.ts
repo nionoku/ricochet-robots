@@ -16,10 +16,11 @@ class RobotsController implements IController {
 
       return robot;
     });
+
     this._robots = robots;
   }
 
-  selectRobot(name: RobotInfo['name']) {
+  selectRobot(name: RobotInfo['name']): void {
     this.clearSelectedRobot();
 
     for (const robot of this._robots) {
@@ -28,17 +29,23 @@ class RobotsController implements IController {
 
         robot.select();
       } else {
-        robot.deselect();
+        robot.unselect();
       }
     }
   }
 
-  clearSelectedRobot() {
+  clearSelectedRobot(): void {
     this._selectedRobot = null;
   }
 
-  getRobotByName(name: RobotInfo['name']): Robot | undefined {
-    return this._robots.find((robot) => robot.userData.name === name);
+  getRobotByName(name: RobotInfo['name']): Robot {
+    const foundRobot = this._robots.find((robot) => robot.userData.name === name);
+
+    if (foundRobot === undefined) {
+      throw new Error(`Robot with name ${name} is undefined`);
+    }
+
+    return foundRobot;
   }
 
   get objects(): Robot[] {

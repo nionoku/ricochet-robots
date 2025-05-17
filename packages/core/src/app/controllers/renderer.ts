@@ -10,7 +10,7 @@ class RendererController extends WebGLRenderer {
     this.setPixelRatio(window.devicePixelRatio);
   }
 
-  resize(width: number, height: number) {
+  resize(width: number, height: number): void {
     this.setSize(width, height);
   }
 }

@@ -17,7 +17,9 @@ class MapHelperInstance {
 
     // right-bottom side, left-bottom side, left-top side, right-top side
     const [rb, lb, lt, rt] = parts
+      // eslint-disable-next-line unicorn/no-array-callback-reference
       .map(rotateWalls)
+      // eslint-disable-next-line unicorn/no-array-callback-reference
       .map(rotateMatrix);
     // bottom-side
     const bs = lb.map((row, i) => [...row, ...rb[i]]);
@@ -29,12 +31,12 @@ class MapHelperInstance {
     this._map = result;
   }
 
-  map(robots?: Robot[]): MapType {
+  prepareMap(robots: Robot[]): MapType {
     const map = structuredClone(this._map);
 
     // apply "box wall" on robots positions
-    if (robots) for (const { coords: { x, y } } of robots) {
-      map[y][x] = 15;
+    for (const { coords: { x, y } } of robots) {
+      map[y][x] = ROBOT_ON_CELL;
     }
 
     return map;
@@ -44,7 +46,7 @@ class MapHelperInstance {
   getTargetPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
     // selectedRobot shouldn't emit own position on map
     const otherRobots = robots.filter((robot) => robot.userData.name !== selectedRobot.userData.name);
-    const map = this.map(otherRobots);
+    const map = this.prepareMap(otherRobots);
 
     // console.log(map.map((it) => it.map((it) => it.toString().padStart(5)).join(' ')).join('\n'));
 
@@ -53,6 +55,7 @@ class MapHelperInstance {
         const y = selectedRobot.coords.y;
 
         for (let x = selectedRobot.coords.x; x >= 0; x--) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           const hasWall = (map[y][x] & Direction.LEFT) === Direction.LEFT;
           // there is no robot on the next left cell
           const hasRobot = map[y][x - 1] === ROBOT_ON_CELL;
@@ -72,6 +75,7 @@ class MapHelperInstance {
         const y = selectedRobot.coords.y;
 
         for (let x = selectedRobot.coords.x; x < map[y].length; x++) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           const hasWall = (map[y][x] & Direction.RIGHT) === Direction.RIGHT;
           // there is no robot on the next right cell
           const hasRobot = map[y][x + 1] === ROBOT_ON_CELL;
@@ -93,8 +97,10 @@ class MapHelperInstance {
 
         for (let y = selectedRobot.coords.y; y < column.length; y++) {
           // for right direction find wall on next cell
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           const hasWall = (column[y] & Direction.DOWN) === Direction.DOWN;
           // there is no robot on the next down cell
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
           const hasRobot = map[y + 1] && (map[y + 1][x] === ROBOT_ON_CELL);
           const isTarget = hasWall || hasRobot;
 
@@ -113,8 +119,10 @@ class MapHelperInstance {
         const column = map.map((row) => row[x]);
 
         for (let y = selectedRobot.coords.y; y >= 0; y--) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           const hasWall = (column[y] & Direction.UP) === Direction.UP;
           // there is no robot on the next up cell
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
           const hasRobot = map[y - 1] && (map[y - 1][x] === ROBOT_ON_CELL);
           const isTarget = hasWall || hasRobot;
 
@@ -134,16 +142,16 @@ class MapHelperInstance {
 class MapHelper {
   private _helper: MapHelperInstance | undefined;
 
-  generate(order: number[]) {
+  generate(order: number[]): void {
     this._helper = new MapHelperInstance(order);
   }
 
-  map(robots?: Robot[]): MapType {
+  prepareMap(robots?: Robot[]): MapType {
     if (!this._helper) {
       throw new Error('Call \'generate\' between call \'map\'');
     }
 
-    return this._helper?.map(robots);
+    return this._helper.prepareMap(robots ?? []);
   }
 
   getTargetPoint(selectedRobot: Robot, direction: Direction, robots: Robot[]): Vector2 {
@@ -151,7 +159,7 @@ class MapHelper {
       throw new Error('Call \'generate\' between call \'getTargetPoint\'');
     }
 
-    return this._helper?.getTargetPoint(selectedRobot, direction, robots);
+    return this._helper.getTargetPoint(selectedRobot, direction, robots);
   }
 
   static toPosition(coords: Vector2Like): Vector2 {

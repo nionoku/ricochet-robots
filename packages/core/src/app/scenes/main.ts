@@ -12,11 +12,11 @@ class MainScene extends Scene implements IScene {
     gc.prepare();
   }
 
-  private setupScene() {
+  private setupScene(): void {
     this.add(...this.gc.objects);
   }
 
-  update() {
+  update(): void {
     return;
   }
 }

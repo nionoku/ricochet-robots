@@ -1,7 +1,7 @@
 import { Camera, Object3D, Raycaster, Vector2 } from 'three';
 import type { IntersectionEventHandler, IntersectionEventType } from './types/intersections';
 
-class IntersectionsController extends Raycaster {
+class IntersectionController extends Raycaster {
   private _handler: ((event: MouseEvent) => void) | null = null;
 
   constructor(
@@ -11,7 +11,7 @@ class IntersectionsController extends Raycaster {
     super();
   }
 
-  on(from: Object3D, handler: IntersectionEventHandler) {
+  on(from: Object3D, handler: IntersectionEventHandler): void {
     this.off();
 
     this._handler = (event: MouseEvent) => {
@@ -29,7 +29,7 @@ class IntersectionsController extends Raycaster {
     this._canvas.addEventListener('click', this._handler);
   }
 
-  off() {
+  off(): void {
     if (!this._handler) {
       return;
     }
@@ -39,5 +39,5 @@ class IntersectionsController extends Raycaster {
 }
 
 export {
-  IntersectionsController,
+  IntersectionController,
 };

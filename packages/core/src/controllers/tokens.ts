@@ -10,11 +10,11 @@ class TokensController implements IController {
 
   private _tokens: Token[] = [];
 
-  setTokensFromBoard(board: Board) {
+  setTokensFromBoard(board: Board): void {
     this._tokens = this.findTokens(board);
   }
 
-  selectToken(name: TokenInfo['token']) {
+  selectToken(name: TokenInfo['token']): void {
     const nextToken = this._tokens.find(({ userData: { token } }) => token === name);
 
     if (!nextToken) {
@@ -22,10 +22,9 @@ class TokensController implements IController {
     }
 
     this._selectedToken = nextToken;
-    return nextToken;
   }
 
-  get selectedToken() {
+  get selectedToken(): Token | null {
     return this._selectedToken;
   }
 

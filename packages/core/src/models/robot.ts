@@ -1,4 +1,4 @@
-import { Box3, Mesh, MeshBasicMaterial, type Vector2Like } from 'three';
+import { Box3, Mesh, MeshBasicMaterial, Vector2, type Vector2Like } from 'three';
 import { ModelLoader } from '../loaders/models';
 import { MapHelper } from '../utils/map-helper';
 import type { IRobot, RobotInfo } from './types/robot';
@@ -37,7 +37,7 @@ class Robot extends Mesh implements IRobot {
     this.position.z = this.box.max.z;
   }
 
-  get coords() {
+  get coords(): Vector2 {
     return MapHelper.toCoords(this.position);
   }
 
@@ -52,11 +52,11 @@ class Robot extends Mesh implements IRobot {
     (this.material as MeshBasicMaterial).opacity = OPACITY_SELECTED;
   }
 
-  deselect(): void {
+  unselect(): void {
     (this.material as MeshBasicMaterial).opacity = OPACITY_DESELECTED;
   }
 
-  private get box() {
+  private get box(): Box3 {
     return new Box3().setFromObject(this);
   }
 }

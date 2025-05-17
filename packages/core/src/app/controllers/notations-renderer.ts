@@ -12,7 +12,7 @@ class NotationsRendererController extends CSS2DRenderer {
     this.setSize(width, height);
   }
 
-  resize(width: number, height: number) {
+  resize(width: number, height: number): void {
     this.setSize(width, height);
   }
 }

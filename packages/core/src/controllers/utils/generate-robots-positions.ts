@@ -1,8 +1,10 @@
 import { type Vector2Like, MathUtils, Vector2 } from 'three';
 import { MapHelper } from '../../utils/map-helper';
+import { WALL } from '../../constants/wall';
+import { ROBOTS_COUNT } from '../../constants/robots-count';
 
 const generateRobotsCoords = (mapHelper: MapHelper, excludedCoords: Vector2[]): Vector2Like[] => {
-  const map = mapHelper.map();
+  const map = mapHelper.prepareMap();
 
   const cells = map.flatMap((column, ci) => {
     return column.reduce<Vector2Like[]>((records, cell, ri) => {
@@ -10,7 +12,7 @@ const generateRobotsCoords = (mapHelper: MapHelper, excludedCoords: Vector2[]): 
 
       const isValid = [
         // cell not box wall
-        cell !== 15,
+        cell !== WALL,
         // exclude tokens positions
         excludedCoords.every((coords) => !coords.equals(currentCoords)),
       ].every(Boolean);
@@ -23,7 +25,7 @@ const generateRobotsCoords = (mapHelper: MapHelper, excludedCoords: Vector2[]): 
     }, []);
   });
 
-  return Array.from({ length: 5 }, () => {
+  return Array.from({ length: ROBOTS_COUNT }, () => {
     return cells.splice(MathUtils.randInt(0, cells.length - 1), 1)[0];
   });
 };

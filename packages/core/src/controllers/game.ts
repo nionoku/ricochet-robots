@@ -7,8 +7,10 @@ import type { TokenInfo } from '../models/types/token';
 import { Token } from '../models/token';
 import { Robot } from '../models/robot';
 import { isRobot } from '../models/utils/is-robot';
+import { isScene } from '../models/utils/is-scene';
+import { isRobotEqualTokenColors } from '../models/utils/is-robot-equal-token-colors';
 import { BoardController } from './board';
-import { IntersectionsController } from './intersections';
+import { IntersectionController } from './intersection';
 import { RobotsController } from './robots';
 import { TokensController } from './tokens';
 import type { RobotsCoords } from './types/robots-coords';
@@ -77,7 +79,7 @@ class GameController {
   /** Click event handler */
   private readonly ceh: IntersectionEventHandler = (intersections) => {
     /* handle click by robot */
-    const robot = intersections.find(({ object }) => object.name === 'robot')?.object;
+    const robot = intersections.find(({ object }) => isRobot(object))?.object as Robot | undefined;
 
     if (robot) {
       this.mc.sendMessage({
@@ -90,9 +92,16 @@ class GameController {
 
   /** Intersection handler */
   private readonly ih: IntersectionEventHandler = (intersections, event) => {
-    if (event === 'click') {
-      this.ceh(intersections);
-      return;
+    // eslint-disable-next-line sonarjs/no-small-switch -- will be fixed after add other events
+    switch (event) {
+      case 'click': {
+        this.ceh(intersections);
+        break;
+      }
+
+      default: {
+        break;
+      }
     }
   };
 
@@ -110,28 +119,28 @@ class GameController {
 
   private readonly kc = new KeyupController(globalThis, this.mc);
 
-  constructor(private readonly ic: IntersectionsController) {}
+  constructor(private readonly ic: IntersectionController) {}
 
-  public prepare() {
+  public prepare(): void {
     this.kc.on();
     this.mc.on(this.mh);
     this.ic.on(this.rootObject, this.ih);
   }
 
-  private notifyReady() {
+  private notifyReady(): void {
     this.mc.sendMessage({ event: 'ready' });
   }
 
-  private generateRobotsCoords() {
+  private generateRobotsCoords(): void {
     const coords = generateRobotsCoords(
       this.mapHelper,
       this.tc.objects.map((it) => it.coords),
     );
 
-    const data = this.rc.objects.reduce<Partial<RobotsCoords>>((record, robot, index) => {
-      record[robot.userData.name] = coords[index];
+    const data = this.rc.objects.reduce<Partial<RobotsCoords>>((list, robot, index) => {
+      list[robot.userData.name] = coords[index];
 
-      return record;
+      return list;
     }, {});
 
     this.mc.sendMessage({
@@ -140,7 +149,7 @@ class GameController {
     });
   }
 
-  private prepareRobots(coordsList: Partial<RobotsCoords>) {
+  private prepareRobots(coordsList: Partial<RobotsCoords>): void {
     for (const robot of this.rc.objects) {
       const coords = coordsList[robot.userData.name];
 
@@ -154,30 +163,28 @@ class GameController {
     }
   }
 
-  private prepareMap(partsOrder: number[]) {
+  private prepareMap(partsOrder: number[]): void {
     this.bc.setMap(partsOrder);
     this.tc.setTokensFromBoard(this.bc.board);
   }
 
-  private moveRobot(_robot: Robot | RobotInfo['name'], coords: Vector2Like) {
-    const robot = isRobot(_robot) ? _robot : this.rc.getRobotByName(_robot);
-
-    if (!robot) {
-      throw new Error('Received move robot event with undefined robot');
-    }
+  private moveRobot(_robot: Robot | RobotInfo['name'], coords: Vector2Like): void {
+    const robot = isRobot(_robot)
+      ? _robot
+      : this.rc.getRobotByName(_robot);
 
     robot.move(coords);
   }
 
-  private prepareMapHelper(partsOrder: number[]) {
+  private prepareMapHelper(partsOrder: number[]): void {
     this.mapHelper.generate(partsOrder);
   }
 
-  private selectToken(name: TokenInfo['token']) {
+  private selectToken(name: TokenInfo['token']): void {
     this.tc.selectToken(name);
   }
 
-  private selectRobot(name: RobotInfo['name']) {
+  private selectRobot(name: RobotInfo['name']): void {
     if (this.st.state === GameState.MOVE_DISABLED) {
       return;
     }
@@ -185,55 +192,51 @@ class GameController {
     this.rc.selectRobot(name);
   }
 
-  private moveSelectedRobot(direction: Direction) {
+  private moveSelectedRobot(direction: Direction, selectedRobot = this.rc.selectedRobot, selectedToken = this.tc.selectedToken): void {
     if (this.st.state === GameState.MOVE_DISABLED) {
       return;
     }
 
-    if (!this.rc.selectedRobot) {
+    if (!selectedRobot) {
       return;
     }
 
-    const target = this.mapHelper.getTargetPoint(this.rc.selectedRobot, direction, this.rc.objects);
-
-    if (!target) {
-      throw new Error(`Not found position by direction: '${direction}' from: ${this.rc.selectedRobot.coords.toArray()}`);
-    }
+    const target = this.mapHelper.getTargetPoint(selectedRobot, direction, this.rc.objects);
 
     // if robot didn't move - stop handler
-    if (target.equals(this.rc.selectedRobot.coords)) {
+    if (target.equals(selectedRobot.coords)) {
       return;
     }
 
     this.mc.sendMessage({
       event: 'robot_moved',
-      robot: this.rc.selectedRobot.userData.name,
-      from: this.rc.selectedRobot.coords.toArray(),
+      robot: selectedRobot.userData.name,
+      from: selectedRobot.coords.toArray(),
       to: target.toArray(),
     });
 
-    if (this.isRobotAchievedToken(this.rc.selectedRobot.userData.name, target, this.tc.selectedToken)) {
+    if (!selectedToken) {
+      return;
+    }
+
+    const isRobotReachedTargetToken = this.isRobotReachedTargetToken(selectedRobot, selectedToken);
+
+    if (isRobotReachedTargetToken) {
       this.mc.sendMessage({
         event: 'token_achieved',
       });
     }
   }
 
-  private isRobotAchievedToken(robotName: RobotInfo['name'], robotCoords: Vector2Like, token: Token | null): boolean {
-    if (!token) {
-      return false;
-    }
-
-    return token.coords.equals(robotCoords)
-      // @ts-expect-error TokenColor extends RobotColor
-      && token.userData.color.includes(robotName);
+  private isRobotReachedTargetToken(robot: Robot, token: Token): boolean {
+    return token.coords.equals(robot.coords) && isRobotEqualTokenColors(robot, token);
   }
 
-  private enableRobotsMove() {
+  private enableRobotsMove(): void {
     this.st.setState(GameState.MOVE_ENABLED);
   }
 
-  private disableMoveRobots() {
+  private disableMoveRobots(): void {
     this.st.setState(GameState.MOVE_DISABLED);
   }
 
@@ -244,14 +247,10 @@ class GameController {
     ];
   }
 
-  private get rootObject() {
+  private get rootObject(): Scene {
     const root = this.bc.objects[0].parent;
 
-    if (!root) {
-      throw new Error('Undefined parent for board');
-    }
-
-    if (!(root as Scene).isScene) {
+    if (!isScene(root)) {
       throw new Error('Parent is not a Scene');
     }
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
 import type { RobotInfo } from 'core/src/models/types/robot';
 import { Direction } from 'core/src/constants/direction';
 import type { RobotsCoords } from 'core/src/controllers/types/robots-coords';

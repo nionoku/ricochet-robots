@@ -1,9 +1,10 @@
 import { type ColorRepresentation, Vector2 } from 'three';
 import type { IModel } from './model';
-import type { RobotColor } from './color';
+
+type RobotName = 'blue' | 'green' | 'yellow' | 'red' | 'grey';
 
 interface RobotInfo {
-  name: RobotColor
+  name: RobotName
   color: ColorRepresentation
   tint: ColorRepresentation
 }
@@ -23,10 +24,11 @@ type IRobot = {
   /**
    * Remove select from current robot
    */
-  deselect(): void
+  unselect(): void
 } & IModel;
 
 export type {
   IRobot,
   RobotInfo,
+  RobotName,
 };

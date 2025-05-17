@@ -8,7 +8,7 @@ import type { IController } from './types/controller';
 class BoardController implements IController {
   private readonly _board = new Board();
 
-  setMap(mapPartsOrder: number[]) {
+  setMap(mapPartsOrder: number[]): void {
     const parts = mapPartsOrder.map((index) => mapParts[index]);
     const tokens = mapPartsOrder.map((index) => tokensInfo[index]);
 
