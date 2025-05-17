@@ -3,7 +3,6 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
 import rootPkg from '../../package.json';
@@ -23,7 +22,6 @@ export default defineConfig(({ mode }) => {
     base,
     plugins: [
       vue(),
-      vueJsx(),
       vueDevTools(),
     ],
     resolve: {
@@ -36,7 +34,7 @@ export default defineConfig(({ mode }) => {
       outDir: path.join(rootPath, 'dist'),
     },
     server: {
-      port: Number(viteEnv.VITE_APP_APP_PORT),
+      port: Number(viteEnv['VITE_APP_APP_PORT']),
     },
   };
 });
