@@ -1,11 +1,12 @@
 {
   "name": "app",
   "version": "0.0.0",
-  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm run lint:types && vite build",
+    "build": "npm run lint && vite build",
+    "lint": "npm run lint:eslint && npm run lint:types",
+    "lint:eslint": "npx eslint",
     "lint:types": "vue-tsc"
   },
   "dependencies": {

@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm run lint:types && vite build",
-    "lint:types": "tsc",
-    "preview": "vite preview"
+    "build": "npm run lint && vite build",
+    "lint": "npm run lint:eslint && npm run lint:types",
+    "lint:eslint": "npx eslint",
+    "lint:types": "tsc"
   },
   "devDependencies": {
     "@types/three": "^0.176.0"

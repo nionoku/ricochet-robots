@@ -7,11 +7,8 @@
   ],
   "scripts": {
     "dev": "npm run dev -w app & npm run dev -w core",
-    "build": "rm -rf dist && npm run build -w app & npm run build -w core",
-    "lint": "npm run lint:eslint && npm run lint:types",
-    "lint:eslint": "eslint",
-    "lint:eslint:fix": "eslint --fix",
-    "lint:types": "tsc"
+    "build": "rm -rf dist && npm run build -w app && npm run build -w core",
+    "lint:eslint:fix": "eslint --fix"
   },
   "author": "nionoku <nionoku@gmail.com>",
   "workspaces": [
