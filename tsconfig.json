@@ -23,7 +23,12 @@
 
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
-    "noPropertyAccessFromIndexSignature": true
+    "noPropertyAccessFromIndexSignature": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "#app-config": ["config/app-config.json"]
+    }
   },
   "include": [
     "packages/**/*",
