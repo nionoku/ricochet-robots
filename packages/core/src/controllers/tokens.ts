@@ -1,6 +1,6 @@
 import { Object3D } from 'three';
 import { Token } from '../models/token';
-import type { TokenInfo } from '../models/types/token';
+import type { TokenName } from '../models/types/token';
 import { isToken } from '../models/utils/is-token';
 import { Board } from '../models/board';
 import type { IController } from './types/controller';
@@ -14,8 +14,8 @@ class TokensController implements IController {
     this._tokens = this.findTokens(board);
   }
 
-  selectToken(name: TokenInfo['token']): void {
-    const nextToken = this._tokens.find(({ userData: { token } }) => token === name);
+  selectToken(name: TokenName): void {
+    const nextToken = this._tokens.find(({ userData: { name: token } }) => token === name);
 
     if (!nextToken) {
       throw new Error(`Unknown token: '${name}'`);

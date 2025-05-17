@@ -7,7 +7,7 @@ type TokenColor = Exclude<RobotName, 'grey'>;
 type TokenType = 'planet' | 'cross' | 'gear' | 'moon';
 
 interface TokenInfo {
-  token: TokenName
+  name: TokenName
   color: TokenColor[]
   position: Vector2Tuple
 }

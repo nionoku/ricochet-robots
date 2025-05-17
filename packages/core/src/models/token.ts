@@ -5,7 +5,7 @@ import type { IToken, TokenInfo } from './types/token';
 import { CELL_SIZE, CELL_SIZE_HALF } from './constants/map';
 
 class Token extends Mesh implements IToken {
-  declare userData: Pick<TokenInfo, 'token' | 'color'>;
+  declare userData: Pick<TokenInfo, 'name' | 'color'>;
 
   public readonly isToken = true;
 
@@ -14,7 +14,7 @@ class Token extends Mesh implements IToken {
 
     const geom = new PlaneGeometry(CELL_SIZE * 0.95, CELL_SIZE * 0.95);
     const mat = new MeshBasicMaterial({
-      map: textures.get(tokenInfo.token),
+      map: textures.get(tokenInfo.name),
       transparent: true,
       opacity: 1,
     });
@@ -23,7 +23,7 @@ class Token extends Mesh implements IToken {
 
     this.name = 'token';
     this.userData = {
-      token: tokenInfo.token,
+      name: tokenInfo.name,
       color: tokenInfo.color,
     };
 

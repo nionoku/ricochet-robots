@@ -1,7 +1,7 @@
 import type { RobotInfo } from 'core/src/models/types/robot';
 import { Direction } from 'core/src/constants/direction';
 import type { RobotsCoords } from 'core/src/controllers/types/robots-coords';
-import type { TokenInfo } from 'core/src/models/types/token';
+import type { TokenName } from 'core/src/models/types/token';
 import type { Vector2Tuple } from 'three';
 
 interface Ping {
@@ -39,7 +39,7 @@ interface Disable {
 
 interface SelectToken {
   event: 'select_token'
-  token: TokenInfo['token']
+  token: TokenName
 }
 
 interface SelectRobot {
@@ -61,6 +61,7 @@ interface RobotMoved {
 
 interface TokenAchieved {
   event: 'token_achieved'
+  token: TokenName
 }
 
 type EventMessage =

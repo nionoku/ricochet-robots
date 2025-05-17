@@ -3,7 +3,7 @@ import { KeyupController, type MessagesHandler } from 'listeners';
 import type { RobotInfo } from '../models/types/robot';
 import { Direction } from '../constants/direction';
 import { MapHelper } from '../utils/map-helper';
-import type { TokenInfo } from '../models/types/token';
+import type { TokenName } from '../models/types/token';
 import { Token } from '../models/token';
 import { Robot } from '../models/robot';
 import { isRobot } from '../models/utils/is-robot';
@@ -58,15 +58,12 @@ class GameController {
       }
 
       case 'move_robot': {
-        this.moveSelectedRobot(event.data.direction);
+        this.calculateSelectedRobotMovedPosition(event.data.direction);
         return;
       }
 
       case 'robot_moved': {
-        const coords = new Vector2().fromArray(event.data.to);
-        this.moveRobot(event.data.robot, coords);
-
-        return;
+        this.moveSelectedRobot(event.data.to);
       }
     }
   };
@@ -175,7 +172,7 @@ class GameController {
     this.mapHelper.generate(partsOrder);
   }
 
-  private selectToken(name: TokenInfo['token']): void {
+  private selectToken(name: TokenName): void {
     this.tc.selectToken(name);
   }
 
@@ -187,7 +184,7 @@ class GameController {
     this.rc.selectRobot(name);
   }
 
-  private moveSelectedRobot(direction: Direction, selectedRobot = this.rc.selectedRobot, selectedToken = this.tc.selectedToken): void {
+  private calculateSelectedRobotMovedPosition(direction: Direction, selectedRobot = this.rc.selectedRobot): void {
     if (this.st.state === GameState.MOVE_DISABLED) {
       return;
     }
@@ -209,6 +206,15 @@ class GameController {
       from: selectedRobot.coords.toArray(),
       to: target.toArray(),
     });
+  }
+
+  private moveSelectedRobot(position: number[], selectedRobot = this.rc.selectedRobot, selectedToken = this.tc.selectedToken): void {
+    if (!selectedRobot) {
+      return;
+    }
+
+    const nextCoords = new Vector2().fromArray(position);
+    selectedRobot.move(nextCoords);
 
     if (!selectedToken) {
       return;
@@ -219,6 +225,7 @@ class GameController {
     if (isRobotReachedTargetToken) {
       this.mc.sendMessage({
         event: 'token_achieved',
+        token: selectedToken.userData.name,
       });
     }
   }
