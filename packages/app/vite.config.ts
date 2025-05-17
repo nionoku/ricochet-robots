@@ -30,6 +30,8 @@ const config = defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@features': path.resolve(process.cwd(), 'src', 'features'),
+        '@pages': path.resolve(process.cwd(), 'src', 'pages'),
+        '@shared': path.resolve(process.cwd(), 'src', 'shared'),
       },
     },
     server: {

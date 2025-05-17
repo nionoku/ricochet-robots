@@ -1,21 +1,18 @@
 <template>
   <div class="container">
-    <button @click="whenClick">
+    <button @click="handleClick">
       Start game
     </button>
   </div>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps<{
+const emits = defineEmits<{
+  'game:start': []
 }>();
 
-const emits = defineEmits({
-  startGame: null,
-});
-
-const whenClick = () => {
-  emits('startGame');
+const handleClick = (): void => {
+  emits('game:start');
 };
 </script>
 

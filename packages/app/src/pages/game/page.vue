@@ -3,11 +3,10 @@
     <div class="top">
       <Stats class="stats" />
 
-      <Timer
+      <TimerComponent
         v-show="isShowTimer"
         ref="timerRef"
         class="timer"
-        @finish="handleFinishTimer"
       />
     </div>
 
@@ -26,39 +25,23 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import { Scene } from '../scene';
-import Stats from '../stats/Stats.vue';
-import Timer from '../timer/Timer.vue';
-import { useEmitAnswer } from './composables/use-emit-answer';
-import { validateAnswer } from './utils/validate-answer';
+import Stats from '../../components/stats/Stats.vue';
+import { Scene } from '../../components/scene';
+import { useTimerEvents } from './composables/use-timer-events';
+import { TimerComponent } from '@features/timer';
+import { submitAnswer } from '@shared/utils';
 
-const timerRef = useTemplateRef<InstanceType<typeof Timer>>('timerRef');
-const {
-  isShowTimer,
-  handleAnswer,
+const timerRef = useTemplateRef<InstanceType<typeof TimerComponent>>('timerRef');
 
-  handleTimeout,
-} = useEmitAnswer(timerRef);
-
-const props = defineProps<{
-}>();
-
-const emits = defineEmits({});
+const { isShowTimer } = useTimerEvents(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  timerRef.value?.start();
+});
 
 const handleResolve = () => {
   // TODO (2024.11.17): Replace prompt to dialog
   // TODO (2024.11.17): prompt stops microtasks queue
-  const stepCount = validateAnswer(
-    prompt('Steps for resolve?'),
-  );
-
-  // TODO (2024.11.17): Check is first or better answer
-  // if (isFirstOrBetterAnswer) ...
-  handleAnswer(stepCount);
-};
-
-const handleFinishTimer = () => {
-  handleTimeout();
+  submitAnswer();
 };
 </script>
 

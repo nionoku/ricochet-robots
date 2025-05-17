@@ -5,11 +5,17 @@
 
     "baseUrl": ".",
     "paths": {
+      "#app-config": [
+        "../../config/app-config.json"
+      ],
       "@features/*": [
         "src/features/*"
       ],
-      "#app-config": [
-        "../../config/app-config.json"
+      "@shared/*": [
+        "src/shared/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
       ]
     }
   },
