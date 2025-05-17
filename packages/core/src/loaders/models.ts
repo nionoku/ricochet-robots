@@ -5,14 +5,22 @@ import modelsMap from '../assets/models.json';
 type Key = keyof typeof modelsMap;
 
 class ModelLoader {
-  public static readonly Models = new Map<Key, BufferGeometry>();
+  public readonly models = new Map<Key, BufferGeometry>();
+  public static readonly instance = new ModelLoader();
 
-  static load(models: Record<string, string>, loadingManager?: LoadingManager) {
-    return Object.entries(models)
-      .map(async ([name, url]) => {
-        const model = await new STLLoader(loadingManager).loadAsync(url);
-        ModelLoader.Models.set(name as Key, model);
+  async load(models: Record<string, string>, loadingManager?: LoadingManager): Promise<void> {
+    const tasks = Object.entries(models)
+      .map(([name, url]) => {
+        return new STLLoader(loadingManager)
+          .loadAsync(url)
+          .then((model) => {
+            this.models.set(name as Key, model);
+
+            return model;
+          });
       });
+
+    await Promise.all(tasks);
   }
 }
 

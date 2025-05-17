@@ -4,17 +4,23 @@ import texturesMap from '../assets/textures.json';
 type Key = keyof typeof texturesMap;
 
 class TextureLoader {
-  public static readonly Textures = new Map<Key, Texture>();
+  public static readonly instance = new TextureLoader();
+  public readonly textures = new Map<Key, Texture>();
 
-  static load(textures: Record<string, string>, loadingManager?: LoadingManager) {
-    return Object.entries(textures)
-      .map(async ([name, url]) => {
-        const texture = await new BaseTextureLoader(loadingManager).loadAsync(url);
+  async load(textures: Record<string, string>, loadingManager?: LoadingManager): Promise<void> {
+    const tasks = Object.entries(textures)
+      .map(([name, url]) => {
+        return new BaseTextureLoader(loadingManager)
+          .loadAsync(url)
+          .then((texture) => {
+            texture.colorSpace = SRGBColorSpace;
+            this.textures.set(name as Key, texture);
 
-        texture.colorSpace = SRGBColorSpace;
-
-        TextureLoader.Textures.set(name as Key, texture);
+            return texture;
+          });
       });
+
+    await Promise.all(tasks);
   }
 }
 
