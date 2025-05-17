@@ -1,11 +1,11 @@
-import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { defineConfig } from 'vite';
 
 const config = defineConfig({
-  envDir: process.cwd(),
+  envDir: import.meta.dirname,
   resolve: {
     alias: {
-      '#app-config': fileURLToPath(new URL('./config/app-config.json', import.meta.url)),
+      '#app-config': path.resolve(import.meta.dirname, 'config', 'app-config.json'),
     },
   },
 });

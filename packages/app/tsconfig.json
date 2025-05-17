@@ -1,7 +1,17 @@
 {
   "extends": ["@vue/tsconfig/tsconfig.dom.json", "../../tsconfig.json"],
   "compilerOptions": {
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+
+    "baseUrl": ".",
+    "paths": {
+      "@features/*": [
+        "src/features/*"
+      ],
+      "#app-config": [
+        "../../config/app-config.json"
+      ]
+    }
   },
   "include": [
     "src",

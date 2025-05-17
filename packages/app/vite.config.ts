@@ -27,6 +27,11 @@ const config = defineConfig(({ mode }) => {
     build: {
       outDir: path.join(root, 'dist'),
     },
+    resolve: {
+      alias: {
+        '@features': path.resolve(process.cwd(), 'src', 'features'),
+      },
+    },
     server: {
       port: Number(process.env.VITE_APP_APP_PORT),
     },
