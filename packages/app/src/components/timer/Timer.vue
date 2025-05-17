@@ -6,10 +6,11 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
+import appConfig from '#app-config';
 
 const SECOND = 1000;
 
-const timeoutValue: number = import.meta.env.VITE_APP_RESOLVE_TIMEOUT;
+const timeoutValue: number = appConfig.resolve_timeout;
 const currentTime = ref<number>(timeoutValue);
 let timerId: NodeJS.Timeout;
 

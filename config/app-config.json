@@ -1,3 +1,4 @@
 {
-  "scene_background_color": "#D0D0D0"
+  "scene_background_color": "#D0D0D0",
+  "resolve_timeout": 60000
 }
