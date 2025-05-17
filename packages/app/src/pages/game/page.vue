@@ -10,7 +10,7 @@
       />
     </div>
 
-    <Scene class="scene" />
+    <SceneComponent class="scene" />
 
     <div class="actions">
       <button
@@ -26,8 +26,8 @@
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
 import Stats from '../../components/stats/Stats.vue';
-import { Scene } from '../../components/scene';
 import { useTimerEvents } from './composables/use-timer-events';
+import { SceneComponent } from '@features/scene';
 import { TimerComponent } from '@features/timer';
 import { submitAnswer } from '@shared/utils';
 

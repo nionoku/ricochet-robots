@@ -1,6 +1,6 @@
 import { onMounted, onUnmounted, shallowRef } from 'vue';
 import type { EventMessage } from 'listeners';
-import { MessageControllerInstance } from 'src/controllers/messages';
+import { MessageControllerInstance } from '../../../controllers/messages';
 
 const useTimerEvents = (handleStartTimer: () => void) => {
   const isShowTimer = shallowRef(false);

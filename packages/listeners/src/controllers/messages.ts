@@ -1,12 +1,14 @@
 import type { EventMessage } from '../types/events';
 import type { MessagesHandler } from '../types/message';
 
+type Target = Pick<typeof globalThis, 'postMessage'>;
+
 class MessageController {
-  protected target: Window | undefined;
+  protected target: Target | undefined;
 
   constructor(private readonly targetOrigin: string) {}
 
-  bind(element: Window) {
+  bind(element: Target) {
     this.target = element;
     return this;
   }

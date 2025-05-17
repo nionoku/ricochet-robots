@@ -1,5 +1,5 @@
+import { MessageControllerInstance } from '../../controllers/messages';
 import { isValidAnswer } from './is-valid-answer';
-import { MessageControllerInstance } from 'src/controllers/messages';
 
 const submitAnswer = (): void => {
   const answer = prompt('Steps for resolve?');
