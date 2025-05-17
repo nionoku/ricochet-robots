@@ -16,11 +16,13 @@ class Robot extends Mesh implements IRobot {
   public readonly isRobot = true;
 
   constructor(robotInfo: RobotInfo) {
-    const geom = ModelLoader.Models.get('robot')?.center();
+    const model = ModelLoader.instance.models.get('robot');
 
-    if (!geom) {
+    if (!model) {
       throw new Error('Error when build Robot. Model not loaded');
     }
+
+    const geom = model.center();
 
     const mat = new MeshBasicMaterial({
       color: robotInfo.color,

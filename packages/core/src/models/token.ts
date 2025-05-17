@@ -10,7 +10,7 @@ class Token extends Mesh implements IToken {
   public readonly isToken = true;
 
   constructor(public readonly tokenInfo: TokenInfo) {
-    const textures = TextureLoader.Textures;
+    const textures = TextureLoader.instance.textures;
 
     const geom = new PlaneGeometry(CELL_SIZE * 0.95, CELL_SIZE * 0.95);
     const mat = new MeshBasicMaterial({
@@ -30,13 +30,13 @@ class Token extends Mesh implements IToken {
     this.setInitialPosition(new Vector2().fromArray(tokenInfo.position));
   }
 
-  private setInitialPosition(coords: Vector2Like) {
+  private setInitialPosition(coords: Vector2Like): void {
     this.position.x = coords.x * CELL_SIZE + CELL_SIZE_HALF;
     this.position.y = coords.y * CELL_SIZE * -1 - CELL_SIZE_HALF;
     this.position.z = 0.001;
   }
 
-  get coords() {
+  get coords(): Vector2 {
     const position = this.getWorldPosition(new Vector3());
     return MapHelper.toCoords(position);
   }
