@@ -4,7 +4,7 @@
       v-show="!isLoading"
       id="scene"
       ref="scene"
-      :src="baseUrl"
+      :src="coreAppUrl"
     />
 
     <LoaderComponent
@@ -20,7 +20,7 @@ import { CoreEvent, CoreEventsControllerImpl, type CoreMessageHandler } from '..
 import { LoaderComponent } from './components/loader';
 import { useSceneState } from './composables/use-scene-state';
 
-const baseUrl = import.meta.env.VITE_APP_CORE_BASE_URL;
+const coreAppUrl = import.meta.env.VITE_APP_CORE_BASE_URL;
 
 const sceneRef = useTemplateRef('scene');
 const { isLoading } = useSceneState(sceneRef);
