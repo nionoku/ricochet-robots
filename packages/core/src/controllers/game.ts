@@ -1,4 +1,4 @@
-import { Object3D, Scene, Vector2, type Vector2Like } from 'three';
+import { Camera, Object3D, Scene, Vector2, type Vector2Like } from 'three';
 import type { RobotInfo } from '../models/types/robot';
 import { Direction } from '../constants/direction';
 import { MapHelper } from '../utils/map-helper';
@@ -71,9 +71,9 @@ class GameController {
   /** Click event handler */
   private readonly ceh: IntersectionEventHandler = (intersections) => {
     /* handle click by robot */
-    const robot = intersections.find(({ object }) => isRobot(object))?.object as Robot | undefined;
+    const robot = intersections.at(0)?.object;
 
-    if (robot) {
+    if (robot && isRobot(robot)) {
       this.mc.sendMessage({
         event: CoreEvent.SelectRobot,
         robot: robot.userData.name,
@@ -109,16 +109,23 @@ class GameController {
 
   private readonly rc = new RobotsController();
 
-  private readonly interactiveControllers: IListenerController[] = [
-    new GameKeyupController(this.mc),
-    new GameSwipeController(this.mc),
-  ];
+  private readonly ic: IntersectionController;
 
-  constructor(private readonly ic: IntersectionController) {}
+  private readonly interactiveControllers: IListenerController[];
+
+  constructor(private readonly root: HTMLCanvasElement, private readonly camera: Camera) {
+    this.ic = new IntersectionController(this.root, this.camera);
+
+    this.interactiveControllers = [
+      new GameKeyupController(this.mc),
+      new GameSwipeController(this.mc),
+      this.ic,
+    ];
+  }
 
   public prepare(): void {
     this.mc.on(this.mh);
-    this.ic.on(this.rootObject, this.ih);
+    this.ic.bind(this.rootObject, this.ih);
   }
 
   public notifyReady(): void {
@@ -173,7 +180,7 @@ class GameController {
   }
 
   private moveRobot(_robot: Robot | RobotInfo['name'], coords: Vector2Like): void {
-    const robot = isRobot(_robot)
+    const robot = (_robot instanceof Object3D) && isRobot(_robot)
       ? _robot
       : this.rc.getRobotByName(_robot);
 
