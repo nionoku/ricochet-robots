@@ -8,7 +8,7 @@ import { Robot } from '../models/robot';
 import { isRobot } from '../models/utils/is-robot';
 import { isScene } from '../models/utils/is-scene';
 import { isRobotEqualTokenColors } from '../models/utils/is-robot-equal-token-colors';
-import { CoreMessageHandler, CoreEvent, GameKeyupController, IListenerController } from '../../../host';
+import { CoreMessageHandler, CoreEvent, GameKeyupController, IListenerController, GameSwipeController } from '../../../host';
 import { BoardController } from './board';
 import { IntersectionController } from './intersection';
 import { RobotsController } from './robots';
@@ -111,6 +111,7 @@ class GameController {
 
   private readonly interactiveControllers: IListenerController[] = [
     new GameKeyupController(this.mc),
+    new GameSwipeController(this.mc),
   ];
 
   constructor(private readonly ic: IntersectionController) {}
