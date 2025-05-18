@@ -8,15 +8,15 @@ const THRESHOLD = 20;
 class GameSwipeController implements IListenerController {
   private lastStartSwipeData: Touch | undefined;
 
-  private readonly touchStartHandler = (event: TouchEvent): void => {
-    // event.preventDefault();
+  private readonly touchMoveHandler = (event: TouchEvent): void => {
+    event.preventDefault();
+  };
 
+  private readonly touchStartHandler = (event: TouchEvent): void => {
     this.lastStartSwipeData = event.changedTouches[0];
   };
 
   private readonly touchEndHandler = (event: TouchEvent): void => {
-    // event.preventDefault();
-
     const endSwipeData = event.changedTouches[0];
 
     if (!this.lastStartSwipeData) {
@@ -56,11 +56,13 @@ class GameSwipeController implements IListenerController {
   public attach(): void {
     this.detach();
 
-    globalThis.addEventListener('touchstart', this.touchStartHandler, { passive: false });
-    globalThis.addEventListener('touchend', this.touchEndHandler, { passive: false });
+    globalThis.addEventListener('touchmove', this.touchMoveHandler, { passive: false });
+    globalThis.addEventListener('touchstart', this.touchStartHandler);
+    globalThis.addEventListener('touchend', this.touchEndHandler);
   }
 
   public detach(): void {
+    globalThis.removeEventListener('touchmove', this.touchMoveHandler);
     globalThis.removeEventListener('touchstart', this.touchStartHandler);
     globalThis.removeEventListener('touchend', this.touchEndHandler);
   }
