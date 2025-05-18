@@ -1,6 +1,5 @@
 import { shallowRef } from 'vue';
-import type { MessagesHandler } from 'listeners';
-import { MessageControllerInstance } from '../../../controllers/messages';
+import { CoreEventsController, CoreEvent, type CoreMessageHandler } from '../../../../../host';
 
 const useSceneState = () => {
   const isLoading = shallowRef(false);
@@ -8,11 +7,11 @@ const useSceneState = () => {
   // DEBUG !!! REMOVE AFTER TESTS
   /** @deprecated remove after tests */
   const prepare = () => {
-    MessageControllerInstance
+    CoreEventsController.instance
       .sendMessage({
-        event: 'prepare',
-        schema: [0, 1, 2, 3],
-        robotsCoords: {
+        event: CoreEvent.PrepareGame,
+        order_map_parts: [0, 1, 2, 3],
+        robots_coords: {
           blue: {
             x: 14,
             y: 5,
@@ -36,16 +35,17 @@ const useSceneState = () => {
         },
       });
 
-    MessageControllerInstance.sendMessage({
-      event: 'enable',
-    });
+    CoreEventsController.instance
+      .sendMessage({
+        event: CoreEvent.EnableMoveRobots,
+      });
   };
   // DEBUG !!! REMOVE AFTER TESTS
 
   // loading message handler
-  const lmh: MessagesHandler = (event) => {
+  const lmh: CoreMessageHandler = (event) => {
     switch (event.data.event) {
-      case 'ready': {
+      case CoreEvent.Ready: {
         isLoading.value = false;
 
         // DEBUG !!! REMOVE AFTER TESTS
@@ -55,15 +55,15 @@ const useSceneState = () => {
         break;
       }
 
-      case 'move_robot':
-      case 'robot_moved':
-      case 'select_token':
-      case 'token_achieved':
-      case 'select_robot': {
+      case CoreEvent.MoveRobot:
+      case CoreEvent.RobotMoved:
+      case CoreEvent.SetTargetToken:
+      case CoreEvent.TokenAchieved:
+      case CoreEvent.SelectRobot: {
         // TODO (2025.05.18): Move call sendMessage to peerjs-instance
 
         // DEBUG !!! REMOVE AFTER TESTS
-        MessageControllerInstance
+        CoreEventsController.instance
           .sendMessage(event.data);
         // DEBUG !!! REMOVE AFTER TESTS
       }
@@ -71,7 +71,7 @@ const useSceneState = () => {
   };
 
   // add message handler for watch ready state
-  MessageControllerInstance
+  CoreEventsController.instance
     .on(lmh);
 
   return {

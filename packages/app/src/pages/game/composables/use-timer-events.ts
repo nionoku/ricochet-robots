@@ -1,20 +1,19 @@
 import { onMounted, onUnmounted, shallowRef } from 'vue';
-import type { EventMessage } from 'listeners';
-import { MessageControllerInstance } from '../../../controllers/messages';
+import { AppEvent, AppEventsController, type AppMessageHandler } from '../../../../../host';
 
 const useTimerEvents = (handleStartTimer: () => void) => {
   const isShowTimer = shallowRef(false);
 
-  const handler = (message: MessageEvent<EventMessage>) => {
+  const handler: AppMessageHandler = (message) => {
     switch (message.data.event) {
-      case 'timer:start': {
+      case AppEvent.TimerStart: {
         isShowTimer.value = true;
         handleStartTimer();
 
         break;
       }
 
-      case 'timer:time_up': {
+      case AppEvent.TimerTimeUp: {
         isShowTimer.value = false;
 
         break;
@@ -23,11 +22,13 @@ const useTimerEvents = (handleStartTimer: () => void) => {
   };
 
   onMounted(() => {
-    MessageControllerInstance.on(handler);
+    AppEventsController.instance
+      .on(handler);
   });
 
   onUnmounted(() => {
-    MessageControllerInstance.off(handler);
+    AppEventsController.instance
+      .off(handler);
   });
 
   return {
