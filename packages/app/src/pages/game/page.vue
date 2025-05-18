@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="top">
-      <Stats class="stats" />
+      <StatsComponent class="stats" />
 
       <TimerComponent
         v-show="isShowTimer"
@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import Stats from '../../components/stats/stats.vue';
+import { StatsComponent } from '../../components/stats';
 import { useTimerEvents } from './composables/use-timer-events';
 import { SceneComponent } from '@features/scene';
 import { TimerComponent } from '@features/timer';
