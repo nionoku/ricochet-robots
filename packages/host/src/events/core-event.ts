@@ -2,7 +2,7 @@ enum CoreEvent {
   Ready = 'core:ready',
   GenerateInitialRobotsCoords = 'core:generate_initial_robots_coords',
   InitialRobotsCoords = 'core:initial_robots_coords',
-  PrepareGame = 'core:prepare_game',
+  ConfigureGame = 'core:configure_game',
   EnableMoveRobots = 'core:enable_move_robots',
   DisableMoveRobots = 'core:disable_move_robots',
   SetTargetToken = 'core:set_target_token',

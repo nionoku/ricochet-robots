@@ -1,13 +1,13 @@
-import { type Vector2Like, MathUtils, Vector2 } from 'three';
+import { MathUtils, Vector2 } from 'three';
 import { MapHelper } from '../../utils/map-helper';
 import { WALL } from '../../constants/wall';
 import { ROBOTS_COUNT } from '../../constants/robots-count';
 
-const generateRobotsCoords = (mapHelper: MapHelper, excludedCoords: Vector2[]): Vector2Like[] => {
+const generateRobotsCoords = (mapHelper: MapHelper, excludedCoords: Vector2[]): Vector2[] => {
   const map = mapHelper.prepareMap();
 
   const cells = map.flatMap((column, ci) => {
-    return column.reduce<Vector2Like[]>((records, cell, ri) => {
+    return column.reduce<Vector2[]>((records, cell, ri) => {
       const currentCoords = new Vector2(ci, ri);
 
       const isValid = [

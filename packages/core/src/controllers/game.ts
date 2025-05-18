@@ -29,10 +29,10 @@ class GameController {
         return;
       }
 
-      case CoreEvent.PrepareGame: {
-        this.prepareRobots(event.data.robots_coords);
-        this.prepareMap(event.data.order_map_parts);
-        this.prepareMapHelper(event.data.order_map_parts);
+      case CoreEvent.ConfigureGame: {
+        this.configureRobots(event.data.robots_coords);
+        this.configureMap(event.data.order_map_parts);
+        this.configureMapHelper(event.data.order_map_parts);
 
         return;
       }
@@ -138,19 +138,19 @@ class GameController {
       this.tc.objects.map((it) => it.coords),
     );
 
-    const data = this.rc.objects.reduce<Partial<RobotsCoords>>((list, robot, index) => {
-      list[robot.userData.name] = coords[index];
+    const robotsCoords = this.rc.objects.reduce<Partial<RobotsCoords>>((list, robot, index) => {
+      list[robot.userData.name] = coords[index].toArray();
 
       return list;
     }, {});
 
     this.mc.sendMessage({
       event: CoreEvent.InitialRobotsCoords,
-      coords: data,
+      coords: robotsCoords,
     });
   }
 
-  private prepareRobots(coordsList: Partial<RobotsCoords>): void {
+  private configureRobots(coordsList: Partial<RobotsCoords>): void {
     for (const robot of this.rc.objects) {
       const coords = coordsList[robot.userData.name];
 
@@ -158,13 +158,15 @@ class GameController {
         throw new Error(`Undefined coords for robot: '${robot.userData.name}'`);
       }
 
-      this.moveRobot(robot, coords);
+      const coordsVector = new Vector2().fromArray(coords);
+
+      this.moveRobot(robot, coordsVector);
 
       robot.visible = true;
     }
   }
 
-  private prepareMap(partsOrder: number[]): void {
+  private configureMap(partsOrder: number[]): void {
     this.bc.setMap(partsOrder);
     this.tc.setTokensFromBoard(this.bc.board);
   }
@@ -177,7 +179,7 @@ class GameController {
     robot.move(coords);
   }
 
-  private prepareMapHelper(partsOrder: number[]): void {
+  private configureMapHelper(partsOrder: number[]): void {
     this.mapHelper.generate(partsOrder);
   }
 

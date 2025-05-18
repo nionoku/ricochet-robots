@@ -14,7 +14,7 @@ type GetInitialRobotsCoords = ICoreEventMessage<CoreEvent.InitialRobotsCoords> &
   coords: Partial<RobotsCoords>
 };
 
-type PrepareGame = ICoreEventMessage<CoreEvent.PrepareGame> & {
+type PrepareGame = ICoreEventMessage<CoreEvent.ConfigureGame> & {
   // order of map parts
   order_map_parts: number[]
   // initial robots positions
