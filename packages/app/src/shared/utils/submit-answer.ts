@@ -1,4 +1,4 @@
-import { AppEvent, AppEventsController } from '../../../../host';
+import { AppEvent, AppEventsControllerImpl } from '../../../../host';
 import { isValidAnswer } from './is-valid-answer';
 
 const submitAnswer = (): void => {
@@ -10,10 +10,11 @@ const submitAnswer = (): void => {
     return;
   }
 
-  AppEventsController.instance.sendMessage({
-    event: AppEvent.Answer,
-    steps,
-  });
+  AppEventsControllerImpl.instance
+    .sendMessage({
+      event: AppEvent.Answer,
+      steps,
+    });
 };
 
 export {

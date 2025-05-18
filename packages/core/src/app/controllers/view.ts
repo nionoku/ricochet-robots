@@ -28,7 +28,7 @@ class ViewController {
 
     this.scene = new _Scene(this.gc);
 
-    this.camera.position.z = this.fov();
+    this.camera.position.z = this.fov;
     this.camera.lookAt(0, 0, 0);
   }
 
@@ -38,7 +38,15 @@ class ViewController {
     this.notationsRenderer.render(this.scene, this.camera);
   }
 
-  private fov(): number {
+  private animate(): void {
+    this.renderer.setAnimationLoop(this.render.bind(this));
+  }
+
+  private notifyReady(): void {
+    this.gc.notifyReady();
+  }
+
+  private get fov(): number {
     const aspectRatio = this.root.clientHeight / this.root.clientWidth;
     return Math.max(BASE_FOV, 1) * aspectRatio;
   }
@@ -52,18 +60,18 @@ class ViewController {
 
   resize(): void {
     this.camera.resize(this.root.clientWidth, this.root.clientHeight);
-    this.camera.position.z = this.fov();
+    this.camera.position.z = this.fov;
 
     this.renderer.resize(this.root.clientWidth, this.root.clientHeight);
     this.notationsRenderer.resize(this.root.clientWidth, this.root.clientHeight);
   }
 
-  animate(): void {
-    this.renderer.setAnimationLoop(this.render.bind(this));
-  }
+  run(): void {
+    this.gc.attachInteractiveListeners();
 
-  notifyReady(): void {
-    this.gc.notifyReady();
+    this.animate();
+
+    this.notifyReady();
   }
 }
 

@@ -1,5 +1,5 @@
 import { onMounted, onUnmounted, shallowRef } from 'vue';
-import { AppEvent, AppEventsController, type AppMessageHandler } from '../../../../../host';
+import { AppEvent, AppEventsControllerImpl, type AppMessageHandler } from '../../../../../host';
 
 const useTimerEvents = (handleStartTimer: () => void) => {
   const isShowTimer = shallowRef(false);
@@ -22,12 +22,12 @@ const useTimerEvents = (handleStartTimer: () => void) => {
   };
 
   onMounted(() => {
-    AppEventsController.instance
+    AppEventsControllerImpl.instance
       .on(handler);
   });
 
   onUnmounted(() => {
-    AppEventsController.instance
+    AppEventsControllerImpl.instance
       .off(handler);
   });
 

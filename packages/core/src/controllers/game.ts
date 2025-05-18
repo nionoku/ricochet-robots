@@ -8,7 +8,7 @@ import { Robot } from '../models/robot';
 import { isRobot } from '../models/utils/is-robot';
 import { isScene } from '../models/utils/is-scene';
 import { isRobotEqualTokenColors } from '../models/utils/is-robot-equal-token-colors';
-import { CoreEventsController, CoreMessageHandler, CoreEvent } from '../../../host';
+import { CoreMessageHandler, CoreEvent, GameKeyupController, IListenerController } from '../../../host';
 import { BoardController } from './board';
 import { IntersectionController } from './intersection';
 import { RobotsController } from './robots';
@@ -18,6 +18,7 @@ import type { IntersectionEventHandler } from './types/intersections';
 import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { GameStateController } from './game-state';
 import { GameState } from './constants/game-state';
+import { EventsController } from './events';
 
 class GameController {
   /** Message handler */
@@ -102,11 +103,15 @@ class GameController {
 
   private readonly tc = new TokensController();
 
-  private readonly mc = CoreEventsController.instance;
+  private readonly mc = EventsController.instance;
 
   private readonly bc = new BoardController();
 
   private readonly rc = new RobotsController();
+
+  private readonly interactiveControllers: IListenerController[] = [
+    new GameKeyupController(this.mc),
+  ];
 
   constructor(private readonly ic: IntersectionController) {}
 
@@ -119,6 +124,12 @@ class GameController {
     this.mc.sendMessage({
       event: CoreEvent.Ready,
     });
+  }
+
+  public attachInteractiveListeners(): void {
+    for (const controller of this.interactiveControllers) {
+      controller.attach();
+    }
   }
 
   private generateRobotsCoords(): void {
