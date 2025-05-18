@@ -1,6 +1,6 @@
+import { Camera } from 'three';
 import type { IScene } from '../scenes/types/scene';
 import { GameController } from '../../controllers/game';
-import { IntersectionController } from '../../controllers/intersection';
 import { RendererController } from './renderer';
 import { CameraController } from './camera';
 import { NotationsRendererController } from './notations-renderer';
@@ -18,14 +18,12 @@ class ViewController {
 
   private readonly gc: GameController;
 
-  constructor(private readonly root: HTMLElement, _Scene: new (gc: GameController) => IScene) {
+  constructor(private readonly root: HTMLElement, _GameController: new (root: HTMLCanvasElement, camera: Camera) => GameController, _Scene: new (gc: GameController) => IScene) {
     this.renderer = new RendererController(root.clientWidth, root.clientHeight);
     this.camera = new CameraController(root.clientWidth, root.clientHeight);
     this.notationsRenderer = new NotationsRendererController(root.clientWidth, root.clientHeight);
 
-    const ic = new IntersectionController(this.renderer.domElement, this.camera);
-    this.gc = new GameController(ic);
-
+    this.gc = new _GameController(this.renderer.domElement, this.camera);
     this.scene = new _Scene(this.gc);
 
     this.camera.position.z = this.fov;
