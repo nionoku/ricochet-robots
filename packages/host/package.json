@@ -4,5 +4,8 @@
   "type": "module",
   "files": [
     "index.ts"
-  ]
+  ],
+  "dependencies": {
+    "peerjs": "^1.5.4"
+  }
 }
