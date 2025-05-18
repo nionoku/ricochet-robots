@@ -1,5 +1,4 @@
 import { Object3D, Scene, Vector2, type Vector2Like } from 'three';
-import { KeyupController, type MessagesHandler } from 'listeners';
 import type { RobotInfo } from '../models/types/robot';
 import { Direction } from '../constants/direction';
 import { MapHelper } from '../utils/map-helper';
@@ -9,6 +8,7 @@ import { Robot } from '../models/robot';
 import { isRobot } from '../models/utils/is-robot';
 import { isScene } from '../models/utils/is-scene';
 import { isRobotEqualTokenColors } from '../models/utils/is-robot-equal-token-colors';
+import { CoreEventsController, CoreMessageHandler, CoreEvent } from '../../../host';
 import { BoardController } from './board';
 import { IntersectionController } from './intersection';
 import { RobotsController } from './robots';
@@ -18,51 +18,50 @@ import type { IntersectionEventHandler } from './types/intersections';
 import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { GameStateController } from './game-state';
 import { GameState } from './constants/game-state';
-import { MessagesController } from './messages';
 
 class GameController {
   /** Message handler */
-  private readonly mh: MessagesHandler = (event) => {
+  private readonly mh: CoreMessageHandler = (event) => {
     switch (event.data.event) {
-      case 'generate_robots_coords': {
+      case CoreEvent.GenerateInitialRobotsCoords: {
         this.generateRobotsCoords();
         return;
       }
 
-      case 'prepare': {
-        this.prepareRobots(event.data.robotsCoords);
-        this.prepareMap(event.data.schema);
-        this.prepareMapHelper(event.data.schema);
+      case CoreEvent.PrepareGame: {
+        this.prepareRobots(event.data.robots_coords);
+        this.prepareMap(event.data.order_map_parts);
+        this.prepareMapHelper(event.data.order_map_parts);
 
         return;
       }
 
-      case 'enable': {
+      case CoreEvent.EnableMoveRobots: {
         this.enableRobotsMove();
         return;
       }
 
-      case 'disable': {
+      case CoreEvent.DisableMoveRobots: {
         this.disableMoveRobots();
         return;
       }
 
-      case 'select_token': {
+      case CoreEvent.SetTargetToken: {
         this.selectToken(event.data.token);
         return;
       }
 
-      case 'select_robot': {
-        this.selectRobot(event.data.name);
+      case CoreEvent.SelectRobot: {
+        this.selectRobot(event.data.robot);
         return;
       }
 
-      case 'move_robot': {
+      case CoreEvent.MoveRobot: {
         this.calculateSelectedRobotMovedPosition(event.data.direction);
         return;
       }
 
-      case 'robot_moved': {
+      case CoreEvent.RobotMoved: {
         this.moveSelectedRobot(event.data.to);
       }
     }
@@ -75,8 +74,8 @@ class GameController {
 
     if (robot) {
       this.mc.sendMessage({
-        event: 'select_robot',
-        name: robot.userData.name,
+        event: CoreEvent.SelectRobot,
+        robot: robot.userData.name,
       });
     }
     /* end handle click by robot */
@@ -103,24 +102,23 @@ class GameController {
 
   private readonly tc = new TokensController();
 
-  private readonly mc = new MessagesController();
+  private readonly mc = CoreEventsController.instance;
 
   private readonly bc = new BoardController();
 
   private readonly rc = new RobotsController();
 
-  private readonly kc = new KeyupController(globalThis, this.mc);
-
   constructor(private readonly ic: IntersectionController) {}
 
   public prepare(): void {
-    this.kc.on();
     this.mc.on(this.mh);
     this.ic.on(this.rootObject, this.ih);
   }
 
   public notifyReady(): void {
-    this.mc.sendMessage({ event: 'ready' });
+    this.mc.sendMessage({
+      event: CoreEvent.Ready,
+    });
   }
 
   private generateRobotsCoords(): void {
@@ -136,7 +134,7 @@ class GameController {
     }, {});
 
     this.mc.sendMessage({
-      event: 'submit_robots_coords',
+      event: CoreEvent.InitialRobotsCoords,
       coords: data,
     });
   }
@@ -201,7 +199,7 @@ class GameController {
     }
 
     this.mc.sendMessage({
-      event: 'robot_moved',
+      event: CoreEvent.RobotMoved,
       robot: selectedRobot.userData.name,
       from: selectedRobot.coords.toArray(),
       to: target.toArray(),
@@ -224,7 +222,7 @@ class GameController {
 
     if (isRobotReachedTargetToken) {
       this.mc.sendMessage({
-        event: 'token_achieved',
+        event: CoreEvent.TokenAchieved,
         token: selectedToken.userData.name,
       });
     }

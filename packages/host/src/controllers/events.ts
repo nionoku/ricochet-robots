@@ -1,7 +1,7 @@
 import { IEventMessage } from '../messages/types/event';
 import { Context, IMessagesController } from './types/message-handler';
 
-abstract class EventsController<Event extends string, Message extends IEventMessage<Event> = IEventMessage<Event>> implements IMessagesController<Event, Message> {
+abstract class EventsController<Message extends IEventMessage<string>> implements IMessagesController<Message> {
   protected context: Context | undefined;
 
   constructor(private readonly contextOrigin: string) {}

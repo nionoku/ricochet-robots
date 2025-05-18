@@ -1,16 +1,17 @@
 import { IEventMessage } from '../../messages/types/event';
 
 type Context = Pick<typeof globalThis, 'postMessage'>;
-type MessagesHandler<Event extends string, Message extends IEventMessage<Event>> = (message: MessageEvent<Message>) => void;
+type MessagesHandler<Message extends IEventMessage<string>> = (message: MessageEvent<Message>) => void;
 
-interface IMessagesController<Event extends string, Message extends IEventMessage<Event>> {
+interface IMessagesController<Message extends IEventMessage<string>, Handler extends MessagesHandler<Message> = MessagesHandler<Message>> {
   setContext: (context: Context) => this
-  on: (handler: MessagesHandler<Event, Message>) => this
-  off: (handler: MessagesHandler<Event, Message>) => this
+  on: (handler: Handler) => this
+  off: (handler: Handler) => this
   sendMessage: (message: Message) => this
 }
 
 export type {
   Context,
+  MessagesHandler,
   IMessagesController,
 };

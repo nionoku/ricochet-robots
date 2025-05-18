@@ -3,22 +3,22 @@ import type { TokenName } from 'core/src/models/types/token';
 import { RobotName } from 'core/src/models/types/robot';
 import { Direction } from 'core/src/constants/direction';
 import type { Vector2Tuple } from 'three';
+import { CoreEvent } from '../events/core-event';
 import { ICoreEventMessage } from './types/core-event';
-import { CoreEvent } from 'src/events/core-event';
 
 type Ready = ICoreEventMessage<CoreEvent.Ready>;
 
 type GenerateInitialRobotsCoords = ICoreEventMessage<CoreEvent.GenerateInitialRobotsCoords>;
 
 type GetInitialRobotsCoords = ICoreEventMessage<CoreEvent.InitialRobotsCoords> & {
-  coords: RobotsCoords
+  coords: Partial<RobotsCoords>
 };
 
 type PrepareGame = ICoreEventMessage<CoreEvent.PrepareGame> & {
   // order of map parts
   order_map_parts: number[]
   // initial robots positions
-  robots_coords: RobotsCoords
+  robots_coords: Partial<RobotsCoords>
 };
 
 type EnableMoveRobots = ICoreEventMessage<CoreEvent.EnableMoveRobots>;
