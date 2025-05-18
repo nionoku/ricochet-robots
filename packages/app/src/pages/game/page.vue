@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import Stats from '../../components/stats/Stats.vue';
+import Stats from '../../components/stats/stats.vue';
 import { useTimerEvents } from './composables/use-timer-events';
 import { SceneComponent } from '@features/scene';
 import { TimerComponent } from '@features/timer';

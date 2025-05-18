@@ -1,4 +1,4 @@
-import { IEventMessage } from '../../messages/types/event';
+import type { IEventMessage } from '../../messages/types/event';
 
 type Context = Pick<typeof globalThis, 'postMessage'>;
 type MessagesHandler<Message extends IEventMessage<string>> = (message: MessageEvent<Message>) => void;

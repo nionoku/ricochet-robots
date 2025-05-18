@@ -1,5 +1,5 @@
 import { CoreEvent } from '../../events/core-event';
-import { IEventMessage } from './event';
+import type { IEventMessage } from './event';
 
 type ICoreEventMessage<Event extends CoreEvent> = IEventMessage<Event>;
 

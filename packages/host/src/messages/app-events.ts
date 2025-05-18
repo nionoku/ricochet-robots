@@ -1,5 +1,5 @@
 import { AppEvent } from '../events/app-event';
-import { IAppEventMessage } from './types/app-event';
+import type { IAppEventMessage } from './types/app-event';
 
 type Answer = IAppEventMessage<AppEvent.Answer> & {
   steps: number

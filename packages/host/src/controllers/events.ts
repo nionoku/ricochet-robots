@@ -1,5 +1,5 @@
-import { IEventMessage } from '../messages/types/event';
-import { Context, IMessagesController } from './types/message-handler';
+import type { IEventMessage } from '../messages/types/event';
+import type { Context, IMessagesController } from './types/message-handler';
 
 abstract class EventsController<Message extends IEventMessage<string>> implements IMessagesController<Message> {
   protected context: Context | undefined;

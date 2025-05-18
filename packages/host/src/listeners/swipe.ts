@@ -1,7 +1,7 @@
 import { Direction } from 'core/src/constants/direction';
 import { CoreEventsController } from '../controllers';
 import { CoreEvent } from '../events';
-import { IListenerController } from './types/listener';
+import type { IListenerController } from './types/listener';
 
 const THRESHOLD = 20;
 

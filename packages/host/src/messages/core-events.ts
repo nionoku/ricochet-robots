@@ -1,10 +1,10 @@
 import type { RobotsCoords } from 'core/src/controllers/types/robots-coords';
 import type { TokenName } from 'core/src/models/types/token';
-import { RobotName } from 'core/src/models/types/robot';
+import type { RobotName } from 'core/src/models/types/robot';
 import { Direction } from 'core/src/constants/direction';
 import type { Vector2Tuple } from 'three';
 import { CoreEvent } from '../events/core-event';
-import { ICoreEventMessage } from './types/core-event';
+import type { ICoreEventMessage } from './types/core-event';
 
 type Ready = ICoreEventMessage<CoreEvent.Ready>;
 

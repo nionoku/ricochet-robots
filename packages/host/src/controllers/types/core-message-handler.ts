@@ -1,5 +1,5 @@
-import { CoreEventMessage } from '../../messages';
-import { MessagesHandler } from './message-handler';
+import type { CoreEventMessage } from '../../messages';
+import type { MessagesHandler } from './message-handler';
 
 type CoreMessageHandler = MessagesHandler<CoreEventMessage>;
 
