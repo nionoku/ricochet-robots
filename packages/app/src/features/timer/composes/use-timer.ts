@@ -3,7 +3,7 @@ import appConfig from '#app-config';
 
 const SECOND = 1000;
 
-const useTimer = (onFinish: () => void, { timeout = appConfig.resolve_timeout, step = SECOND } = {}) => {
+const useTimer = (onFinish: () => void, { timeout = appConfig.wait_answer_timeout, step = SECOND } = {}) => {
   let timerId: NodeJS.Timeout;
   const timer = shallowRef(0);
 

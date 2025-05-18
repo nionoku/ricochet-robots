@@ -1,0 +1,8 @@
+{
+  "name": "controls",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "index.ts"
+  ]
+}
