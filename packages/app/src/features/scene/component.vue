@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { useTemplateRef } from 'vue';
-import { MessageControllerInstance } from '../../controllers/messages';
+import { AppEventsController } from '../../../../host';
 import { LoaderComponent } from './components/loader';
 import { useSceneState } from './composables/use-scene-state';
 import { waitSceneReady } from './utils/wait-scene-ready';
@@ -33,8 +33,8 @@ const handleIsSceneReady = (event: Event): void => {
     throw new TypeError('iframeContext is not ready');
   }
 
-  MessageControllerInstance
-    .bind(iframeContext);
+  AppEventsController.instance
+    .setContext(iframeContext);
 };
 
 waitSceneReady(sceneRef, handleIsSceneReady);

@@ -1,5 +1,5 @@
+import { AppEvent } from '../events';
 import { EventsController } from './events';
-import { AppEvent } from 'src/events/app-event';
 
 class AppEventsController extends EventsController<AppEvent> {
   public static readonly instance: AppEventsController = new this();

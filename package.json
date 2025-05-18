@@ -14,7 +14,7 @@
   "workspaces": [
     "packages/core",
     "packages/app",
-    "packages/listeners"
+    "packages/host"
   ],
   "devDependencies": {
     "@eslint/js": "^10.0.0",

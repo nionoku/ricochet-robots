@@ -1,9 +1,0 @@
-{
-  "name": "listeners",
-  "version": "1.0.0",
-  "type": "module",
-  "files": [
-    "index.ts",
-    "types/index.ts"
-  ]
-}

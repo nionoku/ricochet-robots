@@ -1,5 +1,5 @@
+import { CoreEvent } from '../events';
 import { EventsController } from './events';
-import { CoreEvent } from 'src/events/core-event';
 
 class CoreEventsController extends EventsController<CoreEvent> {
   public static readonly instance: CoreEventsController = new this();

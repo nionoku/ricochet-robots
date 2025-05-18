@@ -1,12 +1,12 @@
+import { IEventMessage } from '../messages/types/event';
 import { Context, IMessagesController } from './types/message-handler';
-import { IEventMessage } from 'src/messages/types/event';
 
 abstract class EventsController<Event extends string, Message extends IEventMessage<Event> = IEventMessage<Event>> implements IMessagesController<Event, Message> {
   protected context: Context | undefined;
 
   constructor(private readonly contextOrigin: string) {}
 
-  public bind(context: Context): this {
+  public setContext(context: Context): this {
     this.context = context;
 
     return this;
@@ -24,7 +24,7 @@ abstract class EventsController<Event extends string, Message extends IEventMess
 
   public sendMessage(message: Message): this {
     if (!this.context) {
-      throw new Error('Call \'bind\' with argument context, before emit events');
+      throw new Error('Call \'setContext\' before emit events');
     }
 
     this.context.postMessage(message, this.contextOrigin);
