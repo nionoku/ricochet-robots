@@ -1,5 +1,5 @@
-import type { CoreEventMessage } from '../messages';
-import { EventsController } from './events';
+import type { CoreEventMessage } from '../../messages';
+import { EventsController } from '../events';
 
 abstract class CoreEventsController extends EventsController<CoreEventMessage> {}
 

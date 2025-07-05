@@ -1,4 +1,4 @@
-import { CoreEventsController } from '../../..';
+import { CoreEventsController } from './core-events';
 
 class CoreEventsControllerImpl extends CoreEventsController {
   public static readonly instance: CoreEventsControllerImpl = new this();

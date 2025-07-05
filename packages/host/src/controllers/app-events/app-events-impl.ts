@@ -1,4 +1,4 @@
-import { AppEventsController } from '../../..';
+import { AppEventsController } from './app-events';
 
 class AppEventsControllerImpl extends AppEventsController {
   public static readonly instance: AppEventsControllerImpl = new this();
