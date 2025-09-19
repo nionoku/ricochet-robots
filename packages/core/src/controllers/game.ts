@@ -93,12 +93,27 @@ class GameController {
     /* end handle click by robot */
   };
 
+  /** Mouse move event handler */
+  private readonly mch: IntersectionEventHandler = (intersections) => {
+    /* handle mouse move by robot */
+    const robot = intersections.at(0)?.object;
+
+    document.body.style.cursor = robot && isRobot(robot)
+      ? 'pointer'
+      : 'default';
+    /* end handle mouse move by robot */
+  };
+
   /** Intersection handler */
   private readonly ih: IntersectionEventHandler = (intersections, event) => {
-    // eslint-disable-next-line sonarjs/no-small-switch -- will be fixed after add other events
     switch (event) {
       case 'click': {
         this.ceh(intersections);
+        break;
+      }
+
+      case 'mousemove': {
+        this.mch(intersections);
         break;
       }
 

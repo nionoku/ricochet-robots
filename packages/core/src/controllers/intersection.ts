@@ -41,10 +41,12 @@ class IntersectionController extends Raycaster implements IListenerController {
     this.detach();
 
     this.root.addEventListener('click', this._handler);
+    this.root.addEventListener('mousemove', this._handler);
   }
 
   detach(): void {
     this.root.removeEventListener('click', this._handler);
+    this.root.removeEventListener('mousemove', this._handler);
   }
 
   private normalizedPoint(point: Vector2Like): Vector2 {
