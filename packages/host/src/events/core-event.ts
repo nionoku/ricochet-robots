@@ -7,6 +7,8 @@ enum CoreEvent {
   DisableMoveRobots = 'core:disable_move_robots',
   SetTargetToken = 'core:set_target_token',
   SelectRobot = 'core:select_robot',
+  SelectPrevRobot = 'core:select_prev_robot',
+  SelectNextRobot = 'core:select_next_robot',
   MoveRobot = 'core:move_robot',
   RobotMoved = 'core:robot_moved',
   TokenAchieved = 'core:token_achieved',

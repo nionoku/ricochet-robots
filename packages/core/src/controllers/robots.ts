@@ -21,21 +21,29 @@ class RobotsController implements IController {
   }
 
   selectRobot(name: RobotInfo['name']): void {
-    this.clearSelectedRobot();
+    const robot = this.getRobotByName(name);
 
-    for (const robot of this._robots) {
-      if (robot.userData.name === name) {
-        this._selectedRobot = robot;
-
-        robot.select();
-      } else {
-        robot.unselect();
-      }
-    }
+    this.selectRobotAndUnselectOthers(robot);
   }
 
-  clearSelectedRobot(): void {
-    this._selectedRobot = null;
+  selectPrevRobot(): void {
+    const nextIndex = this.selectedRobotIndex - 1;
+
+    const nextIndexValid = nextIndex < 0
+      ? this._robots.length - 1
+      : nextIndex;
+
+    this.selectRobotAndUnselectOthers(this._robots[nextIndexValid]);
+  }
+
+  selectNextRobot(): void {
+    const nextIndex = this.selectedRobotIndex + 1;
+
+    const nextIndexValid = nextIndex >= this._robots.length
+      ? 0
+      : nextIndex;
+
+    this.selectRobotAndUnselectOthers(this._robots[nextIndexValid]);
   }
 
   getRobotByName(name: RobotInfo['name']): Robot {
@@ -48,12 +56,37 @@ class RobotsController implements IController {
     return foundRobot;
   }
 
+  private clearSelectedRobot(): void {
+    this._selectedRobot?.unselect();
+    this._selectedRobot = null;
+  }
+
+  private selectRobotAndUnselectOthers(selectedRobot: Robot): void {
+    this.clearSelectedRobot();
+
+    for (const robot of this._robots) {
+      if (robot === selectedRobot) {
+        this._selectedRobot = robot;
+
+        robot.select();
+      } else {
+        robot.unselect();
+      }
+    }
+  }
+
   get objects(): Robot[] {
     return this._robots;
   }
 
   get selectedRobot(): Robot | null {
     return this._selectedRobot;
+  }
+
+  private get selectedRobotIndex(): number {
+    return this._selectedRobot
+      ? this._robots.indexOf(this._selectedRobot)
+      : -1;
   }
 }
 

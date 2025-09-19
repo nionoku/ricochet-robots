@@ -5,9 +5,9 @@ import type { IListenerController } from './types/listener';
 import { Keys } from './types/keys';
 
 class GameKeyupController implements IListenerController {
-  private readonly handler = (event: KeyboardEvent): void => {
-    switch (event.key as Keys) {
-      case Keys.Up: {
+  private readonly handler = (keyEvent: KeyboardEvent): void => {
+    switch (keyEvent.code as Keys) {
+      case Keys.UP: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
@@ -16,7 +16,7 @@ class GameKeyupController implements IListenerController {
         return;
       }
 
-      case Keys.Down: {
+      case Keys.DOWN: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
@@ -25,7 +25,7 @@ class GameKeyupController implements IListenerController {
         return;
       }
 
-      case Keys.Left: {
+      case Keys.LEFT: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
@@ -34,12 +34,25 @@ class GameKeyupController implements IListenerController {
         return;
       }
 
-      case Keys.Right: {
+      case Keys.RIGHT: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
             direction: Direction.RIGHT,
           });
+        return;
+      }
+
+      case Keys.SPACE: {
+        const event: CoreEvent.SelectNextRobot | CoreEvent.SelectPrevRobot = keyEvent.shiftKey
+          ? CoreEvent.SelectPrevRobot
+          : CoreEvent.SelectNextRobot;
+
+        this.mc
+          .sendMessage({
+            event,
+          });
+
         return;
       }
     }

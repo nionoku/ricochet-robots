@@ -33,6 +33,10 @@ type SelectRobot = ICoreEventMessage<CoreEvent.SelectRobot> & {
   robot: RobotName
 };
 
+type SelectPrevRobot = ICoreEventMessage<CoreEvent.SelectPrevRobot>;
+
+type SelectNextRobot = ICoreEventMessage<CoreEvent.SelectNextRobot>;
+
 type MoveRobot = ICoreEventMessage<CoreEvent.MoveRobot> & {
   direction: Direction
 };
@@ -56,6 +60,8 @@ type CoreEventMessage = Ready
   | DisableMoveRobots
   | SelectRobot
   | MoveRobot
+  | SelectPrevRobot
+  | SelectNextRobot
   | RobotWillMoved
   | TokenAchieved;
 

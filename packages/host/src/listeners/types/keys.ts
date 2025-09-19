@@ -1,8 +1,10 @@
 enum Keys {
-  Up = 'ArrowUp',
-  Down = 'ArrowDown',
-  Left = 'ArrowLeft',
-  Right = 'ArrowRight',
+  UP = 'ArrowUp',
+  DOWN = 'ArrowDown',
+  LEFT = 'ArrowLeft',
+  RIGHT = 'ArrowRight',
+
+  SPACE = 'Space',
 }
 
 export {

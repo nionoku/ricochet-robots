@@ -57,6 +57,16 @@ class GameController {
         return;
       }
 
+      case CoreEvent.SelectPrevRobot: {
+        this.selectPrevRobot();
+        return;
+      }
+
+      case CoreEvent.SelectNextRobot: {
+        this.selectNextRobot();
+        return;
+      }
+
       case CoreEvent.MoveRobot: {
         this.calculateSelectedRobotMovedPosition(event.data.direction);
         return;
@@ -201,6 +211,22 @@ class GameController {
     }
 
     this.rc.selectRobot(name);
+  }
+
+  private selectPrevRobot(): void {
+    if (this.st.state === GameState.MOVE_DISABLED) {
+      return;
+    }
+
+    this.rc.selectPrevRobot();
+  }
+
+  private selectNextRobot(): void {
+    if (this.st.state === GameState.MOVE_DISABLED) {
+      return;
+    }
+
+    this.rc.selectNextRobot();
   }
 
   private calculateSelectedRobotMovedPosition(direction: Direction, selectedRobot = this.rc.selectedRobot): void {
