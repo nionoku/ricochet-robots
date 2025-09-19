@@ -27,7 +27,6 @@ class ViewController {
     this.scene = new _Scene(this.gc);
 
     this.camera.position.z = this.fov;
-    this.camera.lookAt(0, 0, 0);
   }
 
   private render(): void {
