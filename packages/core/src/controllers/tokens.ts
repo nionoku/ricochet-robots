@@ -14,7 +14,7 @@ class TokensController implements IController {
     this._tokens = this.findTokens(board);
   }
 
-  selectToken(name: TokenName): void {
+  selectToken(name: TokenName): Token {
     const nextToken = this._tokens.find(({ userData: { name: token } }) => token === name);
 
     if (!nextToken) {
@@ -22,6 +22,7 @@ class TokensController implements IController {
     }
 
     this._selectedToken = nextToken;
+    return nextToken;
   }
 
   get selectedToken(): Token | null {

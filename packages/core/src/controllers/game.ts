@@ -19,6 +19,7 @@ import { generateRobotsCoords } from './utils/generate-robots-positions';
 import { GameStateController } from './game-state';
 import { GameState } from './constants/game-state';
 import { EventsController } from './events';
+import { NotationsController } from './notations';
 
 class GameController {
   /** Message handler */
@@ -117,6 +118,8 @@ class GameController {
 
   private readonly bc = new BoardController();
 
+  private readonly nc = new NotationsController();
+
   private readonly rc = new RobotsController();
 
   private readonly ic: IntersectionController;
@@ -202,7 +205,10 @@ class GameController {
   }
 
   private selectToken(name: TokenName): void {
-    this.tc.selectToken(name);
+    const token = this.tc.selectToken(name);
+
+    // highlight notations
+    this.nc.highlighting(token.coords);
   }
 
   private selectRobot(name: RobotInfo['name']): void {
@@ -289,7 +295,8 @@ class GameController {
 
   public get objects(): Object3D[] {
     return [
-      this.bc.board,
+      ...this.bc.objects,
+      ...this.nc.objects,
       ...this.rc.objects,
     ];
   }
