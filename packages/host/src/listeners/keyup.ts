@@ -1,12 +1,13 @@
 import { Direction } from 'core/src/constants/direction';
-import { CoreEventsController } from '../controllers';
+import { CoreEventsControllerImpl } from '../controllers';
 import { CoreEvent } from '../events';
 import type { IListenerController } from './types/listener';
+import { Keys } from './types/keys';
 
 class GameKeyupController implements IListenerController {
   private readonly handler = (event: KeyboardEvent): void => {
-    switch (event.key) {
-      case 'ArrowUp': {
+    switch (event.key as Keys) {
+      case Keys.Up: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
@@ -15,7 +16,7 @@ class GameKeyupController implements IListenerController {
         return;
       }
 
-      case 'ArrowDown': {
+      case Keys.Down: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
@@ -24,7 +25,7 @@ class GameKeyupController implements IListenerController {
         return;
       }
 
-      case 'ArrowLeft': {
+      case Keys.Left: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
@@ -33,7 +34,7 @@ class GameKeyupController implements IListenerController {
         return;
       }
 
-      case 'ArrowRight': {
+      case Keys.Right: {
         this.mc
           .sendMessage({
             event: CoreEvent.MoveRobot,
@@ -44,7 +45,7 @@ class GameKeyupController implements IListenerController {
     }
   };
 
-  constructor(private readonly mc: CoreEventsController) {}
+  constructor(private readonly mc: CoreEventsControllerImpl) {}
 
   public attach(): void {
     this.detach();

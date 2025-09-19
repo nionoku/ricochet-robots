@@ -1,5 +1,5 @@
 import { Direction } from 'core/src/constants/direction';
-import { CoreEventsController } from '../controllers';
+import { CoreEventsControllerImpl } from '../controllers';
 import { CoreEvent } from '../events';
 import type { IListenerController } from './types/listener';
 
@@ -51,7 +51,7 @@ class GameSwipeController implements IListenerController {
     });
   };
 
-  constructor(private readonly mc: CoreEventsController) {}
+  constructor(private readonly mc: CoreEventsControllerImpl) {}
 
   public attach(): void {
     this.detach();
