@@ -1,11 +1,9 @@
 import { Camera } from 'three';
 import type { IScene } from '../scenes/types/scene';
 import { GameController } from '../../controllers/game';
-import { RendererController } from './renderer';
 import { CameraController } from './camera';
 import { NotationsRendererController } from './notations-renderer';
-
-const BASE_FOV = 1.6;
+import { RendererController } from './renderer';
 
 class ViewController {
   private readonly notationsRenderer: NotationsRendererController;
@@ -25,8 +23,6 @@ class ViewController {
 
     this.gc = new _GameController(this.renderer.domElement, this.camera);
     this.scene = new _Scene(this.gc);
-
-    this.camera.position.z = this.fov;
   }
 
   private render(): void {
@@ -43,11 +39,6 @@ class ViewController {
     this.gc.notifyReady();
   }
 
-  private get fov(): number {
-    const aspectRatio = this.root.clientHeight / this.root.clientWidth;
-    return BASE_FOV * Math.max(aspectRatio, 1);
-  }
-
   get domElements(): [HTMLCanvasElement, HTMLElement] {
     return [
       this.renderer.domElement,
@@ -57,7 +48,6 @@ class ViewController {
 
   resize(): void {
     this.camera.resize(this.root.clientWidth, this.root.clientHeight);
-    this.camera.position.z = this.fov;
 
     this.renderer.resize(this.root.clientWidth, this.root.clientHeight);
     this.notationsRenderer.resize(this.root.clientWidth, this.root.clientHeight);
