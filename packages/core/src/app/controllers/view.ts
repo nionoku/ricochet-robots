@@ -45,7 +45,7 @@ class ViewController {
 
   private get fov(): number {
     const aspectRatio = this.root.clientHeight / this.root.clientWidth;
-    return Math.max(BASE_FOV, 1) * aspectRatio;
+    return BASE_FOV * Math.max(aspectRatio, 1);
   }
 
   get domElements(): [HTMLCanvasElement, HTMLElement] {
