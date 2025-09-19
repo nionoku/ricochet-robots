@@ -16,6 +16,9 @@
       ],
       "@pages/*": [
         "src/pages/*"
+      ],
+      "#host/*": [
+        "../../packages/host/src/*"
       ]
     }
   },

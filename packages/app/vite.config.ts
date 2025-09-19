@@ -32,6 +32,7 @@ const config = defineConfig(({ mode }) => {
         '@features': path.resolve(process.cwd(), 'src', 'features'),
         '@pages': path.resolve(process.cwd(), 'src', 'pages'),
         '@shared': path.resolve(process.cwd(), 'src', 'shared'),
+        '#host': path.resolve(process.cwd(), '..', 'host', 'src'),
       },
     },
     server: {
